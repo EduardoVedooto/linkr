@@ -1,24 +1,43 @@
+import axios from "axios";
 import { useState } from "react";
 import styled from "styled-components";
 
 function CreatePost() {
     const [isWaitingServer, setIsWaitingServer] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(false);
 
     const [post, setPost] = useState({
-        url: "",
-        text: ""
+        texto: "",
+        link: ""
     });
 
     function handleSubmit(e) {
         e.preventDefault();
         setIsWaitingServer(true);
-        console.log("Publicado");
         // Axios Post
+        const promisse = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", post, {
+            headers: {
+                Authorization: `Bearer ...`, // Falta token
+            }
+        });
+        promisse.then(() => {
+            console.log("Publicado");
+            post.texto = "";
+            post.link = "";
+            setPost({ ...post });
+            setIsWaitingServer(false);
+        });
+        promisse.catch(error => {
+            console.log(error.response.data);
+            setErrorMessage(true);
+            setIsWaitingServer(false);
+        })
     }
 
     function handleChange(e) {
+        if (errorMessage) setErrorMessage(false);
         if (e.target.type === "url") {
-            post.url = e.target.value;
+            post.link = e.target.value;
             setPost({ ...post });
         } else {
             post.text = e.target.value;
@@ -40,7 +59,7 @@ function CreatePost() {
                 <input
                     placeholder="http://..."
                     type="url"
-                    value={post.url}
+                    value={post.link}
                     onChange={handleChange}
                     disabled={isWaitingServer}
                     required
@@ -51,7 +70,10 @@ function CreatePost() {
                     onChange={handleChange}
                     disabled={isWaitingServer}
                 />
-                <button disabled={isWaitingServer}>{isWaitingServer ? "Publicando" : "Publicar"}</button>
+                <footer>
+                    <span>{errorMessage ? "Houve um erro ao publicar o seu link" : ""}</span>
+                    <button disabled={isWaitingServer}>{isWaitingServer ? "Publicando" : "Publicar"}</button>
+                </footer>
             </Form>
         </Container>
     );
@@ -120,6 +142,16 @@ const Form = styled.form`
             color: #949494;
         }
     }
+
+    footer {
+        display: flex;
+        align-items: center;
+
+        span {
+            color: #c90000;
+        }
+    }
+
 
     button {
         width: 112px;

@@ -36,7 +36,7 @@ function CraetePost() {
         <Container>
             <img onClick={goToProfile} src="https://ahseeit.com/meme-templates/king-include/uploads/2020/11/hide-the-pain-harold-4386494474.png" alt="Imagem do perfil" />
             <Form onSubmit={handleSubmit} isWaitingServer={isWaitingServer}>
-                <h2>O que você tem para favoritar hoje?</h2>
+                <h3>O que você tem para favoritar hoje?</h3>
                 <input
                     placeholder="http://..."
                     type="url"
@@ -59,12 +59,10 @@ function CraetePost() {
 
 const Container = styled.div`
     display: flex;
-    width: 611px;
     background-color: #fff;
     border-radius: 16px;
     padding: 16px 22px 16px 18px;
     box-shadow: 0 4px 4px rgba(0,0,0,.25);
-    margin-left: 20px;
 
     img {
         width: 50px;
@@ -83,7 +81,7 @@ const Form = styled.form`
     width: 100%;
     gap: 5px;
     
-    h2 {
+    h3 {
         color: #707070;
         font-size: 20px;
         font-weight: 300;

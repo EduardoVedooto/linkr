@@ -2,13 +2,12 @@ import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
 
-function Post() {
-
+function Post(data) {
 
     return (
         <PostsContainer>
             <aside>
-                <img src="https://ahseeit.com/meme-templates/king-include/uploads/2020/11/hide-the-pain-harold-4386494474.png" alt="Imagem do perfil" />
+                <img src={data.user.avatar} alt="Imagem do perfil" />
                 <div id="likes">
                     <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
                         <FiHeart />
@@ -17,13 +16,13 @@ function Post() {
                 </div>
             </aside>
             <main>
-                <h3>Name Example</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <h3>{data.user.username}</h3>
+                <p>{data.text}</p>
                 <LinkContent>
-                    <h4>Title Example</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <span>www.textoDoLink.com</span>
-                    <img src="https://cdn.freebiesupply.com/logos/thumbs/2x/react-1-logo.png" alt="link" />
+                    <h4>{data.linkTitle}</h4>
+                    <p>{data.linkDescription}</p>
+                    <span>{data.link}</span>
+                    <img src={data.linkImage} alt="link" />
                 </LinkContent>
             </main>
         </PostsContainer>

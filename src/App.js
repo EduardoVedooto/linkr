@@ -1,6 +1,13 @@
+import GlobalStyles from "./styles/GlobalStyles";
+
 function App() {
   return (
-    <h1>linkr</h1>
+    <>
+      <GlobalStyles />
+
+      <h1>Linkr</h1>
+
+    </>
   );
 }
 

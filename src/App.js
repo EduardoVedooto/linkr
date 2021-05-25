@@ -1,3 +1,4 @@
+import CraetePost from "./components/CreatePost";
 import GlobalStyles from "./styles/GlobalStyles";
 
 function App() {
@@ -6,7 +7,6 @@ function App() {
       <GlobalStyles />
 
       <h1>Linkr</h1>
-
     </>
   );
 }

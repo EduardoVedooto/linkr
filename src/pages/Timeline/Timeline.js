@@ -1,20 +1,42 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import CraetePost from "../../components/CreatePost";
+import CreatePost from "../../components/CreatePost";
+import Loading from "../../components/Loading";
+import Post from "../../components/Post";
+
 
 function Timeline() {
+    const [isWaitingServer, setIsWaitingServer] = useState(true);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsWaitingServer(false);
+        }, 2000); // Apenas para simular o Servidor
+    }, []);
+
+
     return (
         <Main>
             <Content>
                 <h2>timeline</h2>
-                <Columns>
+                {isWaitingServer ?
+                    <Loading />
+                    :
+                    <Columns>
 
-                    <Posts>
-                        <CraetePost />
-                    </Posts>
+                        <Posts>
+                            <CreatePost />
+                            <Post />
+                            <Post />
+                            <Post />
+                        </Posts>
 
-                    <aside></aside>
+                        <aside>in development</aside>
 
-                </Columns>
+                    </Columns>
+
+                }
+
             </Content>
         </Main>
     );
@@ -23,7 +45,7 @@ function Timeline() {
 const Main = styled.main`
     display: flex;
     justify-content: center;
-    padding-top: 125px;
+    padding: 125px 0 50px 0;
     min-height: 100vh;
     background-color: #2F2F2F;
 `;
@@ -41,16 +63,25 @@ const Content = styled.div`
 
 const Columns = styled.div`
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
     height: inherit;
     margin-top: 43px;
+
+    &>aside{  // Será substituído pela div hashtag
+        background-color: #171717;
+        color: #fff;
+        width: 301px;
+        height: 406px;
+        border-radius: 16px;
+        text-align: center;
+    }
 `;
 
 const Posts = styled.section`
     width: 611px;
-    min-height: 100vh;
-
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 `;
 
 export default Timeline;

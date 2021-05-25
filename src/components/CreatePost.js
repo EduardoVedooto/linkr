@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-function CraetePost() {
+function CreatePost() {
     const [isWaitingServer, setIsWaitingServer] = useState(false);
 
     const [post, setPost] = useState({
@@ -63,6 +63,7 @@ const Container = styled.div`
     border-radius: 16px;
     padding: 16px 22px 16px 18px;
     box-shadow: 0 4px 4px rgba(0,0,0,.25);
+    margin-bottom: 14px;
 
     img {
         width: 50px;
@@ -139,4 +140,4 @@ const Form = styled.form`
 
 `;
 
-export default CraetePost;
+export default CreatePost;

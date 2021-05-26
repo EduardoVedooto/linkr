@@ -35,6 +35,23 @@ function Timeline() {
         });
     }, [user.token]);
 
+    function updateList() {
+        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
+            headers: {
+                Authorization: `Bearer fab13ed8-a5b8-475c-965d-3f2d87efc629`,
+            }
+        });
+        promise.then(({ data }) => {
+            setPosts(data.posts);
+            setIsWaitingServer(false);
+        });
+        promise.catch(error => {
+            console.log(error.response.data.message);
+            setIsWaitingServer(false);
+            setInternalError(false);
+        });
+    }
+
     return (
         <Main>
             <Content>
@@ -43,7 +60,7 @@ function Timeline() {
                     <Columns>
 
                         <Posts>
-                            <CreatePost />
+                            <CreatePost updateList={updateList} />
                             {!posts.length ? <h3 className="error">Nenhum post encontrado...</h3>
                                 : posts.map(post => <Post key={post.id} data={post} />)
                             }

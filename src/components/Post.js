@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
+import { FiPencil } from 'react-icons/fi'
+
 import { Link} from "react-router-dom";
-import {useContext } from "react";
+import {useContext, useState } from "react";
 import SelectedContext from "../Context/SelectedContext";
 import ReactHashtag from "react-hashtag";
 /*
@@ -11,8 +13,31 @@ import ReactHashtag from "react-hashtag";
 function Post(data) {
 //console.log(data);
 const {setSelected} = useContext(SelectedContext);
+const [clicked,setCliked]=useState(false);
+//const [text,setText]=useState("");
+const [text,setText]=useState("");
 let i=0;
+
+
+function editPost(e,post){
+    e.stopPropagation();
+    console.log(post);
+    setCliked(true);
+    setText(post.text);
+}
+
+function handleChange(e) {
+    //if (errorMessage) setErrorMessage(false);
+         
+         setText(e.target.value);
+        //setPost({ ...post });
+    
+}
+
+
+
     return (
+        
         <PostsContainer>
           
   <aside>
@@ -25,10 +50,22 @@ let i=0;
                 </div>
             </aside>
             <main>
-                <Link to={`/user/${data.data.user.id}`}>
+            <FiHeart onClick={(e) => editPost(e,data.data)}/>
+                <Link to={`/user/${data.data.user.id}`}> 
                 <h3 onClick={()=> setSelected(data.data.user.username) }>{data.data.user.username}</h3>
                 </Link>
                 
+                {clicked?
+                
+                <Edit>
+                    <input
+                    placeholder=""
+                    value={text}
+                    required
+                    onChange={handleChange}
+                />
+                </Edit>
+                : 
                 
                 <p>                    
                 <ReactHashtag renderHashtag={hashtag => (
@@ -40,6 +77,7 @@ let i=0;
                         {data.data.text}
                     </ReactHashtag>
                     </p>
+                }
                 <LinkContent>
                     <h4>{data.data.linkTitle}</h4>
                     <p>{data.data.linkDescription}</p>
@@ -50,6 +88,25 @@ let i=0;
         </PostsContainer>
     );
 }
+
+
+const Edit = styled.div `
+width:100%;
+background:white;
+padding-left:9px;
+padding-right:9px;
+padding-top:4px;
+padding-bottom:4px;
+p{
+font-family: Lato;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 17px;
+
+color: #4C4C4C;
+}
+`
 
 const PostsContainer = styled.div`
     background-color: #171717;

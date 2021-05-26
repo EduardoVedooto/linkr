@@ -4,7 +4,6 @@ import CreatePost from "../../components/CreatePost";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 
-
 function Timeline() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
 

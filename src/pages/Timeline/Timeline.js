@@ -7,7 +7,6 @@ import InternalError from "../../components/InternalError";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 
-
 function Timeline() {
     const history = useHistory();
     const [isWaitingServer, setIsWaitingServer] = useState(true);

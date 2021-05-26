@@ -6,6 +6,7 @@ import Post from "../../components/Post";
 import { useParams } from "react-router-dom";
 import UserContext from "../../Context/UserContext";
 import SelectedContext from "../../Context/SelectedContext";
+import InternalError from "../../components/InternalError";
 
 
 
@@ -15,37 +16,34 @@ export default function UserID() {
     const {selected} = useContext(SelectedContext);
     const [posts, setPosts] = useState([]);
     const {user} = useContext(UserContext);
+    const [internalError,setInternalError] = useState(false);
      //console.log(selected);
-    //console.log(user);
+    //console.log(user); `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/posts`
 
 /* 
 
 //*/
-    useEffect(() => {
-        updateList();
-    }, []);
+useEffect(() => {
+    updateList();
+}, []);
 
-    function updateList() {
-        const config = {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          };
-          const promise = axios.get(
-            `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/posts`,
-            config
-          )
-        promise.then(({ data }) => {
-            setPosts(data.posts);
-            //console.log(data);
-            setIsWaitingServer(false);
-        });
-        promise.catch(error => {
-            console.log(error.response.data);
-            setIsWaitingServer(false);
-           // setInternalError(false);
-        });
-    };
+function updateList() {
+    const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/posts`, {
+        headers: {
+            Authorization: `Bearer ${user.token}`,
+        }
+    });
+    promise.then(({ data }) => {
+        console.log(data.posts);
+        setPosts(data.posts);
+        setIsWaitingServer(false);
+    });
+    promise.catch(error => {
+        console.log(error.response.data);
+        setIsWaitingServer(false);
+        setInternalError(false);
+    });
+} 
    
 
 
@@ -53,9 +51,7 @@ export default function UserID() {
         <Main>
             <Content>
                 <h2>{selected}'s posts</h2>
-                {isWaitingServer ?
-                    <Loading />
-                    :
+                {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
                     <Columns>
 
                         <Posts>

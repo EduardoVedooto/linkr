@@ -25,18 +25,14 @@ function Timeline() {
     }, []);
 
     function updateList() {
-        const config = {
+        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
             headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          };
-          const promise = axios.get(
-            `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts`,
-            config
-          )
+                Authorization: `Bearer ${user.token}`,
+            }
+        });
         promise.then(({ data }) => {
+            console.log(data.posts);
             setPosts(data.posts);
-            //console.log(data)
             setIsWaitingServer(false);
         });
         promise.catch(error => {
@@ -44,7 +40,7 @@ function Timeline() {
             setIsWaitingServer(false);
             setInternalError(false);
         });
-    };   
+    } 
     
 
     return (

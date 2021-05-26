@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import Aside from "../../components/Aside";
 import CreatePost from "../../components/CreatePost";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
@@ -30,7 +31,7 @@ function Timeline() {
                             <Post />
                         </Posts>
 
-                        <aside>in development</aside>
+                        <Aside />
 
                     </Columns>
 
@@ -65,15 +66,6 @@ const Columns = styled.div`
     justify-content: space-between;
     height: inherit;
     margin-top: 43px;
-
-    &>aside{  // Será substituído pela div hashtag
-        background-color: #171717;
-        color: #fff;
-        width: 301px;
-        height: 406px;
-        border-radius: 16px;
-        text-align: center;
-    }
 `;
 
 const Posts = styled.section`

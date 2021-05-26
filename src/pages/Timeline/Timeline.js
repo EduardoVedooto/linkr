@@ -8,9 +8,12 @@ import InternalError from "../../components/InternalError";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> main
 function Timeline() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);

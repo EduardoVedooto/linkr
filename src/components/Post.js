@@ -87,6 +87,7 @@ const PostsContainer = styled.div`
             word-break: break-word;
         }
     }
+
 `;
 
 const LinkContent = styled.div`

@@ -20,9 +20,8 @@ function Login(){
 
         const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-in", body);
         request.then((response)=>{
-            history.push("/user/2");
             setUser(response.data);
-            
+            history.push("/timeline");
             console.log(response.data);
         });
         request.catch((error)=>{

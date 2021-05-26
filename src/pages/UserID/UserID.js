@@ -5,19 +5,22 @@ import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 import { useParams } from "react-router-dom";
 import UserContext from "../../Context/UserContext";
+import SelectedContext from "../../Context/SelectedContext";
 
 
 
 export default function UserID() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const { idUser } = useParams();  
+    const {selected,setSelected} = useContext(SelectedContext);
     const [posts, setPosts] = useState([]);
     const {user, setUser } = useContext(UserContext);
+     //console.log(selected);
+    //console.log(user);
 
-    console.log("pagina");
-    console.log(user);
+/* 
 
-    
+//*/
     useEffect(() => {
         updateList();
     }, []);
@@ -29,12 +32,12 @@ export default function UserID() {
             },
           };
           const promise = axios.get(
-            `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/1/posts`,
+            `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/posts`,
             config
           )
         promise.then(({ data }) => {
             setPosts(data.posts);
-            console.log(data)
+            //console.log(data);
             setIsWaitingServer(false);
         });
         promise.catch(error => {
@@ -43,24 +46,25 @@ export default function UserID() {
            // setInternalError(false);
         });
     };
-    //*/
+   
 
 
     return (
         <Main>
             <Content>
-                <h2>timeline</h2>
+                <h2>{selected}'s posts</h2>
                 {isWaitingServer ?
                     <Loading />
                     :
                     <Columns>
 
                         <Posts>
-                    {posts.map((post,i)=> (
-                    <Post key={i} user={post.user.id}/>
+                        {posts.map((post,i)=> (
+                    <Post key={post.id} data={post}/>
                     )
 
                     )}
+
                         </Posts>
 
                         <aside>in development</aside>
@@ -71,7 +75,7 @@ export default function UserID() {
 
             </Content>
         </Main>
-    );
+    ); 
 }
 
 const Main = styled.main`
@@ -112,6 +116,11 @@ const Posts = styled.section`
     display: flex;
     flex-direction: column;
     gap: 16px;
+    h3.error {
+        color: #FFF;
+        font-size: 24px;
+        font-family: "Oswald";
+    }
 `;
 
 

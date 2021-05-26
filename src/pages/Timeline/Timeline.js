@@ -1,16 +1,25 @@
 
-import { useEffect, useState ,useContext} from "react";
 import axios from "axios";
+import { useEffect, useState ,useContext} from "react";
+import UserContext from "../../Context/UserContext";
 import styled from "styled-components";
 import CreatePost from "../../components/CreatePost";
+import InternalError from "../../components/InternalError";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
-import UserContext from "../../Context/UserContext";
 
-function Timeline() {
+
+
+
+function Timeline(selected,setSelected) {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
-    const {user, setUser } = useContext(UserContext);
+    const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
+    const {user, setUser } = useContext(UserContext);
+   
+    //console.log(user);
+
+    /*   //*/ 
     useEffect(() => {
         updateList();
     }, []);
@@ -27,7 +36,7 @@ function Timeline() {
           )
         promise.then(({ data }) => {
             setPosts(data.posts);
-            console.log(data)
+            //console.log(data)
             setIsWaitingServer(false);
         });
         promise.catch(error => {
@@ -35,25 +44,25 @@ function Timeline() {
             setIsWaitingServer(false);
            // setInternalError(false);
         });
-    };
-
+    };   
+    
 
     return (
         <Main>
             <Content>
                 <h2>timeline</h2>
-                {isWaitingServer ?
-                    <Loading />
-                    :
+                {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
                     <Columns>
 
                         <Posts>
                             <CreatePost />
-                            {posts.map((post,i)=> (
-                    <Post key={i} user={post.user}/>
-                    )
-
-                    )}
+                            {!posts.length ? <h3 className="error">Nenhum post encontrado...</h3>
+                                : posts.map(post => <Post key={post.id} data={post} />)
+                            }
+                            {
+                                /*<Post />
+                            <Post />
+                            <Post /> */}
                         </Posts>
 
                         <aside>in development</aside>
@@ -105,6 +114,11 @@ const Posts = styled.section`
     display: flex;
     flex-direction: column;
     gap: 16px;
+    h3.error {
+        color: #FFF;
+        font-size: 24px;
+        font-family: "Oswald";
+    }
 `;
 
 export default Timeline;

@@ -1,15 +1,21 @@
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
-import { Link, useHistory } from "react-router-dom"
+import { Link} from "react-router-dom";
+import { useState, useContext } from "react";
+import SelectedContext from "../Context/SelectedContext";
+/*
 
-function Post(user) {
+*/
 
-console.log(user);
+function Post(data) {
+//console.log(data);
+const {setSelected} = useContext(SelectedContext);
     return (
         <PostsContainer>
-            <aside>
-                <img src="https://ahseeit.com/meme-templates/king-include/uploads/2020/11/hide-the-pain-harold-4386494474.png" alt="Imagem do perfil" />
+          
+  <aside>
+                <img src={data.data.user.avatar} alt="Imagem do perfil" />
                 <div id="likes">
                     <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
                         <FiHeart />
@@ -18,16 +24,14 @@ console.log(user);
                 </div>
             </aside>
             <main>
-            <Link to={`/user/${user}`}>
-                <h3>Name Example</h3>
-                </Link>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <Link to={`/user/${data.data.user.id}`}>
+                <h3 onClick={()=> setSelected(data.data.user.username) }>{data.data.user.username}</h3></Link>
+                <p>{data.data.text}</p>
                 <LinkContent>
-                    <h4>Title Example</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <span>www.textoDoLink.com</span>
-                    <img src="https://cdn.freebiesupply.com/logos/thumbs/2x/react-1-logo.png" alt="link" />
+                    <h4>{data.data.linkTitle}</h4>
+                    <p>{data.data.linkDescription}</p>
+                    <span>{data.data.link}</span>
+                    <img src={data.data.linkImage} alt="link" />
                 </LinkContent>
             </main>
         </PostsContainer>
@@ -42,13 +46,11 @@ const PostsContainer = styled.div`
     padding: 17px 22px 20px 18px;
     color: #fff;
     gap: 18px;
-
     aside {
         display: flex;
         flex-direction: column;
         align-items: center;
         
-
         &>img {
             width: 50px;
             height: 50px;
@@ -57,7 +59,6 @@ const PostsContainer = styled.div`
             margin-bottom: 15px;
             cursor: pointer;
         }
-
         #likes{
             display: flex;
             flex-direction: column;
@@ -65,17 +66,14 @@ const PostsContainer = styled.div`
             cursor: pointer;
             width: 72px;
         }
-
         span {
             margin-top: 5px;
             text-align: center;
         }
     }
-
     main {
         display: flex;
         flex-direction: column;
-
         h3 {
             width: fit-content;
             font-size: 20px;
@@ -83,7 +81,6 @@ const PostsContainer = styled.div`
             cursor: pointer;
             word-break: break-word;
         }
-
         &>p {
             color: #b7b7b7;
             font-size: 17px;
@@ -91,7 +88,6 @@ const PostsContainer = styled.div`
             word-break: break-word;
         }
     }
-
 `;
 
 const LinkContent = styled.div`
@@ -106,7 +102,6 @@ const LinkContent = styled.div`
     cursor: pointer;
     justify-content: space-between;
     margin-top: 14px;
-
     img {
         height: inherit;
         width: 155px;
@@ -121,17 +116,14 @@ const LinkContent = styled.div`
         border-top-right-radius: 11px;
         border-bottom-right-radius: 11px;
     }
-
     h4 {
         color: #cecece;
         font-size: 16px;
     }
-
     p {
         font-size: 11px;
         color: #9B9595;
     }
-
     span {
         font-size: 11px;
         color: #cecece;

@@ -38,9 +38,6 @@ function Timeline() {
         });
     }, [user.token]);
 
-
-    
-
     return (
         <Main>
             <Content>

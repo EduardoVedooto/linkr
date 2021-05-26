@@ -22,7 +22,7 @@ function Login(){
         request.then((response)=>{
             setUser(response.data);
             history.push("/timeline");
-            console.log(response.data);
+            //console.log(response.data);
         });
         request.catch((error)=>{
             setEmail("");
@@ -154,4 +154,4 @@ const Button = styled.button`
     border: none;
 `
 
-export default Login
+export default Login;

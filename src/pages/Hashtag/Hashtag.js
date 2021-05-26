@@ -39,9 +39,6 @@ useEffect(() => {
     });
 }, [hashtag,user.token]);
 
-   
-
-
     return (
         <Main>
             <Content>

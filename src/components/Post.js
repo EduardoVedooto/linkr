@@ -21,7 +21,7 @@ function Post({ post, goToProfile, goToHashtag }) {
                 <h3 onClick={() => goToProfile(post.user.id)}>{post.user.username}</h3>
                 <p>
                     <ReactHashtag renderHashtag={hashtag => (
-                        <Hashtag key={post.id} onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>
+                        <Hashtag onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag> //eslint-disable-line
                     )}>
                         {post.text}
                     </ReactHashtag>

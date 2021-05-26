@@ -1,26 +1,31 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
 import CreatePost from "../../components/CreatePost";
 import InternalError from "../../components/InternalError";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
+import UserContext from "../../Context/UserContext";
+
 
 function Timeline() {
     const history = useHistory();
+    const { user } = useContext(UserContext);
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
 
+    console.log(user);
+
     useEffect(() => {
         updateList();
-    }, []);
+    }, []); //eslint-disable-line
 
     function updateList() {
         const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
             headers: {
-                Authorization: `Bearer fab13ed8-a5b8-475c-965d-3f2d87efc629`,
+                Authorization: `Bearer ${user.token}`,
             }
         });
         promise.then(({ data }) => {
@@ -54,7 +59,7 @@ function Timeline() {
                             <CreatePost updateList={updateList} goToProfile={goToProfile} />
 
                             {posts.length ?
-                                posts.map(post => <Post key={post.id} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} />)
+                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} />)
                                 :
                                 <h3 className="error">Nenhum post encontrado...</h3>
                             }

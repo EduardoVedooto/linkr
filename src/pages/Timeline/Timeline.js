@@ -11,11 +11,11 @@ import Post from "../../components/Post";
 
 
 
-function Timeline(selected,setSelected) {
+function Timeline() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
-    const {user, setUser } = useContext(UserContext);
+    const {user} = useContext(UserContext);
    
     //console.log(user);
 
@@ -42,7 +42,7 @@ function Timeline(selected,setSelected) {
         promise.catch(error => {
             console.log(error.response.data);
             setIsWaitingServer(false);
-           // setInternalError(false);
+            setInternalError(false);
         });
     };   
     

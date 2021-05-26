@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
 import { Link} from "react-router-dom";
-import { useState, useContext } from "react";
+import {useContext } from "react";
 import SelectedContext from "../Context/SelectedContext";
 /*
 

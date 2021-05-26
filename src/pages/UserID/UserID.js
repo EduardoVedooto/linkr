@@ -12,9 +12,9 @@ import SelectedContext from "../../Context/SelectedContext";
 export default function UserID() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const { idUser } = useParams();  
-    const {selected,setSelected} = useContext(SelectedContext);
+    const {selected} = useContext(SelectedContext);
     const [posts, setPosts] = useState([]);
-    const {user, setUser } = useContext(UserContext);
+    const {user} = useContext(UserContext);
      //console.log(selected);
     //console.log(user);
 

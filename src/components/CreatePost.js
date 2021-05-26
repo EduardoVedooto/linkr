@@ -2,14 +2,16 @@ import axios from "axios";
 import { useState } from "react";
 import styled from "styled-components";
 
-function CreatePost() {
+function CreatePost({ updateList, goToProfile }) {
     const [isWaitingServer, setIsWaitingServer] = useState(false);
     const [errorMessage, setErrorMessage] = useState(false);
 
     const [post, setPost] = useState({
-        texto: "",
+        text: "",
         link: ""
     });
+
+    console.log(post);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -17,15 +19,15 @@ function CreatePost() {
         // Axios Post
         const promisse = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", post, {
             headers: {
-                Authorization: `Bearer ...`, // Falta token
+                Authorization: `Bearer fab13ed8-a5b8-475c-965d-3f2d87efc629`, // Falta token
             }
         });
         promisse.then(() => {
-            console.log("Publicado");
-            post.texto = "";
+            setIsWaitingServer(false);
+            post.text = "";
             post.link = "";
             setPost({ ...post });
-            setIsWaitingServer(false);
+            updateList();
         });
         promisse.catch(error => {
             console.log(error.response.data);
@@ -46,10 +48,6 @@ function CreatePost() {
     }
 
     console.log()
-
-    function goToProfile() {
-        console.log("indo para o profile");
-    }
 
     return (
         <Container>

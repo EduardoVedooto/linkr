@@ -2,28 +2,32 @@ import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
 
-function Post() {
+function Post({ post }) {
 
+    console.log(post);
+
+    const { link, linkDescription, linkImage, linkTitle, text, likes } = post;
+    const { username, avatar } = post.user;
 
     return (
         <PostsContainer>
             <aside>
-                <img src="https://ahseeit.com/meme-templates/king-include/uploads/2020/11/hide-the-pain-harold-4386494474.png" alt="Imagem do perfil" />
+                <img src={avatar} />
                 <div id="likes">
                     <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
                         <FiHeart />
-                        <span>34 likes</span>
+                        <span>{likes.length} likes</span>
                     </IconContext.Provider>
                 </div>
             </aside>
             <main>
-                <h3>Name Example</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <h3>{username}</h3>
+                <p>{text}</p>
                 <LinkContent>
-                    <h4>Title Example</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <span>www.textoDoLink.com</span>
-                    <img src="https://cdn.freebiesupply.com/logos/thumbs/2x/react-1-logo.png" alt="link" />
+                    <h4>{linkTitle}</h4>
+                    <p>{linkDescription}</p>
+                    <span>{link}</span>
+                    <img src={linkImage} alt="link image" />
                 </LinkContent>
             </main>
         </PostsContainer>

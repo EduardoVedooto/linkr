@@ -7,10 +7,6 @@ import CreatePost from "../../components/CreatePost";
 import InternalError from "../../components/InternalError";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
-
-
-
-
 function Timeline() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);

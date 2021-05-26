@@ -21,20 +21,21 @@ function SignUp(){
             pictureUrl,   
         }
         const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-up", body);
-        request.then(()=> {history.push("/");console.log("deu certo")});
+
+        request.then(()=> {history.push("/")});
         request.catch((error)=>{setLoading(false)
-            console.log("fudeu");
+
             if(email === "" || password === "" || pictureUrl === "" || username === ""){
                 alert("Preencha os campos");
                 return
             }
             if(error.response.status === 400){
-                alert("Email invalido!")
+
+                alert("Imagem inválida!")
             }
             if(error.response.status === 403){
-                alert("Email inserido já está cadastrado")
+                alert("Endereço de email já cadastrado")
             }
-
         });
     }
 

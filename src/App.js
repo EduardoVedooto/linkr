@@ -7,6 +7,7 @@ import SelectedContext from "./Context/SelectedContext"
 import SignUp from "./pages/SignUp/SignUp"
 import Login from "./pages/Login/Login"
 import Timeline from "./pages/Timeline/Timeline";
+
 import UserID from "./pages/UserID/UserID";
 
 function App() {
@@ -35,7 +36,8 @@ function App() {
     </SelectedContext.Provider>
     </UserContext.Provider>
     
-  )
+  );
+
 }
 
 export default App;

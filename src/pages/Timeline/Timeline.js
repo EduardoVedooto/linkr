@@ -41,6 +41,11 @@ function Timeline() {
         history.push(`/user/${id}`);
     }
 
+    function goToHashtag(hashtag) {
+        history.push(`/hashtag/${hashtag}`);
+    }
+
+
     return (
         <Main>
             <Content>
@@ -51,7 +56,7 @@ function Timeline() {
                         <Posts>
                             <CreatePost updateList={updateList} goToProfile={goToProfile} />
                             {!posts.length ? <h3 className="error">Nenhum post encontrado...</h3>
-                                : posts.map(post => <Post key={post.id} post={post} goToProfile={goToProfile} />)
+                                : posts.map(post => <Post key={post.id} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} />)
                             }
                             {/* <Post />
                             <Post />

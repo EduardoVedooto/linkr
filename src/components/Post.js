@@ -1,15 +1,16 @@
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
+import ReactHashtag from "react-hashtag";
 
-function Post({ post, goToProfile }) {
-    console.log(post);
+function Post({ post, goToProfile, goToHashtag }) {
+
 
     return (
         <PostsContainer>
             <aside>
                 <img src={post.user.avatar} onClick={() => goToProfile(post.user.id)} alt="Imagem do perfil" />
-                <div id="likes">
+                <div id="likes" onClick={() => console.log(post.likes)}>
                     <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
                         <FiHeart />
                         <span>{post.likes.length} {post.likes.length === 1 ? "like" : "likes"}</span>
@@ -18,7 +19,13 @@ function Post({ post, goToProfile }) {
             </aside>
             <main>
                 <h3 onClick={() => goToProfile(post.user.id)}>{post.user.username}</h3>
-                <p>{post.text}</p>
+                <p>
+                    <ReactHashtag renderHashtag={hashtag => (
+                        <Hashtag onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>
+                    )}>
+                        {post.text}
+                    </ReactHashtag>
+                </p>
                 <LinkContent onClick={() => window.open(post.link, "_blank")}>
                     <h4>{post.linkTitle}</h4>
                     <p>{post.linkDescription}</p>
@@ -71,7 +78,7 @@ const PostsContainer = styled.div`
     main {
         display: flex;
         flex-direction: column;
-        width: 100%;
+        width: 100%;    
 
         h3 {
             width: fit-content;
@@ -103,6 +110,7 @@ const LinkContent = styled.div`
     justify-content: space-between;
     margin-top: 14px;
     width: inherit;
+    max-width: 100%;
 
     img {
         height: inherit;
@@ -132,7 +140,15 @@ const LinkContent = styled.div`
     span {
         font-size: 11px;
         color: #cecece;
+        word-break: break-word;
     }
+`;
+
+const Hashtag = styled.span`
+    font-size: inherit;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
 `;
 
 export default Post;

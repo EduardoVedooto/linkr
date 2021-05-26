@@ -4,6 +4,7 @@ import { FiHeart } from "react-icons/fi";
 import { Link} from "react-router-dom";
 import {useContext } from "react";
 import SelectedContext from "../Context/SelectedContext";
+import ReactHashtag from "react-hashtag";
 /*
 
 */
@@ -11,6 +12,7 @@ import SelectedContext from "../Context/SelectedContext";
 function Post(data) {
 //console.log(data);
 const {setSelected} = useContext(SelectedContext);
+let i=0;
     return (
         <PostsContainer>
           
@@ -25,8 +27,20 @@ const {setSelected} = useContext(SelectedContext);
             </aside>
             <main>
                 <Link to={`/user/${data.data.user.id}`}>
-                <h3 onClick={()=> setSelected(data.data.user.username) }>{data.data.user.username}</h3></Link>
-                <p>{data.data.text}</p>
+                <h3 onClick={()=> setSelected(data.data.user.username) }>{data.data.user.username}</h3>
+                </Link>
+                
+                
+                <p>                    
+                <ReactHashtag renderHashtag={hashtag => (
+                        
+                        <Link to={`/Hashtag/${hashtag.replace("#","")}`} key={i++}> 
+                        <Hashtag key={i++} onClick={() => setSelected(hashtag)}>{hashtag}</Hashtag>
+                        </Link>
+                    )}>
+                        {data.data.text}
+                    </ReactHashtag>
+                    </p>
                 <LinkContent>
                     <h4>{data.data.linkTitle}</h4>
                     <p>{data.data.linkDescription}</p>
@@ -129,5 +143,10 @@ const LinkContent = styled.div`
         color: #cecece;
     }
 `;
-
+const Hashtag = styled.span`
+    font-size: inherit;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+`;
 export default Post;

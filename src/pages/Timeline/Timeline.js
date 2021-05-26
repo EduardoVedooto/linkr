@@ -16,8 +16,6 @@ function Timeline() {
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
 
-    console.log(user);
-
     useEffect(() => {
         updateList();
     }, []); //eslint-disable-line
@@ -35,7 +33,7 @@ function Timeline() {
         promise.catch(error => {
             console.log(error.response.data.message);
             setIsWaitingServer(false);
-            setInternalError(false);
+            setInternalError(true);
         });
     }
 

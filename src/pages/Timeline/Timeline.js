@@ -1,18 +1,41 @@
-import { useEffect, useState } from "react";
+
+import { useEffect, useState ,useContext} from "react";
+import axios from "axios";
 import styled from "styled-components";
 import CreatePost from "../../components/CreatePost";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
-
+import UserContext from "../../Context/UserContext";
 
 function Timeline() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
-
+    const {user, setUser } = useContext(UserContext);
+    const [posts, setPosts] = useState([]);
     useEffect(() => {
-        setTimeout(() => {
-            setIsWaitingServer(false);
-        }, 2000); // Apenas para simular o Servidor
+        updateList();
     }, []);
+
+    function updateList() {
+        const config = {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          };
+          const promise = axios.get(
+            `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts`,
+            config
+          )
+        promise.then(({ data }) => {
+            setPosts(data.posts);
+            console.log(data)
+            setIsWaitingServer(false);
+        });
+        promise.catch(error => {
+            console.log(error.response.data);
+            setIsWaitingServer(false);
+           // setInternalError(false);
+        });
+    };
 
 
     return (
@@ -26,9 +49,11 @@ function Timeline() {
 
                         <Posts>
                             <CreatePost />
-                            <Post />
-                            <Post />
-                            <Post />
+                            {posts.map((post,i)=> (
+                    <Post key={i} user={post.user}/>
+                    )
+
+                    )}
                         </Posts>
 
                         <aside>in development</aside>
@@ -52,7 +77,6 @@ const Main = styled.main`
 
 const Content = styled.div`
     width: 937px;
-
     h2 {
         color: #fff;
         font-family: "Oswald";
@@ -66,7 +90,6 @@ const Columns = styled.div`
     justify-content: space-between;
     height: inherit;
     margin-top: 43px;
-
     &>aside{  // Será substituído pela div hashtag
         background-color: #171717;
         color: #fff;

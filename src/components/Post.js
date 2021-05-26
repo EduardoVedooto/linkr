@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
+import { Link, useHistory } from "react-router-dom"
 
-function Post() {
+function Post(user) {
 
-
+console.log(user);
     return (
         <PostsContainer>
             <aside>
@@ -17,7 +18,10 @@ function Post() {
                 </div>
             </aside>
             <main>
+            <Link to={`/user/${user}`}>
                 <h3>Name Example</h3>
+                </Link>
+
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 <LinkContent>
                     <h4>Title Example</h4>

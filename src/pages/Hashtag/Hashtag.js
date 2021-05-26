@@ -18,16 +18,10 @@ export default function Hashtag() {
     const {user} = useContext(UserContext);
     const [internalError,setInternalError] = useState(false);
     //console.log(hashtag);
-    //console.log(user); `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/HASHTAG/posts`
-
 /* 
 
 //*/
 useEffect(() => {
-    updateList();
-}, []);
-
-function updateList() {
     const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts`, {
         headers: {
             Authorization: `Bearer ${user.token}`,
@@ -43,7 +37,8 @@ function updateList() {
         setIsWaitingServer(false);
         setInternalError(false);
     });
-} 
+}, [hashtag,user.token]);
+
    
 
 

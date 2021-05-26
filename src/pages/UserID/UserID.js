@@ -24,10 +24,6 @@ export default function UserID() {
 
 //*/
 useEffect(() => {
-    updateList();
-}, []);
-
-function updateList() {
     const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/posts`, {
         headers: {
             Authorization: `Bearer ${user.token}`,
@@ -43,7 +39,10 @@ function updateList() {
         setIsWaitingServer(false);
         setInternalError(false);
     });
-} 
+}, [idUser,user.token]);
+
+
+ 
    
 
 

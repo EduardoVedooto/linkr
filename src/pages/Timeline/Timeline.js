@@ -21,10 +21,6 @@ function Timeline() {
 
     /*   //*/ 
     useEffect(() => {
-        updateList();
-    }, []);
-
-    function updateList() {
         const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
             headers: {
                 Authorization: `Bearer ${user.token}`,
@@ -40,7 +36,9 @@ function Timeline() {
             setIsWaitingServer(false);
             setInternalError(false);
         });
-    } 
+    }, [user.token]);
+
+
     
 
     return (

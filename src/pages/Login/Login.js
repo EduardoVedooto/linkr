@@ -8,11 +8,7 @@ function Login(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
-<<<<<<< HEAD
-    const {setUser } = useContext(UserContext);
-=======
     const { setUser } = useContext(UserContext)
->>>>>>> main
     const history = useHistory();
 
     function AttemptToLogin(){
@@ -24,15 +20,9 @@ function Login(){
 
         const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-in", body);
         request.then((response)=>{
-<<<<<<< HEAD
-            setUser(response.data);
-            history.push("/timeline");
-            //console.log(response.data);
-=======
             setUser({token: response.data.token, avatar: response.data.user.avatar, id: response.data.user.id, username: response.data.user.username, email: response.data.user.email})
             history.push("/timeline")
             
->>>>>>> main
         });
         request.catch((error)=>{
             setEmail("");
@@ -164,8 +154,4 @@ const Button = styled.button`
     border: none;
 `
 
-<<<<<<< HEAD
-export default Login;
-=======
 export default Login
->>>>>>> main

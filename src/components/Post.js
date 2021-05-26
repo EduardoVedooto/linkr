@@ -8,7 +8,6 @@ import ReactHashtag from "react-hashtag";
 /*
 
 */
-
 function Post(data) {
 //console.log(data);
 const {setSelected} = useContext(SelectedContext);

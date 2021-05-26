@@ -16,6 +16,7 @@ function CreatePost() {
     });
 
     function handleSubmit(e) {
+        if (errorMessage) setErrorMessage(false);
         e.preventDefault();
         setIsWaitingServer(true);
         // Axios Post
@@ -31,7 +32,7 @@ function CreatePost() {
             setIsWaitingServer(false);
         });
         promisse.catch(error => {
-            console.log(error.response.data);
+            console.log(error.response.data.message);
             setErrorMessage(true);
             setIsWaitingServer(false);
         })

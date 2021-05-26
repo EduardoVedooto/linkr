@@ -10,7 +10,7 @@ function Post({ post, goToProfile, goToHashtag }) {
         <PostsContainer>
             <aside>
                 <img src={post.user.avatar} onClick={() => goToProfile(post.user.id)} alt="Imagem do perfil" />
-                <div id="likes" onClick={() => console.log(post.likes)}>
+                <div id="likes">
                     <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
                         <FiHeart />
                         <span>{post.likes.length} {post.likes.length === 1 ? "like" : "likes"}</span>
@@ -21,7 +21,7 @@ function Post({ post, goToProfile, goToHashtag }) {
                 <h3 onClick={() => goToProfile(post.user.id)}>{post.user.username}</h3>
                 <p>
                     <ReactHashtag renderHashtag={hashtag => (
-                        <Hashtag onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>
+                        <Hashtag key={post.id} onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>
                     )}>
                         {post.text}
                     </ReactHashtag>

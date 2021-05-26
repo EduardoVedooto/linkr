@@ -25,19 +25,17 @@ function Timeline() {
             }
         });
         promise.then(({ data }) => {
-            console.log(data.posts);
             setPosts(data.posts);
             setIsWaitingServer(false);
         });
         promise.catch(error => {
-            console.log(error.response.data);
+            console.log(error.response.data.message);
             setIsWaitingServer(false);
             setInternalError(false);
         });
     }
 
     function goToProfile(id) {
-        console.log("Chegou: " + id);
         history.push(`/user/${id}`);
     }
 
@@ -55,15 +53,15 @@ function Timeline() {
 
                         <Posts>
                             <CreatePost updateList={updateList} goToProfile={goToProfile} />
-                            {!posts.length ? <h3 className="error">Nenhum post encontrado...</h3>
-                                : posts.map(post => <Post key={post.id} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} />)
+
+                            {posts.length ?
+                                posts.map(post => <Post key={post.id} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} />)
+                                :
+                                <h3 className="error">Nenhum post encontrado...</h3>
                             }
-                            {/* <Post />
-                            <Post />
-                            <Post /> */}
                         </Posts>
 
-                        <aside>in development</aside>
+                        <aside>in development (Trending)</aside>
 
                     </Columns>
 

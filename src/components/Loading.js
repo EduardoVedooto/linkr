@@ -18,7 +18,7 @@ const LoadingContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: calc(100vh - 225px);
 `;
 
 export default Loading;

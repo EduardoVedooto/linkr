@@ -7,12 +7,14 @@ import SelectedContext from "./Context/SelectedContext"
 import SignUp from "./pages/SignUp/SignUp"
 import Login from "./pages/Login/Login"
 import Timeline from "./pages/Timeline/Timeline";
-
 import UserID from "./pages/UserID/UserID";
+import Hashtag from "./pages/Hashtag/Hashtag";
 
 function App() {
   const [user, setUser] = useState();
   const [selected, setSelected] = useState();
+  //        <Route path="/user/:idUser" exact component={UserID} />
+  //<Route path="/Hashtag/:hashtag" exact component={Hashtag} />
 
   return (
     <UserContext.Provider value={{user, setUser}}>
@@ -23,7 +25,6 @@ function App() {
         < Route path="/" exact component={Login}/>
         <Route path="/signup" exact component={SignUp}/>
         <Route path="/timeline" exact component={Timeline}/>
-        <Route path="/user/:idUser" exact component={UserID} />
 
 
       </Switch>
@@ -36,8 +37,7 @@ function App() {
     </SelectedContext.Provider>
     </UserContext.Provider>
     
-  );
-
+  )
 }
 
 export default App;

@@ -3,6 +3,8 @@ import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
 import ReactHashtag from "react-hashtag";
 
+import Like from './Like';
+
 function Post({ post, goToProfile, goToHashtag }) {
 
     let counter = 0;
@@ -11,11 +13,13 @@ function Post({ post, goToProfile, goToHashtag }) {
         <PostsContainer>
             <aside>
                 <img src={post.user.avatar} onClick={() => goToProfile(post.user.id)} alt="Imagem do perfil" />
+                
                 <div id="likes">
-                    <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
+                <Like likes={post.likes} postId={post.id} />
+                    {/*<IconContext.Provider value={{ size: "20px", color: "#fff" }}>
                         <FiHeart />
                         <span>{post.likes.length} {post.likes.length === 1 ? "like" : "likes"}</span>
-                    </IconContext.Provider>
+                    </IconContext.Provider>*/}
                 </div>
             </aside>
             <main>

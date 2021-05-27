@@ -1,14 +1,25 @@
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
-import { FiPencil } from 'react-icons/fi'
+
 
 import { Link} from "react-router-dom";
 import {useContext, useState,useRef,useEffect } from "react";
 import SelectedContext from "../Context/SelectedContext";
 import ReactHashtag from "react-hashtag";
 /*
+  useEffect(() => {
+    const handleEsc = (event) => {
+       if (event.keyCode === 27) {
+        console.log('Close')
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
 
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }, []);
 */
 
 
@@ -21,11 +32,30 @@ const [clicked,setCliked]=useState(false);
 const [text,setText]=useState("");
 let i=0;
 const inputRef=useRef();
+
 useEffect(() => {
     if (clicked) {
-      inputRef.current.focus();
-    }
+      inputRef.current.focus()
+      const handleEsc = (event) => {
+        if (event.keyCode === 27) {
+            console.log('Close')
+            setCliked(false);
+          }
+        };
+        window.addEventListener('keydown', handleEsc);
+    
+        return () => {
+          window.removeEventListener('keydown', handleEsc);
+        }
+      }
+
+    
   }, [clicked]);
+
+
+
+
+
 
 
 function editPost(e,post){
@@ -36,17 +66,23 @@ function editPost(e,post){
     console.log(inputRef);
 
 }
-function escFunction(e){
-    if(e.keyCode === 27) {
-        alert();
-        return true;
-      //Do whatever when esc is pressed
-    }return false;
-  }
+
+
 
 function handleChange(e) {
     //if (errorMessage) setErrorMessage(false);
-         escFunction(e)?alert():setText(e.target.value);
+    setText(e.target.value);
+    const handleEsc = (event) => {
+        if (event.keyCode === 27) {
+         console.log('Close')
+       }
+     };
+     window.addEventListener('keydown', handleEsc);
+ 
+     return () => {
+       window.removeEventListener('keydown', handleEsc);
+     };
+         
          
         //setPost({ ...post });
     

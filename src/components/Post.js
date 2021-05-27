@@ -2,13 +2,19 @@ import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
 import ReactHashtag from "react-hashtag";
+import RemovePost from "./RemovePost";
+import { useContext } from "react";
+import UserContext from "../Context/UserContext";
 
-function Post({ post, goToProfile, goToHashtag })  {
+function Post({ post, goToProfile, goToHashtag, updateList }) {
+
+    const { id, token } = useContext(UserContext).user;
+
     let counter = 0;
     return (
         <PostsContainer>
             <aside>
-                <img src={post.user.avatar} onClick={() => goToProfile(post.user.id,post.user.username)} alt="Imagem do perfil" />
+                <img src={post.user.avatar} onClick={() => goToProfile(post.user.id, post.user.username)} alt="Imagem do perfil" />
                 <div id="likes">
                     <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
                         <FiHeart />
@@ -17,7 +23,8 @@ function Post({ post, goToProfile, goToHashtag })  {
                 </div>
             </aside>
             <main>
-                <h3 onClick={() => goToProfile(post.user.id,post.user.username)}>{post.user.username}</h3>
+                {post.user.id === id ? <RemovePost id={post.id} token={token} updateList={updateList} /> : ""}
+                <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
                 <p>
                     <ReactHashtag renderHashtag={hashtag => <Hashtag key={post.id + hashtag + counter++} onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>}>
                         {post.text}
@@ -74,7 +81,9 @@ const PostsContainer = styled.div`
     main {
         display: flex;
         flex-direction: column;
-        width: 100%;    
+        width: 100%;   
+        position: relative; 
+
         h3 {
             width: fit-content;
             font-size: 20px;

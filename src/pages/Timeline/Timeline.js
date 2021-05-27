@@ -19,11 +19,11 @@ function Timeline() {
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
 
-   const {setSelected} = useContext(SelectedContext);
-    
+    const { setSelected } = useContext(SelectedContext);
+
     useEffect(() => {
         updateList();
-    }, [user.token]); //eslint-disable-line
+    }, []); //eslint-disable-line
 
     function updateList() {
         const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
@@ -41,17 +41,17 @@ function Timeline() {
         });
     }
 
-    function goToProfile(id,nome) {
+    function goToProfile(id, nome) {
         setSelected(nome);
         history.push(`/user/${id}`);
     }
 
     function goToHashtag(hashtag) {
-        history.push(`/hashtag/${hashtag.replace("#","")}`);
+        history.push(`/hashtag/${hashtag.replace("#", "")}`);
     }
 
- 
-    
+
+
 
     return (
         <Main>
@@ -64,7 +64,7 @@ function Timeline() {
                             <CreatePost updateList={updateList} goToProfile={goToProfile} />
 
                             {posts.length ?
-                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} />)
+                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
                                 :
                                 <h3 className="error">Nenhum post encontrado...</h3>
                             }

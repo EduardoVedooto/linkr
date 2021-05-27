@@ -19,17 +19,17 @@ function App() {
   return (
     <UserContext.Provider value={{user, setUser}}>
       <SelectedContext.Provider value={{selected, setSelected}}>
-    <BrowserRouter>
-      <GlobalStyles />
-      <Switch>
-        <Route path="/" exact component={Login}/>
-        <Route path="/signup" exact component={SignUp}/>
-        <Route path="/timeline" exact component={Timeline}/>
-        <Route path="/user/:idUser" exact component={UserID} />
-        <Route path="/Hashtag/:hashtag" exact component={Hashtag} />
-      </Switch>
-    </BrowserRouter>
-    </SelectedContext.Provider>
+        <BrowserRouter>
+          <GlobalStyles />
+          <Switch>
+            <Route path="/" exact component={Login}/>
+            <Route path="/signup" exact component={SignUp}/>
+            <Route path="/timeline" exact component={Timeline}/>
+            <Route path="/user/:idUser" exact component={UserID} />
+            <Route path="/Hashtag/:hashtag" exact component={Hashtag} />
+          </Switch>
+        </BrowserRouter>
+      </SelectedContext.Provider>
     </UserContext.Provider>
     
   )

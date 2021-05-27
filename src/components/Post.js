@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
-/*
-*/
 import ReactHashtag from "react-hashtag";
 
 function Post({ post, goToProfile, goToHashtag })  {

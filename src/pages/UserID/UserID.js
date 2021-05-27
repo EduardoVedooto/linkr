@@ -1,4 +1,4 @@
-import { useEffect, useState ,useContext} from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import Loading from "../../components/Loading";
@@ -14,66 +14,69 @@ import Aside from "../../components/Aside";
 
 export default function UserID() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
-    const { idUser } = useParams();  
+    const { idUser } = useParams();
     const [posts, setPosts] = useState([]);
-    const {user} = useContext(UserContext);
-    const [internalError,setInternalError] = useState(false);
+    const { user } = useContext(UserContext);
+    const [internalError, setInternalError] = useState(false);
     const history = useHistory();
-    const {selected,setSelected} = useContext(SelectedContext);
-    
-useEffect(() => {
-    const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/posts`, {
-        headers: {
-            Authorization: `Bearer ${user.token}`,
-        }
-    });
-    promise.then(({ data }) => {
-        setPosts(data.posts);
-        setIsWaitingServer(false);
-    });
-    promise.catch(error => {
-        setIsWaitingServer(false);
-        setInternalError(true);
-    });
-}, [idUser,user.token]); 
+    const { selected, setSelected } = useContext(SelectedContext);
 
-function goToProfile(id,nome) {
-    setSelected(nome);
-    history.push(`/user/${id}`);
-}
+    useEffect(() => {
+        updateList();
+    }, []); //eslint-disable-line 
 
-function goToHashtag(hashtag) {
-    history.push(`/hashtag/${hashtag.replace("#","")}`);
-}
+    function goToProfile(id, nome) {
+        setSelected(nome);
+        history.push(`/user/${id}`);
+    }
 
+    function goToHashtag(hashtag) {
+        history.push(`/hashtag/${hashtag.replace("#", "")}`);
+    }
 
-
-return (
-    <Main>
-        <Content>
-            <h2>{selected}’s posts</h2>
-            {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
-                <Columns>
-
-                    <Posts>
-                        
-
-                        {posts.length>0 ?
-                            posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} />)
-                            :
-                            <h3 className="error">Nenhum post encontrado...</h3>
-                        }
-                    </Posts>
-
-                    <Aside user={user} posts={posts} />
-
-                </Columns>
-
+    function updateList() {
+        const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/posts`, {
+            headers: {
+                Authorization: `Bearer ${user.token}`,
             }
+        });
+        promise.then(({ data }) => {
+            setPosts(data.posts);
+            setIsWaitingServer(false);
+        });
+        promise.catch(error => {
+            setIsWaitingServer(false);
+            setInternalError(true);
+        });
+    }
 
-        </Content>
-    </Main>
-);
+    return (
+        <Main>
+            <Content>
+                <h2>{selected}’s posts</h2>
+                {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
+                    <Columns>
+
+                        <Posts>
+
+                    
+
+                            {posts.length > 0 ?
+                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
+                                :
+                                <h3 className="error">Nenhum post encontrado...</h3>
+                            }
+                        </Posts>
+
+                        <Aside user={user} posts={posts} />
+
+                    </Columns>
+
+                }
+
+            </Content>
+        </Main>
+    );
 }
 
 const Main = styled.main`

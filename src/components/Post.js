@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
 
-
 import { Link} from "react-router-dom";
 import {useContext, useState,useRef,useEffect } from "react";
 import SelectedContext from "../Context/SelectedContext";
@@ -38,7 +37,7 @@ useEffect(() => {
       inputRef.current.focus()
       const handleEsc = (event) => {
         if (event.keyCode === 27) {
-            console.log('Close')
+            //console.log('Close')
             setCliked(false);
           }
         };

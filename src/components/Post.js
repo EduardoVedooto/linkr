@@ -18,7 +18,7 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
             <aside>
                 <img src={post.user.avatar} onClick={() => goToProfile(post.user.id, post.user.username)} alt="Imagem do perfil" />
                 <div id="likes">
-                <Like likes={post.likes} postId={post.id} />
+                <Like likes={post.likes} postId={post.id} updateList={updateList} />
                     {/*<IconContext.Provider value={{ size: "20px", color: "#fff" }}>
                         <FiHeart />
                         <span>{post.likes.length} {post.likes.length === 1 ? "like" : "likes"}</span>

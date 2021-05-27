@@ -7,9 +7,9 @@ import axios from 'axios';
 import UserContext from '../Context/UserContext';
 import { useContext, useEffect, useState } from "react";
 
-function Like({ postId, likes }) {
+function Like({ postId, likes, updateList }) {
     const { user } = useContext(UserContext);
-
+    const [text, setText] = useState("");
     const [likesInfo, setLikesInfo] = useState({
         likesList: [],
         clickedLike: false,
@@ -38,16 +38,13 @@ function Like({ postId, likes }) {
 
         request.then(({ data }) => {
             console.log(data.post.likes);
-
-
-            
-
             setLikesInfo({...likesInfo, 
                 likesList: data.post.likes,
                 clickedLike: true,
                 tooltipText: tooltip()
             });
 
+            updateList();
             console.log(likesInfo);
 
             //setClickedLike(true);
@@ -65,12 +62,13 @@ function Like({ postId, likes }) {
 
         request.then(({ data }) => {
             console.log(data.post.likes);
-
             setLikesInfo({...likesInfo, 
                 likesList: data.post.likes,
                 clickedLike: false,
                 tooltipText: tooltip()
             });
+
+            updateList();
 
             //setLikesInfo(data.post.likes);
             //setClickedLike(false);
@@ -88,28 +86,26 @@ function Like({ postId, likes }) {
     function tooltip() {
         const {likesList, clickedLike} = likesInfo;
         const userNotMe = likesList.find(u => u.userId !== user.id);
-        let text = "";
+        
 
         if (clickedLike) {
             if (likesList.length === 1) {
-                text = "Somente você curtiu esse post";
+                setText("Somente você curtiu esse post");
             } else if (likesList.length === 2) {
-                text = `Você e ${userNotMe.username}`;
+                setText(`Você e ${userNotMe.username}`);
             } else if (likesList.length > 2) {
                 const qtd = likesList.length - 2;
-                text = `Você, ${userNotMe.username} e ${qtd} ${qtd === 1 ? "outra pessoa" : "outras pessoas"}`;
-            }
-        } else if(!clickedLike) {
-            if(likesList.length === 1) {
-                text = `${likesList[0].username}`;
-            } else if (likesList.length === 2) {
-                text = `${likesList[0].username} e ${likesList[1].username}`;
-            } else if (likesList.length > 2) {
-                const qtd = likesList.length - 2;
-                text = `${likesList[0].username}, ${likesList[1].username} e ${qtd} ${qtd === 1 ? "outra pessoa" : "outras pessoas"}`;
+                setText(`Você, ${userNotMe.username} e ${qtd} ${qtd === 1 ? "outra pessoa" : "outras pessoas"}`);
             }
         } else {
-            text = "testando";
+            if(likesList.length === 1) {
+                setText(`${likesList[0].username}`);
+            } else if (likesList.length === 2) {
+                setText(`${likesList[0].username} e ${likesList[1].username}`);
+            } else if (likesList.length > 2) {
+                const qtd = likesList.length - 2;
+                setText(`${likesList[0].username}, ${likesList[1].username} e ${qtd} ${qtd === 1 ? "outra pessoa" : "outras pessoas"}`);
+            }
         }
 
         return text;

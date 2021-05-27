@@ -79,6 +79,7 @@ const Main = styled.main`
     padding: 125px 0 50px 0;
     min-height: 100vh;
     background-color: #2F2F2F;
+
 `;
 
 const Content = styled.div`
@@ -89,6 +90,13 @@ const Content = styled.div`
         font-family: "Oswald";
         font-size: 43px;
         font-weight: 700;
+    }
+
+    @media(max-width: 937px){
+        width: 100%;
+        h2 {
+            margin-left: 20px;
+        }
     }
 `;
 
@@ -106,6 +114,12 @@ const Columns = styled.div`
         border-radius: 16px;
         text-align: center;
     }
+
+    @media(max-width: 937px){
+        &>aside {
+            display: none;
+        }
+    }
 `;
 
 const Posts = styled.section`
@@ -113,6 +127,12 @@ const Posts = styled.section`
     display: flex;
     flex-direction: column;
     gap: 16px;
+    @media(max-width: 937px){
+        margin: 0 auto;
+    }
+    @media(max-width: 611px){
+        width: 100%;
+    }
 
     h3.error {
         color: #FFF;
@@ -120,6 +140,7 @@ const Posts = styled.section`
         font-family: "Oswald";
 
     }
+
 `;
 
 export default Timeline;

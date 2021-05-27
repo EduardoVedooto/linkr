@@ -79,6 +79,10 @@ const Container = styled.div`
     padding: 16px 22px 16px 18px;
     box-shadow: 0 4px 4px rgba(0,0,0,.25);
     margin-bottom: 14px;
+    @media(max-width: 611px){
+        width: 100%;
+        border-radius: 0;
+    }
 
     img {
         width: 50px;

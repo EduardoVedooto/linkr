@@ -44,6 +44,10 @@ const PostsContainer = styled.div`
     padding: 17px 22px 20px 18px;
     color: #fff;
     gap: 18px;
+    @media(max-width: 611px){
+        width: 100%;
+        border-radius: 0;
+    }
 
     aside {
         display: flex;
@@ -102,7 +106,6 @@ const LinkContent = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    padding: 24px;
     height: 155px;
     padding: 24px 175px 23px 20px;
     cursor: pointer;
@@ -110,6 +113,7 @@ const LinkContent = styled.div`
     margin-top: 14px;
     width: inherit;
     max-width: 100%;
+    
 
     img {
         height: inherit;
@@ -134,12 +138,24 @@ const LinkContent = styled.div`
     p {
         font-size: 11px;
         color: #9B9595;
+        word-break: break-word;
     }
 
     span {
         font-size: 11px;
         color: #cecece;
         word-break: break-word;
+    }
+
+    @media(max-width: 611px) {
+        padding: 7px 105px 7px 7px;
+        height: 115px;
+        overflow: hidden;
+
+        img {
+            width: 95px;
+            height: 115px;
+        }
     }
 `;
 

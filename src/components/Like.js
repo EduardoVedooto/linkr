@@ -32,7 +32,7 @@ function Like({ postId }) {
     }
 
     function dislike() {
-        const request = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}/like`, {}, config);
+        const request = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}/dislike`, {}, config);
 
         request.then(({ data }) => {
             setLikesInfo(data.post.likes);

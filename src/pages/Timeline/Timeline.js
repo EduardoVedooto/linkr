@@ -8,6 +8,7 @@ import InternalError from "../../components/InternalError";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 import UserContext from "../../Context/UserContext";
+import SelectedContext from "../../Context/SelectedContext";
 
 
 
@@ -17,6 +18,8 @@ function Timeline() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
+
+   const {setSelected} = useContext(SelectedContext);
     /*   //*/ 
     useEffect(() => {
         updateList();
@@ -38,7 +41,8 @@ function Timeline() {
         });
     }
 
-    function goToProfile(id) {
+    function goToProfile(id,nome) {
+        setSelected(nome);
         history.push(`/user/${id}`);
     }
 
@@ -46,23 +50,7 @@ function Timeline() {
         history.push(`/hashtag/${hashtag}`);
     }
 
-    function updateList() {
-        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
-            headers: {
-                Authorization: `Bearer ${user.token}`,
-            }
-        });
-        promise.then(({ data }) => {
-            console.log(data.posts);
-            setPosts(data.posts);
-            setIsWaitingServer(false);
-        });
-        promise.catch(error => {
-            console.log(error.response.data);
-            setIsWaitingServer(false);
-            setInternalError(false);
-        });
-    } 
+ 
     
 
     return (

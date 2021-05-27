@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 import { useParams } from "react-router-dom";
+import { useHistory } from "react-router";
 import UserContext from "../../Context/UserContext";
 import SelectedContext from "../../Context/SelectedContext";
 import InternalError from "../../components/InternalError";
@@ -13,16 +14,12 @@ import InternalError from "../../components/InternalError";
 export default function UserID() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const { idUser } = useParams();  
-    const {selected} = useContext(SelectedContext);
     const [posts, setPosts] = useState([]);
     const {user} = useContext(UserContext);
     const [internalError,setInternalError] = useState(false);
-     //console.log(selected);
-    //console.log(user); `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/posts`
-
-/* 
-
-//*/
+    const history = useHistory();
+    const {selected,setSelected} = useContext(SelectedContext);
+    
 useEffect(() => {
     const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/posts`, {
         headers: {
@@ -30,90 +27,119 @@ useEffect(() => {
         }
     });
     promise.then(({ data }) => {
-        console.log(data.posts);
         setPosts(data.posts);
         setIsWaitingServer(false);
     });
     promise.catch(error => {
-        console.log(error.response.data);
         setIsWaitingServer(false);
-        setInternalError(false);
-    }); 
-}, [idUser,user.token]);
+        setInternalError(true);
+    });
+}, [idUser,user.token]); 
+
+function goToProfile(id,nome) {
+    setSelected(nome);
+    history.push(`/user/${id}`);
+}
+
+function goToHashtag(hashtag) {
+    history.push(`/hashtag/${hashtag}`);
+}
 
 
-   
-    return (
-        <Main>
-            <Content>
-                <h2>{selected}'s posts</h2>
-                {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
-                    <Columns>
 
-                        <Posts>
-                        {posts.map((post,i)=> (
-                    <Post key={post.id} data={post}/>
-                    )
+return (
+    <Main>
+        <Content>
+            <h2>{selected}’s posts</h2>
+            {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
+                <Columns>
 
-                    )}
+                    <Posts>
+                        
 
-                        </Posts>
+                        {posts.length ?
+                            posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} />)
+                            :
+                            <h3 className="error">Nenhum post encontrado...</h3>
+                        }
+                    </Posts>
 
-                        <aside>in development</aside>
+                    <aside>in development (Trending)</aside>
 
-                    </Columns>
+                </Columns>
 
-                }
+            }
 
-            </Content>
-        </Main>
-    ); 
+        </Content>
+    </Main>
+);
 }
 
 const Main = styled.main`
-    display: flex;
-    justify-content: center;
-    padding: 125px 0 50px 0;
-    min-height: 100vh;
-    background-color: #2F2F2F;
+display: flex;
+justify-content: center;
+padding: 125px 0 50px 0;
+min-height: 100vh;
+background-color: #2F2F2F;
+
 `;
 
 const Content = styled.div`
-    width: 937px;
+width: 937px;
+h2 {
+    color: #fff;
+    font-family: "Oswald";
+    font-size: 43px;
+    font-weight: 700;
+}
+
+@media(max-width: 937px){
+    width: 100%;
     h2 {
-        color: #fff;
-        font-family: "Oswald";
-        font-size: 43px;
-        font-weight: 700;
+        margin-left: 20px;
     }
+}
 `;
 
 const Columns = styled.div`
-    display: flex;
-    justify-content: space-between;
-    height: inherit;
-    margin-top: 43px;
-    &>aside{  // Será substituído pela div hashtag
-        background-color: #171717;
-        color: #fff;
-        width: 301px;
-        height: 406px;
-        border-radius: 16px;
-        text-align: center;
+display: flex;
+justify-content: space-between;
+height: inherit;
+margin-top: 43px;
+&>aside{  // Será substituído pela div hashtag
+    background-color: #171717;
+    color: #fff;
+    width: 301px;
+    height: 406px;
+    border-radius: 16px;
+    text-align: center;
+}
+
+@media(max-width: 937px){
+    &>aside {
+        display: none;
     }
+}
 `;
 
 const Posts = styled.section`
-    width: 611px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    h3.error {
-        color: #FFF;
-        font-size: 24px;
-        font-family: "Oswald";
-    }
+width: 611px;
+display: flex;
+flex-direction: column;
+gap: 16px;
+@media(max-width: 937px){
+    margin: 0 auto;
+}
+@media(max-width: 611px){
+    width: 100%;
+}
+
+h3.error {
+    color: #FFF;
+    font-size: 24px;
+    font-family: "Oswald";
+
+}
+
 `;
-
-
 

@@ -1,33 +1,35 @@
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
+import ReactHashtag from "react-hashtag";
 
-function Post({ post }) {
+function Post({ post, goToProfile, goToHashtag }) {
 
-    console.log(post);
-
-    const { link, linkDescription, linkImage, linkTitle, text, likes } = post;
-    const { username, avatar } = post.user;
+    let counter = 0;
 
     return (
         <PostsContainer>
             <aside>
-                <img src={avatar} />
+                <img src={post.user.avatar} onClick={() => goToProfile(post.user.id)} alt="Imagem do perfil" />
                 <div id="likes">
                     <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
                         <FiHeart />
-                        <span>{likes.length} likes</span>
+                        <span>{post.likes.length} {post.likes.length === 1 ? "like" : "likes"}</span>
                     </IconContext.Provider>
                 </div>
             </aside>
             <main>
-                <h3>{username}</h3>
-                <p>{text}</p>
-                <LinkContent>
-                    <h4>{linkTitle}</h4>
-                    <p>{linkDescription}</p>
-                    <span>{link}</span>
-                    <img src={linkImage} alt="link image" />
+                <h3 onClick={() => goToProfile(post.user.id)}>{post.user.username}</h3>
+                <p>
+                    <ReactHashtag renderHashtag={hashtag => <Hashtag key={post.id + hashtag + counter++} onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>}>
+                        {post.text}
+                    </ReactHashtag>
+                </p>
+                <LinkContent onClick={() => window.open(post.link, "_blank")}>
+                    <h4>{post.linkTitle}</h4>
+                    <p>{post.linkDescription}</p>
+                    <span>{post.link}</span>
+                    <img src={post.linkImage} alt="link" />
                 </LinkContent>
             </main>
         </PostsContainer>
@@ -42,6 +44,10 @@ const PostsContainer = styled.div`
     padding: 17px 22px 20px 18px;
     color: #fff;
     gap: 18px;
+    @media(max-width: 611px){
+        width: 100%;
+        border-radius: 0;
+    }
 
     aside {
         display: flex;
@@ -75,6 +81,7 @@ const PostsContainer = styled.div`
     main {
         display: flex;
         flex-direction: column;
+        width: 100%;    
 
         h3 {
             width: fit-content;
@@ -99,12 +106,14 @@ const LinkContent = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    padding: 24px;
     height: 155px;
     padding: 24px 175px 23px 20px;
     cursor: pointer;
     justify-content: space-between;
     margin-top: 14px;
+    width: inherit;
+    max-width: 100%;
+    
 
     img {
         height: inherit;
@@ -124,17 +133,38 @@ const LinkContent = styled.div`
     h4 {
         color: #cecece;
         font-size: 16px;
+        word-break: break-word;
     }
 
     p {
         font-size: 11px;
         color: #9B9595;
+        word-break: break-word;
     }
 
     span {
         font-size: 11px;
         color: #cecece;
+        word-break: break-word;
     }
+
+    @media(max-width: 611px) {
+        padding: 7px 105px 7px 7px;
+        height: 115px;
+        overflow: hidden;
+
+        img {
+            width: 95px;
+            height: 115px;
+        }
+    }
+`;
+
+const Hashtag = styled.span`
+    font-size: inherit;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
 `;
 
 export default Post;

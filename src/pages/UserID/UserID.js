@@ -59,9 +59,6 @@ export default function UserID() {
 
                         <Posts>
 
-                            
-
-
                             {posts.length > 0 ?
                                 posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
                                 :

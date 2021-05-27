@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
+/*
+*/
 import ReactHashtag from "react-hashtag";
 
 import Like from './Like';
@@ -8,12 +10,10 @@ import Like from './Like';
 function Post({ post, goToProfile, goToHashtag }) {
 
     let counter = 0;
-
     return (
         <PostsContainer>
             <aside>
-                <img src={post.user.avatar} onClick={() => goToProfile(post.user.id)} alt="Imagem do perfil" />
-                
+                <img src={post.user.avatar} onClick={() => goToProfile(post.user.id,post.user.username)} alt="Imagem do perfil" />
                 <div id="likes">
                 <Like likes={post.likes} postId={post.id} />
                     {/*<IconContext.Provider value={{ size: "20px", color: "#fff" }}>
@@ -23,7 +23,7 @@ function Post({ post, goToProfile, goToHashtag }) {
                 </div>
             </aside>
             <main>
-                <h3 onClick={() => goToProfile(post.user.id)}>{post.user.username}</h3>
+                <h3 onClick={() => goToProfile(post.user.id,post.user.username)}>{post.user.username}</h3>
                 <p>
                     <ReactHashtag renderHashtag={hashtag => <Hashtag key={post.id + hashtag + counter++} onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>}>
                         {post.text}
@@ -52,13 +52,11 @@ const PostsContainer = styled.div`
         width: 100%;
         border-radius: 0;
     }
-
     aside {
         display: flex;
         flex-direction: column;
         align-items: center;
         
-
         &>img {
             width: 50px;
             height: 50px;
@@ -67,7 +65,6 @@ const PostsContainer = styled.div`
             margin-bottom: 15px;
             cursor: pointer;
         }
-
         #likes{
             display: flex;
             flex-direction: column;
@@ -75,18 +72,15 @@ const PostsContainer = styled.div`
             cursor: pointer;
             width: 72px;
         }
-
         span {
             margin-top: 5px;
             text-align: center;
         }
     }
-
     main {
         display: flex;
         flex-direction: column;
         width: 100%;    
-
         h3 {
             width: fit-content;
             font-size: 20px;
@@ -94,7 +88,6 @@ const PostsContainer = styled.div`
             cursor: pointer;
             word-break: break-word;
         }
-
         &>p {
             color: #b7b7b7;
             font-size: 17px;
@@ -118,7 +111,6 @@ const LinkContent = styled.div`
     width: inherit;
     max-width: 100%;
     
-
     img {
         height: inherit;
         width: 155px;
@@ -133,30 +125,25 @@ const LinkContent = styled.div`
         border-top-right-radius: 11px;
         border-bottom-right-radius: 11px;
     }
-
     h4 {
         color: #cecece;
         font-size: 16px;
         word-break: break-word;
     }
-
     p {
         font-size: 11px;
         color: #9B9595;
         word-break: break-word;
     }
-
     span {
         font-size: 11px;
         color: #cecece;
         word-break: break-word;
     }
-
     @media(max-width: 611px) {
         padding: 7px 105px 7px 7px;
         height: 115px;
         overflow: hidden;
-
         img {
             width: 95px;
             height: 115px;

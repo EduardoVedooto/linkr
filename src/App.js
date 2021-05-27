@@ -3,6 +3,7 @@ import { Route, Switch, BrowserRouter } from "react-router-dom";
 import Timeline from "./pages/Timeline/Timeline";
 import SignUp from "./pages/SignUp/SignUp"
 import Login from "./pages/Login/Login"
+import Header from "./components/Header"
 import { useState } from "react";
 import UserContext from "./Context/UserContext"
 
@@ -12,6 +13,7 @@ function App() {
     <UserContext.Provider value={{user, setUser}}>
       <BrowserRouter>
         <GlobalStyles />
+        <Header />
         <Switch>
           <Route path="/" exact component={Login}/>
           <Route path="/signup" exact component={SignUp}/>

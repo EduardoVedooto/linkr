@@ -6,7 +6,7 @@ import ReactHashtag from "react-hashtag"
 import axios from "axios";
 
 
-export default function EditPost({ post, token, updateList }){
+export default function EditPost({ post, token, updateList,goToHashtag }){
     Modal.setAppElement('#root');
     const [clicked,setCliked]=useState(false);
     const [text,setText]=useState("");
@@ -86,9 +86,9 @@ export default function EditPost({ post, token, updateList }){
                 : 
                 <p>
                 
-                <ReactHashtag renderHashtag={hashtag => <Hashtag key={post.id + hashtag + counter++}>{hashtag}</Hashtag>}>
-                    {post.text}
-                </ReactHashtag>
+                <ReactHashtag renderHashtag={hashtag => <Hashtag key={post.id + hashtag + counter++} onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>}>
+                     {post.text}
+                 </ReactHashtag>
                 </p>
                 
                 } 

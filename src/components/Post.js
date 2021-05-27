@@ -7,7 +7,7 @@ import RemovePost from "./RemovePost";
 import { useContext } from "react";
 import UserContext from "../Context/UserContext";
 
-function Post({ post, goToProfile, goToHashtag, updateList }) {
+function Post({ post, goToProfile,goToHashtag, updateList }) {
 
     const { id, token } = useContext(UserContext).user;
 
@@ -30,7 +30,7 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
             {post.user.id === id ?
                  <>
                  <RemovePost id={post.id} token={token} updateList={updateList} /> 
-                 <EditPost post={post} token={token} updateList={updateList} />
+                 <EditPost post={post} token={token} updateList={updateList} goToHashtag={goToHashtag}/>
                  </>
                  : 
                  <p>

@@ -133,6 +133,7 @@ const LinkContent = styled.div`
     h4 {
         color: #cecece;
         font-size: 16px;
+        word-break: break-word;
     }
 
     p {

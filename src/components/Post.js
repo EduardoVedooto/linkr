@@ -1,8 +1,4 @@
 import styled from "styled-components";
-import { IconContext } from "react-icons";
-import { FiHeart } from "react-icons/fi";
-/*
-*/
 import ReactHashtag from "react-hashtag";
 import RemovePost from "./RemovePost";
 import { useContext } from "react";
@@ -19,10 +15,6 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
                 <img src={post.user.avatar} onClick={() => goToProfile(post.user.id, post.user.username)} alt="Imagem do perfil" />
                 <div id="likes">
                 <Like likes={post.likes} postId={post.id} updateList={updateList} />
-                    {/*<IconContext.Provider value={{ size: "20px", color: "#fff" }}>
-                        <FiHeart />
-                        <span>{post.likes.length} {post.likes.length === 1 ? "like" : "likes"}</span>
-                    </IconContext.Provider>*/}
                 </div>
             </aside>
             <main>

@@ -5,7 +5,7 @@ import ReactTooltip from 'react-tooltip';
 
 import axios from 'axios';
 import UserContext from '../Context/UserContext';
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 
 function Like({ postId, likes, updateList }) {
     const { user } = useContext(UserContext);
@@ -26,8 +26,7 @@ function Like({ postId, likes, updateList }) {
         const request = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}/like`, {}, config);
 
         request.then(({ data }) => {
-            console.log(data.post.likes);
-            setLikesInfo({ 
+            setLikesInfo({
                 likesList: data.post.likes,
                 clickedLike: true,
                 tooltipText: tooltip()
@@ -37,7 +36,7 @@ function Like({ postId, likes, updateList }) {
         });
 
         request.catch(error => {
-            console.log(error);
+            alert(error.response.data.message);
         });
     }
 
@@ -45,7 +44,6 @@ function Like({ postId, likes, updateList }) {
         const request = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}/dislike`, {}, config);
 
         request.then(({ data }) => {
-            console.log(data.post.likes);
             setLikesInfo({
                 likesList: data.post.likes,
                 clickedLike: false,
@@ -56,15 +54,13 @@ function Like({ postId, likes, updateList }) {
         });
 
         request.catch(error =>{
-            console.log(error);
+            alert(error.response.data.message);
         });
     }
 
     function tooltip() {
         const {likesList, clickedLike} = likesInfo;
         const userNotMe = likesList.find(u => u.userId !== user.id);
-        
-        console.log(likesInfo);
 
         if (clickedLike) {
             if (likesList.length === 1) {

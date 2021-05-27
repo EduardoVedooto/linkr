@@ -46,7 +46,7 @@ function Timeline() {
     }
 
     function goToHashtag(hashtag) {
-        history.push(`/hashtag/${hashtag}`);
+        history.push(`/hashtag/${hashtag.replace("#","")}`);
     }
 
  

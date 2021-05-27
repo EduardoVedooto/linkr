@@ -1,17 +1,11 @@
 import GlobalStyles from "./styles/GlobalStyles";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
-import Timeline from "./pages/Timeline/Timeline";
 import SignUp from "./pages/SignUp/SignUp"
 import Login from "./pages/Login/Login"
 import { useState } from "react";
 import UserContext from "./Context/UserContext"
 import SelectedContext from "./Context/SelectedContext"
-import SignUp from "./pages/SignUp/SignUp"
-import Login from "./pages/Login/Login"
-import Timeline from "./pages/Timeline/Timeline";
-import UserID from "./pages/UserID/UserID";
-import Hashtag from "./pages/Hashtag/Hashtag";
-
+import Authenticated from "./Authenticated";
 
 function App() {
   const [user, setUser] = useState();
@@ -26,9 +20,7 @@ function App() {
           <Switch>
             <Route path="/" exact component={Login}/>
             <Route path="/signup" exact component={SignUp}/>
-            <Route path="/timeline" exact component={Timeline}/>
-            <Route path="/user/:idUser" exact component={UserID} />
-            <Route path="/Hashtag/:hashtag" exact component={Hashtag} />
+            <Route component={Authenticated}/>
           </Switch>
         </BrowserRouter>
       </SelectedContext.Provider>

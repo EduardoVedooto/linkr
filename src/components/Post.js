@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
-/*
-*/
+import EditPost from "./EditPost";
 import ReactHashtag from "react-hashtag";
 import RemovePost from "./RemovePost";
 import { useContext } from "react";
@@ -25,13 +24,22 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
                 </div>
             </aside>
             <main>
-                {post.user.id === id ? <RemovePost id={post.id} token={token} updateList={updateList} /> : ""}
-                <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
-                <p>
-                    <ReactHashtag renderHashtag={hashtag => <Hashtag key={post.id + hashtag + counter++} onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>}>
-                        {post.text}
-                    </ReactHashtag>
-                </p>
+                
+
+            <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
+            {post.user.id === id ?
+                 <>
+                 <RemovePost id={post.id} token={token} updateList={updateList} /> 
+                 <EditPost post={post} token={token} updateList={updateList} />
+                 </>
+                 : 
+                 <p>
+                 <ReactHashtag renderHashtag={hashtag => <Hashtag key={post.id + hashtag + counter++} onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>}>
+                     {post.text}
+                 </ReactHashtag>
+                 </p>
+                 }
+
                 <LinkContent onClick={() => window.open(post.link, "_blank")}>
                     <h4>{post.linkTitle}</h4>
                     <p>{post.linkDescription}</p>

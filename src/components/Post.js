@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
 import ReactHashtag from "react-hashtag";
+import RemovePost from "./RemovePost";
 
 function Post({ post, goToProfile, goToHashtag }) {
 
@@ -20,6 +21,7 @@ function Post({ post, goToProfile, goToHashtag }) {
             </aside>
             <main>
                 <h3 onClick={() => goToProfile(post.user.id)}>{post.user.username}</h3>
+                <RemovePost />
                 <p>
                     <ReactHashtag renderHashtag={hashtag => <Hashtag key={post.id + hashtag + counter++} onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>}>
                         {post.text}

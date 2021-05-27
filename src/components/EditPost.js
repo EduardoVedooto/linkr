@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FaPencilAlt, FaTrash } from "react-icons/fa";
+import { FaPencilAlt} from "react-icons/fa";
 import Modal from "react-modal";
 import {useState,useRef,useEffect } from "react";
 import ReactHashtag from "react-hashtag"
@@ -19,7 +19,6 @@ export default function EditPost({ post, token, updateList }){
           inputRef.current.focus()
           const handleEsc = (event) => {
             if (event.keyCode === 27) {
-                //console.log('Close')
                 setCliked(false);
               }
             };
@@ -36,7 +35,6 @@ export default function EditPost({ post, token, updateList }){
         e.stopPropagation();
         setCliked(!clicked);
         setText(post.text);
-        //console.log(inputRef);
     
     }
 

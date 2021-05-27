@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-
-import Post from '../components/Post';
 import styled from 'styled-components';
+
+import Post from '../../components/Post';
 
 //import context with user data, into config
 

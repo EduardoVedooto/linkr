@@ -4,7 +4,7 @@ import { useState } from "react";
 import UserContext from "./Context/UserContext"
 
 import Timeline from "./pages/Timeline/Timeline";
-import MyPosts from './pages/MyPosts';
+import MyPosts from './pages/MyPosts/MyPosts';
 import SignUp from "./pages/SignUp/SignUp"
 import Login from "./pages/Login/Login"
 

@@ -21,20 +21,21 @@ function SignUp(){
             pictureUrl,   
         }
         const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-up", body);
+
         request.then(()=> {history.push("/")});
         request.catch((error)=>{setLoading(false)
+
             if(email === "" || password === "" || pictureUrl === "" || username === ""){
                 alert("Preencha os campos");
                 return
             }
             if(error.response.status === 400){
+
                 alert("Imagem inválida!")
             }
             if(error.response.status === 403){
                 alert("Endereço de email já cadastrado")
             }
-
-
         });
     }
 
@@ -79,7 +80,6 @@ const ContainerText = styled.div`
     font-weight: 700;
     color: #fff;
     h1{
-
         font-size: 106px;
         letter-spacing: 5px;
     }
@@ -129,7 +129,6 @@ const InputsContainer = styled.div`
         justify-content: start;
         padding-top: 40px;
     }
-
 `
 
 const Input = styled.input`

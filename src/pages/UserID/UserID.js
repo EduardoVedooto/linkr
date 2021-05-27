@@ -42,7 +42,7 @@ function goToProfile(id,nome) {
 }
 
 function goToHashtag(hashtag) {
-    history.push(`/hashtag/${hashtag}`);
+    history.push(`/hashtag/${hashtag.replace("#","")}`);
 }
 
 

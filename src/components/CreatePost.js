@@ -32,7 +32,6 @@ function CreatePost() {
             setIsWaitingServer(false);
         });
         promisse.catch(error => {
-            console.log(error.response.data.message);
             setErrorMessage(true);
             setIsWaitingServer(false);
         })

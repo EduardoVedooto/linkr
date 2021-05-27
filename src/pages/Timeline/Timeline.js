@@ -20,11 +20,10 @@ function Timeline() {
     const [posts, setPosts] = useState([]);
 
    const {setSelected} = useContext(SelectedContext);
-    /*   //*/ 
+    
     useEffect(() => {
         updateList();
-    }, []); //eslint-disable-line
-
+    }, []); 
     function updateList() {
         const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
             headers: {

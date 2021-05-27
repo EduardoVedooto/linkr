@@ -57,7 +57,7 @@ return (
                     <Posts>
                         
 
-                        {posts.length ?
+                        {posts.length>0 ?
                             posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} />)
                             :
                             <h3 className="error">Nenhum post encontrado...</h3>

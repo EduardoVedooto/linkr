@@ -11,8 +11,6 @@ function CreatePost({ updateList, goToProfile }) {
         link: ""
     });
 
-    console.log(post);
-
     function handleSubmit(e) {
         e.preventDefault();
         setIsWaitingServer(true);
@@ -30,7 +28,6 @@ function CreatePost({ updateList, goToProfile }) {
             updateList();
         });
         promisse.catch(error => {
-            console.log(error.response.data);
             setErrorMessage(true);
             setIsWaitingServer(false);
         })
@@ -46,8 +43,6 @@ function CreatePost({ updateList, goToProfile }) {
             setPost({ ...post });
         }
     }
-
-    console.log()
 
     return (
         <Container>

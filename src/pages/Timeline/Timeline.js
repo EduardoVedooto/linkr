@@ -31,7 +31,6 @@ function Timeline() {
             setIsWaitingServer(false);
         });
         promise.catch(error => {
-            console.log(error.response.data.message);
             setIsWaitingServer(false);
             setInternalError(true);
         });

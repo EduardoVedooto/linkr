@@ -3,61 +3,73 @@ import { FaTrash } from "react-icons/fa";
 import Modal from "react-modal";
 import { useState } from "react";
 import Loader from "react-loader-spinner";
+import axios from "axios";
 
-function RemovePost() {
+function RemovePost({ id, token, updateList }) {
     Modal.setAppElement('#root');
     const [isOpen, setIsOpen] = useState(false);
+    const [isWaitingServer, setIsWaitingServer] = useState(false);
 
-    const modalStyles = {
-        overlay: {
-            "display": "flex",
-            "justify-content": "center",
-            "align-items": "center"
-        },
-        content: {
-            "position": "static",
-            "width": "597px",
-            "height": "262px",
-            "border-radius": "50px",
-            "background-color": "#333",
-            "display": "flex",
-            "justify-content": "center",
-            "align-items": "center",
-            "padding": "0"
-        }
+    function handleRemove() {
+        setIsWaitingServer(true);
+        const promise = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        promise.then(() => {
+            updateList();
+            setIsWaitingServer(false);
+            setIsOpen(false);
+        });
+        promise.catch(error => {
+            setIsWaitingServer(false);
+            setIsOpen(false);
+            setTimeout(() => {
+                window.alert(`Não foi possível remover o post.\nCode: ${error.response.status} - ${error.response.statusText}\n${error.response.data.message}`);
+            }, 100);
+        })
     }
 
-
-
     return (
-        <>
+        <RemoveContainer>
             <FaTrash onClick={() => setIsOpen(true)} />
             <Modal
                 isOpen={isOpen}
                 className="Modal"
                 overlayClassName="Overlay"
-                preventScroll={true}
+
             >
-                <ModalContent>
-                    <h3>Tem certeza que deseja<br />excluir essa publicação?</h3>
-                    {/* <ModalLoading>
-                        <Loader
-                            type="Rings"
-                            color="#1877F2"
-                            height={75}
-                            width={75}
-                        />
-                        Carregando...
-                    </ModalLoading> */}
+                <ModalContent isWaitingServer={isWaitingServer}>
+                    {isWaitingServer ?
+                        <ModalLoading>
+                            <Loader
+                                type="Rings"
+                                color="#1877F2"
+                                height={75}
+                                width={75}
+                            />
+                            Carregando...
+                        </ModalLoading>
+                        :
+                        <h3>Tem certeza que deseja<br />excluir essa publicação?</h3>
+                    }
                     <div className="buttons">
-                        <button onClick={() => setIsOpen(false)}>Não, voltar</button>
-                        <button className="confirm">Sim, excluir</button>
+                        <button disabled={isWaitingServer} onClick={() => setIsOpen(false)}>Não, voltar</button>
+                        <button disabled={isWaitingServer} className="confirm" onClick={handleRemove}>Sim, excluir</button>
                     </div>
                 </ModalContent>
             </Modal>
-        </>
+        </RemoveContainer>
     );
 }
+
+const RemoveContainer = styled.div`
+    position: absolute;
+    right: 0px;
+    top: 5px;
+    cursor: pointer;
+`;
 
 const ModalContent = styled.div`
     height: 260px;
@@ -85,11 +97,12 @@ const ModalContent = styled.div`
         border: none;
         border-radius: 5px;
         outline: none;
-        cursor: pointer;
         font-size: 18px;
         font-weight: 700;
         background-color: #fff;
         color: #1877F2;
+        opacity: ${props => props.isWaitingServer ? ".5" : "1"};
+        cursor: ${props => props.isWaitingServer ? "not-allowed" : "pointer"};
 
         &.confirm {
             color: #fff;

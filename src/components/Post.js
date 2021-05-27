@@ -3,8 +3,12 @@ import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
 import ReactHashtag from "react-hashtag";
 import RemovePost from "./RemovePost";
+import { useContext } from "react";
+import UserContext from "../Context/UserContext";
 
-function Post({ post, goToProfile, goToHashtag }) {
+function Post({ post, goToProfile, goToHashtag, updateList }) {
+
+    const { id, token } = useContext(UserContext).user;
 
     let counter = 0;
 
@@ -21,7 +25,7 @@ function Post({ post, goToProfile, goToHashtag }) {
             </aside>
             <main>
                 <h3 onClick={() => goToProfile(post.user.id)}>{post.user.username}</h3>
-                <RemovePost />
+                {post.user.id === id ? <RemovePost id={post.id} token={token} updateList={updateList} /> : ""}
                 <p>
                     <ReactHashtag renderHashtag={hashtag => <Hashtag key={post.id + hashtag + counter++} onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>}>
                         {post.text}
@@ -83,7 +87,8 @@ const PostsContainer = styled.div`
     main {
         display: flex;
         flex-direction: column;
-        width: 100%;    
+        width: 100%;   
+        position: relative; 
 
         h3 {
             width: fit-content;

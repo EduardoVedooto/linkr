@@ -11,17 +11,17 @@ import InternalError from "../../components/InternalError";
 
 
 
-export default function UserID() {
+export default function Hashtag() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
-    const { idUser } = useParams();  
+    const { hashtag } = useParams();  
+    const {setSelected} = useContext(SelectedContext);
     const [posts, setPosts] = useState([]);
     const {user} = useContext(UserContext);
     const [internalError,setInternalError] = useState(false);
     const history = useHistory();
-    const {selected,setSelected} = useContext(SelectedContext);
-    
+
 useEffect(() => {
-    const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/posts`, {
+    const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts`, {
         headers: {
             Authorization: `Bearer ${user.token}`,
         }
@@ -32,9 +32,9 @@ useEffect(() => {
     });
     promise.catch(error => {
         setIsWaitingServer(false);
-        setInternalError(true);
+        setInternalError(false);
     });
-}, [idUser,user.token]); 
+}, [hashtag,user.token]);
 
 function goToProfile(id,nome) {
     setSelected(nome);
@@ -50,7 +50,7 @@ function goToHashtag(hashtag) {
 return (
     <Main>
         <Content>
-            <h2>{selected}’s posts</h2>
+            <h2>#{hashtag}</h2>
             {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
                 <Columns>
 
@@ -134,8 +134,5 @@ h3.error {
     color: #FFF;
     font-size: 24px;
     font-family: "Oswald";
-
 }
-
 `;
-

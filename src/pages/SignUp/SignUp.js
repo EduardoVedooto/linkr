@@ -30,7 +30,6 @@ function SignUp(){
                 return
             }
             if(error.response.status === 400){
-
                 alert("Imagem inválida!")
             }
             if(error.response.status === 403){

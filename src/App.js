@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp/SignUp"
 import Login from "./pages/Login/Login"
 import Timeline from "./pages/Timeline/Timeline";
 import UserID from "./pages/UserID/UserID";
+import Hashtag from "./pages/Hashtag/Hashtag";
 
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
         <Route path="/signup" exact component={SignUp}/>
         <Route path="/timeline" exact component={Timeline}/>
         <Route path="/user/:idUser" exact component={UserID} />
-
+        <Route path="/Hashtag/:hashtag" exact component={Hashtag} />
 
       </Switch>
    

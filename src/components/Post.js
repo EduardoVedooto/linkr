@@ -48,7 +48,6 @@ const PostsContainer = styled.div`
         width: 100%;
         border-radius: 0;
     }
-
     aside {
         display: flex;
         flex-direction: column;
@@ -78,7 +77,6 @@ const PostsContainer = styled.div`
         display: flex;
         flex-direction: column;
         width: 100%;    
-
         h3 {
             width: fit-content;
             font-size: 20px;
@@ -109,7 +107,6 @@ const LinkContent = styled.div`
     width: inherit;
     max-width: 100%;
     
-
     img {
         height: inherit;
         width: 155px;
@@ -139,12 +136,10 @@ const LinkContent = styled.div`
         color: #cecece;
         word-break: break-word;
     }
-
     @media(max-width: 611px) {
         padding: 7px 105px 7px 7px;
         height: 115px;
         overflow: hidden;
-
         img {
             width: 95px;
             height: 115px;

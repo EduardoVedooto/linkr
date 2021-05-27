@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router";
@@ -46,7 +45,7 @@ function Timeline() {
     }
 
     function goToHashtag(hashtag) {
-        history.push(`/hashtag/${hashtag}`);
+        history.push(`/hashtag/${hashtag.replace("#","")}`);
     }
 
  
@@ -86,7 +85,6 @@ const Main = styled.main`
     padding: 125px 0 50px 0;
     min-height: 100vh;
     background-color: #2F2F2F;
-
 `;
 
 const Content = styled.div`
@@ -97,7 +95,6 @@ const Content = styled.div`
         font-size: 43px;
         font-weight: 700;
     }
-
     @media(max-width: 937px){
         width: 100%;
         h2 {
@@ -119,7 +116,6 @@ const Columns = styled.div`
         border-radius: 16px;
         text-align: center;
     }
-
     @media(max-width: 937px){
         &>aside {
             display: none;
@@ -138,7 +134,6 @@ const Posts = styled.section`
     @media(max-width: 611px){
         width: 100%;
     }
-
     h3.error {
         color: #FFF;
         font-size: 24px;

@@ -7,7 +7,7 @@ import axios from 'axios';
 import UserContext from '../Context/UserContext';
 import { useContext, useEffect, useState } from "react";
 
-function Like({ postId }) {
+function Like({ postId, likes }) {
     const { user } = useContext(UserContext);
     const [likesInfo, setLikesInfo] = useState([]);
     const [clickedLike, setClickedLike] = useState(false);
@@ -23,11 +23,12 @@ function Like({ postId }) {
 
         request.then(({ data }) => {
             setLikesInfo(data.post.likes);
-            //console.log(likesInfo);
+            console.log(likesInfo);
 
             setClickedLike(true);
-            //setTooltipText(tooltip);
-            tooltip();
+            console.log(clickedLike);
+            setTooltipText(tooltip);
+            //tooltip();
         });
 
         request.catch(error => {
@@ -40,13 +41,13 @@ function Like({ postId }) {
 
         request.then(({ data }) => {
             setLikesInfo(data.post.likes);
-            //console.log(likesInfo);
+            console.log(likesInfo);
 
             setClickedLike(false);
 
             console.log(clickedLike);
-            //setTooltipText(tooltip);
-            tooltip();
+            setTooltipText(tooltip);
+            //tooltip();
         });
 
         request.catch(error =>{
@@ -57,7 +58,7 @@ function Like({ postId }) {
     
     function tooltip() {
         const userNotMe = likesInfo.find(u => u.userId !== user.id);
-
+        console.log(userNotMe);
 
         if (clickedLike) {
             if (likesInfo.length === 1) {
@@ -80,8 +81,6 @@ function Like({ postId }) {
         } else {
             setTooltipText("testando");
         }
-        
-        console.log(tooltipText);
 
     }
 
@@ -119,20 +118,20 @@ function Like({ postId }) {
         clickedLike ?
             <IconContext.Provider value={{ size: "20px", color: "red" }}>
                 <FaHeart onClick={dislike} />
-                <span data-tip data-for="info">{likesInfo.length} {likesInfo.length === 1 ? "like" : "likes"}</span>
+                <span data-tip data-for="info">{likes.length} {likes.length === 1 ? "like" : "likes"}</span>
             
                 <ReactTooltip id="info" place="bottom" type="light">
-                    {tooltipText}
+                    hover
                 </ReactTooltip>
             
             </IconContext.Provider>
             :
             <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
                 <FiHeart onClick={addLike} />
-                <span data-tip data-for="info">{likesInfo.length} {likesInfo.length === 1 ? "like" : "likes"}</span>
+                <span data-tip data-for="info">{likes.length} {likes.length === 1 ? "like" : "likes"}</span>
 
                 <ReactTooltip id="info" place="bottom" type="light">
-                    {tooltipText}
+                    hover
                 </ReactTooltip>
 
             </IconContext.Provider>

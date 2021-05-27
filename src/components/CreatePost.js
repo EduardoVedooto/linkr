@@ -14,7 +14,6 @@ function CreatePost({ updateList }) {
         text: "",
         link: ""
     });
-
     function handleSubmit(e) {
         if (errorMessage) setErrorMessage(false);
         e.preventDefault();
@@ -171,7 +170,6 @@ const Form = styled.form`
         cursor: ${props => props.isWaitingServer ? "not-allowed" : "pointer"};
         margin-left: auto;
     }
-
 `;
 
 export default CreatePost;

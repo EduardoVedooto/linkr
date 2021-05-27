@@ -8,6 +8,7 @@ import { useHistory } from "react-router";
 import UserContext from "../../Context/UserContext";
 import SelectedContext from "../../Context/SelectedContext";
 import InternalError from "../../components/InternalError";
+import Aside from "../../components/Aside";
 
 
 
@@ -58,6 +59,7 @@ export default function UserID() {
 
                         <Posts>
 
+                    
 
                             {posts.length > 0 ?
                                 posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
@@ -66,7 +68,7 @@ export default function UserID() {
                             }
                         </Posts>
 
-                        <aside>in development (Trending)</aside>
+                        <Aside user={user} posts={posts} />
 
                     </Columns>
 
@@ -106,14 +108,6 @@ display: flex;
 justify-content: space-between;
 height: inherit;
 margin-top: 43px;
-&>aside{  // Será substituído pela div hashtag
-    background-color: #171717;
-    color: #fff;
-    width: 301px;
-    height: 406px;
-    border-radius: 16px;
-    text-align: center;
-}
 @media(max-width: 937px){
     &>aside {
         display: none;

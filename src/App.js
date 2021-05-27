@@ -3,7 +3,6 @@ import { Route, Switch, BrowserRouter } from "react-router-dom";
 import { useState } from "react";
 import UserContext from "./Context/UserContext"
 import SelectedContext from "./Context/SelectedContext"
-
 import SignUp from "./pages/SignUp/SignUp"
 import Login from "./pages/Login/Login"
 import Timeline from "./pages/Timeline/Timeline";
@@ -19,23 +18,17 @@ function App() {
   return (
     <UserContext.Provider value={{user, setUser}}>
       <SelectedContext.Provider value={{selected, setSelected}}>
-    <BrowserRouter>
-      <GlobalStyles />
-      <Switch>
-        < Route path="/" exact component={Login}/>
-        <Route path="/signup" exact component={SignUp}/>
-        <Route path="/timeline" exact component={Timeline}/>
-        <Route path="/user/:idUser" exact component={UserID} />
-        <Route path="/Hashtag/:hashtag" exact component={Hashtag} />
-
-      </Switch>
-   
-        
-  
-
-
-    </BrowserRouter>
-    </SelectedContext.Provider>
+        <BrowserRouter>
+          <GlobalStyles />
+          <Switch>
+            <Route path="/" exact component={Login}/>
+            <Route path="/signup" exact component={SignUp}/>
+            <Route path="/timeline" exact component={Timeline}/>
+            <Route path="/user/:idUser" exact component={UserID} />
+            <Route path="/Hashtag/:hashtag" exact component={Hashtag} />
+          </Switch>
+        </BrowserRouter>
+      </SelectedContext.Provider>
     </UserContext.Provider>
     
   )

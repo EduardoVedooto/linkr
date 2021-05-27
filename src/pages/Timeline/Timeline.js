@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
+import Aside from "../../components/Aside";
 import CreatePost from "../../components/CreatePost";
 import InternalError from "../../components/InternalError";
 import Loading from "../../components/Loading";
@@ -69,7 +70,7 @@ function Timeline() {
                             }
                         </Posts>
 
-                        <aside>in development (Trending)</aside>
+                        <Aside user={user} posts={posts}/>
 
                     </Columns>
 
@@ -109,19 +110,6 @@ const Columns = styled.div`
     justify-content: space-between;
     height: inherit;
     margin-top: 43px;
-    &>aside{  // Será substituído pela div hashtag
-        background-color: #171717;
-        color: #fff;
-        width: 301px;
-        height: 406px;
-        border-radius: 16px;
-        text-align: center;
-    }
-    @media(max-width: 937px){
-        &>aside {
-            display: none;
-        }
-    }
 `;
 
 const Posts = styled.section`

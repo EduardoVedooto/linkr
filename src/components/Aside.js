@@ -26,7 +26,7 @@ function updateTrending(){
             <Border></Border>
             { hastagsList.length ? 
             hastagsList.map((h,i)=>
-                <Link key={i} to={`/hastag/${h.name}`}>
+                <Link key={i} to={`/hashtag/${h.name}`}>
                     <p># {h.name}</p>
                 </Link>
             ): <h1>Error!</h1> }
@@ -60,7 +60,7 @@ const Container = styled.div`
         font-size: 19px;
         letter-spacing: 0.5px;
     }
-    @media(max-width: 611px){
+    @media(max-width: 915px){
         display: none;
     }
 `

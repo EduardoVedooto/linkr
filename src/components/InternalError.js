@@ -13,7 +13,6 @@ const ErrorContainer = styled.div`
     align-items: center;
     justify-content: center;
     height: calc(100vh - 225px);
-
     h3 {
         font-size: 32px;
         font-family: "Oswald";

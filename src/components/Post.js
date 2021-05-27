@@ -36,11 +36,18 @@ function editPost(e,post){
     console.log(inputRef);
 
 }
+function escFunction(e){
+    if(e.keyCode === 27) {
+        alert();
+        return true;
+      //Do whatever when esc is pressed
+    }return false;
+  }
 
 function handleChange(e) {
     //if (errorMessage) setErrorMessage(false);
+         escFunction(e)?alert():setText(e.target.value);
          
-         setText(e.target.value);
         //setPost({ ...post });
     
 }

@@ -10,9 +10,11 @@ import Timeline from "./pages/Timeline/Timeline";
 import UserID from "./pages/UserID/UserID";
 import Hashtag from "./pages/Hashtag/Hashtag";
 
+
 function App() {
   const [user, setUser] = useState();
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState();     
+  
 
   return (
     <UserContext.Provider value={{user, setUser}}>

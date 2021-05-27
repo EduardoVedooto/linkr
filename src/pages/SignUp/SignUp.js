@@ -21,8 +21,10 @@ function SignUp(){
             pictureUrl,   
         }
         const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-up", body);
+
         request.then(()=> {history.push("/")});
         request.catch((error)=>{setLoading(false)
+
             if(email === "" || password === "" || pictureUrl === "" || username === ""){
                 alert("Preencha os campos");
                 return
@@ -33,8 +35,6 @@ function SignUp(){
             if(error.response.status === 403){
                 alert("Endereço de email já cadastrado")
             }
-
-
         });
     }
 

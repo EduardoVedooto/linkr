@@ -1,10 +1,14 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useHistory } from "react-router";
 import styled from "styled-components";
+import UserContext from "../Context/UserContext";
 
-function CreatePost({ updateList, goToProfile }) {
+function CreatePost({ updateList }) {
     const [isWaitingServer, setIsWaitingServer] = useState(false);
     const [errorMessage, setErrorMessage] = useState(false);
+    const { user } = useContext(UserContext);
+    const history = useHistory();
 
     const [post, setPost] = useState({
         text: "",
@@ -12,12 +16,13 @@ function CreatePost({ updateList, goToProfile }) {
     });
 
     function handleSubmit(e) {
+        if (errorMessage) setErrorMessage(false);
         e.preventDefault();
         setIsWaitingServer(true);
         // Axios Post
         const promisse = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", post, {
             headers: {
-                Authorization: `Bearer fab13ed8-a5b8-475c-965d-3f2d87efc629`, // Falta token
+                Authorization: `Bearer ${user.token}`,
             }
         });
         promisse.then(() => {
@@ -46,7 +51,7 @@ function CreatePost({ updateList, goToProfile }) {
 
     return (
         <Container>
-            <img onClick={goToProfile} src="https://ahseeit.com/meme-templates/king-include/uploads/2020/11/hide-the-pain-harold-4386494474.png" alt="Imagem do perfil" />
+            <img onClick={() => history.push(`/user/${user.id}`)} src={user.avatar} alt="Imagem do perfil" />
             <Form onSubmit={handleSubmit} isWaitingServer={isWaitingServer}>
                 <h3>O que você tem para favoritar hoje?</h3>
                 <input

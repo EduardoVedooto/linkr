@@ -7,6 +7,8 @@ import InternalError from "../../components/InternalError";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 import UserContext from "../../Context/UserContext";
+import SelectedContext from "../../Context/SelectedContext";
+
 
 
 function Timeline() {
@@ -15,6 +17,8 @@ function Timeline() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
+
+    const { setSelected } = useContext(SelectedContext);
 
     useEffect(() => {
         updateList();
@@ -36,13 +40,16 @@ function Timeline() {
         });
     }
 
-    function goToProfile(id) {
+    function goToProfile(id, nome) {
+        setSelected(nome);
         history.push(`/user/${id}`);
     }
 
     function goToHashtag(hashtag) {
-        history.push(`/hashtag/${hashtag}`);
+        history.push(`/hashtag/${hashtag.replace("#", "")}`);
     }
+
+
 
 
     return (
@@ -79,19 +86,16 @@ const Main = styled.main`
     padding: 125px 0 50px 0;
     min-height: 100vh;
     background-color: #2F2F2F;
-
 `;
 
 const Content = styled.div`
     width: 937px;
-
     h2 {
         color: #fff;
         font-family: "Oswald";
         font-size: 43px;
         font-weight: 700;
     }
-
     @media(max-width: 937px){
         width: 100%;
         h2 {
@@ -105,7 +109,6 @@ const Columns = styled.div`
     justify-content: space-between;
     height: inherit;
     margin-top: 43px;
-
     &>aside{  // Será substituído pela div hashtag
         background-color: #171717;
         color: #fff;
@@ -114,7 +117,6 @@ const Columns = styled.div`
         border-radius: 16px;
         text-align: center;
     }
-
     @media(max-width: 937px){
         &>aside {
             display: none;
@@ -133,7 +135,6 @@ const Posts = styled.section`
     @media(max-width: 611px){
         width: 100%;
     }
-
     h3.error {
         color: #FFF;
         font-size: 24px;

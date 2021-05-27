@@ -1,166 +1,40 @@
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
-
-import { Link} from "react-router-dom";
-import {useContext, useState,useRef,useEffect } from "react";
-import SelectedContext from "../Context/SelectedContext";
-import ReactHashtag from "react-hashtag";
 /*
-  useEffect(() => {
-    const handleEsc = (event) => {
-       if (event.keyCode === 27) {
-        console.log('Close')
-      }
-    };
-    window.addEventListener('keydown', handleEsc);
-
-    return () => {
-      window.removeEventListener('keydown', handleEsc);
-    };
-  }, []);
 */
+import ReactHashtag from "react-hashtag";
 
-
-
-function Post(data) {
-//console.log(data);
-const {setSelected} = useContext(SelectedContext);
-const [clicked,setCliked]=useState(false);
-//const [text,setText]=useState("");
-const [text,setText]=useState("");
-let i=0;
-const inputRef=useRef();
-
-useEffect(() => {
-    if (clicked) {
-      inputRef.current.focus()
-      const handleEsc = (event) => {
-        if (event.keyCode === 27) {
-            //console.log('Close')
-            setCliked(false);
-          }
-        };
-        window.addEventListener('keydown', handleEsc);
-    
-        return () => {
-          window.removeEventListener('keydown', handleEsc);
-        }
-      }
-
-    
-  }, [clicked]);
-
-
-
-
-
-
-
-function editPost(e,post){
-    e.stopPropagation();
-    //console.log(post);
-    setCliked(!clicked);
-    setText(post.text);
-    console.log(inputRef);
-
-}
-
-
-
-function handleChange(e) {
-    //if (errorMessage) setErrorMessage(false);
-    setText(e.target.value);
-    const handleEsc = (event) => {
-        if (event.keyCode === 27) {
-         console.log('Close')
-       }
-     };
-     window.addEventListener('keydown', handleEsc);
- 
-     return () => {
-       window.removeEventListener('keydown', handleEsc);
-     };
-         
-         
-        //setPost({ ...post });
-    
-}
-
-
-
+function Post({ post, goToProfile, goToHashtag })  {
+    let counter = 0;
     return (
-        
         <PostsContainer>
-          
-  <aside>
-                <img src={data.data.user.avatar} alt="Imagem do perfil" />
+            <aside>
+                <img src={post.user.avatar} onClick={() => goToProfile(post.user.id,post.user.username)} alt="Imagem do perfil" />
                 <div id="likes">
                     <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
                         <FiHeart />
-                        <span>34 likes</span>
+                        <span>{post.likes.length} {post.likes.length === 1 ? "like" : "likes"}</span>
                     </IconContext.Provider>
                 </div>
             </aside>
             <main>
-            <FiHeart onClick={(e) => editPost(e,data.data)}/>
-                <Link to={`/user/${data.data.user.id}`}> 
-                <h3 onClick={()=> setSelected(data.data.user.username) }>{data.data.user.username}</h3>
-                </Link>
-                
-                {clicked?
-                
-                <Edit>
-                    <input
-                    ref={inputRef}
-                    placeholder=""
-                    value={text}
-                    required
-                    onChange={handleChange}
-                />
-                </Edit>
-                : 
-                
-                <p>                    
-                <ReactHashtag renderHashtag={hashtag => (
-                        
-                        <Link to={`/Hashtag/${hashtag.replace("#","")}`} key={i++}> 
-                        <Hashtag key={i++} onClick={() => setSelected(hashtag)}>{hashtag}</Hashtag>
-                        </Link>
-                    )}>
-                        {data.data.text}
+                <h3 onClick={() => goToProfile(post.user.id,post.user.username)}>{post.user.username}</h3>
+                <p>
+                    <ReactHashtag renderHashtag={hashtag => <Hashtag key={post.id + hashtag + counter++} onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>}>
+                        {post.text}
                     </ReactHashtag>
-                    </p>
-                }
-                <LinkContent>
-                    <h4>{data.data.linkTitle}</h4>
-                    <p>{data.data.linkDescription}</p>
-                    <span>{data.data.link}</span>
-                    <img src={data.data.linkImage} alt="link" />
+                </p>
+                <LinkContent onClick={() => window.open(post.link, "_blank")}>
+                    <h4>{post.linkTitle}</h4>
+                    <p>{post.linkDescription}</p>
+                    <span>{post.link}</span>
+                    <img src={post.linkImage} alt="link" />
                 </LinkContent>
             </main>
         </PostsContainer>
     );
 }
-
-
-const Edit = styled.div `
-width:100%;
-background:white;
-padding-left:9px;
-padding-right:9px;
-padding-top:4px;
-padding-bottom:4px;
-p{
-font-family: Lato;
-font-style: normal;
-font-weight: normal;
-font-size: 14px;
-line-height: 17px;
-
-color: #4C4C4C;
-}
-`
 
 const PostsContainer = styled.div`
     background-color: #171717;
@@ -170,6 +44,10 @@ const PostsContainer = styled.div`
     padding: 17px 22px 20px 18px;
     color: #fff;
     gap: 18px;
+    @media(max-width: 611px){
+        width: 100%;
+        border-radius: 0;
+    }
     aside {
         display: flex;
         flex-direction: column;
@@ -198,6 +76,7 @@ const PostsContainer = styled.div`
     main {
         display: flex;
         flex-direction: column;
+        width: 100%;    
         h3 {
             width: fit-content;
             font-size: 20px;
@@ -220,12 +99,14 @@ const LinkContent = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    padding: 24px;
     height: 155px;
     padding: 24px 175px 23px 20px;
     cursor: pointer;
     justify-content: space-between;
     margin-top: 14px;
+    width: inherit;
+    max-width: 100%;
+    
     img {
         height: inherit;
         width: 155px;
@@ -243,20 +124,34 @@ const LinkContent = styled.div`
     h4 {
         color: #cecece;
         font-size: 16px;
+        word-break: break-word;
     }
     p {
         font-size: 11px;
         color: #9B9595;
+        word-break: break-word;
     }
     span {
         font-size: 11px;
         color: #cecece;
+        word-break: break-word;
+    }
+    @media(max-width: 611px) {
+        padding: 7px 105px 7px 7px;
+        height: 115px;
+        overflow: hidden;
+        img {
+            width: 95px;
+            height: 115px;
+        }
     }
 `;
+
 const Hashtag = styled.span`
     font-size: inherit;
     font-weight: 700;
     color: #fff;
     cursor: pointer;
 `;
+
 export default Post;

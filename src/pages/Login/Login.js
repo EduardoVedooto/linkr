@@ -22,7 +22,6 @@ function Login(){
         request.then((response)=>{
             setUser({token: response.data.token, avatar: response.data.user.avatar, id: response.data.user.id, username: response.data.user.username, email: response.data.user.email})
             history.push("/timeline")
-            
         });
         request.catch((error)=>{
             setEmail("");

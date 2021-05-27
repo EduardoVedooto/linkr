@@ -1,56 +1,56 @@
-
 import axios from "axios";
-import { useEffect, useState ,useContext} from "react";
-import UserContext from "../../Context/UserContext";
+import { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router";
 import styled from "styled-components";
 import CreatePost from "../../components/CreatePost";
 import InternalError from "../../components/InternalError";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
+import UserContext from "../../Context/UserContext";
+import SelectedContext from "../../Context/SelectedContext";
+
+
 
 function Timeline() {
+    const history = useHistory();
+    const { user } = useContext(UserContext);
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
-    const {user} = useContext(UserContext);
-   
-    //console.log(user);
 
+   const {setSelected} = useContext(SelectedContext);
     /*   //*/ 
     useEffect(() => {
+        updateList();
+    }, []); //eslint-disable-line
+
+    function updateList() {
         const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
             headers: {
                 Authorization: `Bearer ${user.token}`,
             }
         });
         promise.then(({ data }) => {
-            console.log(data.posts);
             setPosts(data.posts);
             setIsWaitingServer(false);
         });
         promise.catch(error => {
-            console.log(error.response.data);
             setIsWaitingServer(false);
-            setInternalError(false);
-        });
-    }, [user.token]);
-
-    function updateList() {
-        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
-            headers: {
-                Authorization: `Bearer fab13ed8-a5b8-475c-965d-3f2d87efc629`,
-            }
-        });
-        promise.then(({ data }) => {
-            setPosts(data.posts);
-            setIsWaitingServer(false);
-        });
-        promise.catch(error => {
-            console.log(error.response.data.message);
-            setIsWaitingServer(false);
-            setInternalError(false);
+            setInternalError(true);
         });
     }
+
+    function goToProfile(id,nome) {
+        setSelected(nome);
+        history.push(`/user/${id}`);
+    }
+
+    function goToHashtag(hashtag) {
+        history.push(`/hashtag/${hashtag}`);
+    }
+
+ 
+    
 
     return (
         <Main>
@@ -60,17 +60,16 @@ function Timeline() {
                     <Columns>
 
                         <Posts>
-                            <CreatePost updateList={updateList} />
-                            {!posts.length ? <h3 className="error">Nenhum post encontrado...</h3>
-                                : posts.map(post => <Post key={post.id} data={post} />)
+                            <CreatePost updateList={updateList} goToProfile={goToProfile} />
+
+                            {posts.length ?
+                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} />)
+                                :
+                                <h3 className="error">Nenhum post encontrado...</h3>
                             }
-                            {
-                                /*<Post />
-                            <Post />
-                            <Post /> */}
                         </Posts>
 
-                        <aside>in development</aside>
+                        <aside>in development (Trending)</aside>
 
                     </Columns>
 
@@ -97,6 +96,12 @@ const Content = styled.div`
         font-size: 43px;
         font-weight: 700;
     }
+    @media(max-width: 937px){
+        width: 100%;
+        h2 {
+            margin-left: 20px;
+        }
+    }
 `;
 
 const Columns = styled.div`
@@ -112,6 +117,11 @@ const Columns = styled.div`
         border-radius: 16px;
         text-align: center;
     }
+    @media(max-width: 937px){
+        &>aside {
+            display: none;
+        }
+    }
 `;
 
 const Posts = styled.section`
@@ -119,6 +129,12 @@ const Posts = styled.section`
     display: flex;
     flex-direction: column;
     gap: 16px;
+    @media(max-width: 937px){
+        margin: 0 auto;
+    }
+    @media(max-width: 611px){
+        width: 100%;
+    }
     h3.error {
         color: #FFF;
         font-size: 24px;

@@ -1,10 +1,14 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useHistory } from "react-router";
 import styled from "styled-components";
+import UserContext from "../Context/UserContext";
 
-function CreatePost({ updateList, goToProfile }) {
+function CreatePost({ updateList }) {
     const [isWaitingServer, setIsWaitingServer] = useState(false);
     const [errorMessage, setErrorMessage] = useState(false);
+    const { user } = useContext(UserContext);
+    const history = useHistory();
 
     const [post, setPost] = useState({
         text: "",
@@ -14,12 +18,13 @@ function CreatePost({ updateList, goToProfile }) {
     console.log(post);
 
     function handleSubmit(e) {
+        if (errorMessage) setErrorMessage(false);
         e.preventDefault();
         setIsWaitingServer(true);
         // Axios Post
         const promisse = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", post, {
             headers: {
-                Authorization: `Bearer fab13ed8-a5b8-475c-965d-3f2d87efc629`, // Falta token
+                Authorization: `Bearer ${user.token}`,
             }
         });
         promisse.then(() => {
@@ -30,7 +35,6 @@ function CreatePost({ updateList, goToProfile }) {
             updateList();
         });
         promisse.catch(error => {
-            console.log(error.response.data);
             setErrorMessage(true);
             setIsWaitingServer(false);
         })
@@ -47,11 +51,9 @@ function CreatePost({ updateList, goToProfile }) {
         }
     }
 
-    console.log()
-
     return (
         <Container>
-            <img onClick={goToProfile} src="https://ahseeit.com/meme-templates/king-include/uploads/2020/11/hide-the-pain-harold-4386494474.png" alt="Imagem do perfil" />
+            <img onClick={() => history.push(`/user/${user.id}`)} src={user.avatar} alt="Imagem do perfil" />
             <Form onSubmit={handleSubmit} isWaitingServer={isWaitingServer}>
                 <h3>O que você tem para favoritar hoje?</h3>
                 <input
@@ -84,6 +86,11 @@ const Container = styled.div`
     padding: 16px 22px 16px 18px;
     box-shadow: 0 4px 4px rgba(0,0,0,.25);
     margin-bottom: 14px;
+    @media(max-width: 611px){
+        width: 100%;
+        border-radius: 0;
+    }
+
     img {
         width: 50px;
         height: 50px;
@@ -139,13 +146,17 @@ const Form = styled.form`
             color: #949494;
         }
     }
+
     footer {
         display: flex;
         align-items: center;
+
         span {
             color: #c90000;
         }
     }
+
+
     button {
         width: 112px;
         height: 31px;

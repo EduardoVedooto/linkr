@@ -1,104 +1,68 @@
 import { useState, useEffect, useContext } from 'react';
+import { useHistory } from 'react-router';
 import axios from 'axios';
 import styled from 'styled-components';
 
 import Post from '../../components/Post';
-
-//import context with user data, into config
+import Loading from '../../components/Loading';
+import InternalError from '../../components/InternalError';
+import UserContext from "../../Context/UserContext";
 
 function MyPosts() {
+    const history = useHistory();
     const [myPosts, setMyPosts] = useState([]);
-    //const { user } = useContext(UserContext);
-
-    /*
-    const [myPosts, setMyPosts] = useState([
-        {
-            "id": 2,
-            "text": "Never Gonna Give You Up #rickroll",
-            "link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-            "linkTitle": "Rick Astley - Never Gonna Give You Up (Video)",
-            "linkDescription": "Rick Astley's official music video for “Never Gonna Give You Up” Listen to Rick Astley: https://RickAstley.lnk.to/_listenYDSubscribe to the official Rick Ast...",
-            "linkImage": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-            "user": {
-                "id": 1,
-                "username": "teste",
-                "avatar": "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/1/avatar"
-            },
-            "likes": [
-                {
-                    "id": 1,
-                    "userId": 1,
-                    "postId": 2,
-                    "createdAt": "2021-05-24T18:55:37.544Z",
-                    "updatedAt": "2021-05-24T18:55:37.544Z",
-                    "user.id": 1,
-                    "user.username": "teste"
-                },
-                {
-                    "id": 2,
-                    "userId": 4,
-                    "postId": 2,
-                    "createdAt": "2021-05-25T17:41:50.248Z",
-                    "updatedAt": "2021-05-25T17:41:50.248Z",
-                    "user.id": 4,
-                    "user.username": "lalalabanana"
-                }
-            ]
-        }
-    ]);
-    */
-
-    // token: fab13ed8-a5b8-475c-965d-3f2d87efc629
-    /*
+    const [isWaitingServer, setIsWaitingServer] = useState(true);
+    const [internalError, setInternalError] = useState(false);
+    const { user } = useContext(UserContext);
+    
     const config = {
       headers: {
           "Authorization": `Bearer ${user.token}`
       }  
-    }; */
+    };
 
-    const config = {
-        headers: {
-            "Authorization": "Bearer fab13ed8-a5b8-475c-965d-3f2d87efc629"
-        }  
-      };
-
-    //const userID = user.id;
-    const userID = 14;
-
-    
     useEffect(() => {
-        const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userID}/posts`, config);
+        const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.id}/posts`, config);
 
         promise.then(reply => {
             setMyPosts(reply.data.posts);
-            console.log(reply.data.posts);
+            setIsWaitingServer(false);
         });
 
         promise.catch(error => {
-            console.log(error.response.data);
+            setIsWaitingServer(false);
+            setInternalError(true);
         });
 
     }, []);
     
-
-
+    function goToHashtag(hashtag) {
+        history.push(`/hashtag/${hashtag}`);
+    }
 
     return (
         <Main>
             <Content>
                 <h2>my posts</h2>
+                {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
+
                     <Columns>
 
                         <Posts>
 
-                            {myPosts.map(p => <Post post={p}/>)}
-
+                            {myPosts.length ?
+                                myPosts.map((post, index) => <Post key={index} post={post} goToHashtag={goToHashtag} />)
+                                :
+                                <h3 className="error">Nenhum post encontrado...</h3>
+                            }
 
                         </Posts>
 
                         <aside>in development</aside>
 
                     </Columns>
+                    }
+
             </Content>
         </Main>
     );

@@ -4,14 +4,14 @@ import { useHistory } from "react-router";
 import styled from "styled-components";
 import UserContext from "../Context/UserContext";
 
-function CreatePost() {
+function CreatePost({ updateList }) {
     const [isWaitingServer, setIsWaitingServer] = useState(false);
     const [errorMessage, setErrorMessage] = useState(false);
     const { user } = useContext(UserContext);
     const history = useHistory();
 
     const [post, setPost] = useState({
-        texto: "",
+        text: "",
         link: ""
     });
 
@@ -26,10 +26,11 @@ function CreatePost() {
             }
         });
         promisse.then(() => {
-            post.texto = "";
+            setIsWaitingServer(false);
+            post.text = "";
             post.link = "";
             setPost({ ...post });
-            setIsWaitingServer(false);
+            updateList();
         });
         promisse.catch(error => {
             setErrorMessage(true);
@@ -83,6 +84,10 @@ const Container = styled.div`
     padding: 16px 22px 16px 18px;
     box-shadow: 0 4px 4px rgba(0,0,0,.25);
     margin-bottom: 14px;
+    @media(max-width: 611px){
+        width: 100%;
+        border-radius: 0;
+    }
 
     img {
         width: 50px;

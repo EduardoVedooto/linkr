@@ -4,12 +4,15 @@ import { FiHeart } from "react-icons/fi";
 import { FiPencil } from 'react-icons/fi'
 
 import { Link} from "react-router-dom";
-import {useContext, useState } from "react";
+import {useContext, useState,useRef,useEffect } from "react";
 import SelectedContext from "../Context/SelectedContext";
 import ReactHashtag from "react-hashtag";
 /*
 
 */
+
+
+
 function Post(data) {
 //console.log(data);
 const {setSelected} = useContext(SelectedContext);
@@ -17,13 +20,21 @@ const [clicked,setCliked]=useState(false);
 //const [text,setText]=useState("");
 const [text,setText]=useState("");
 let i=0;
+const inputRef=useRef();
+useEffect(() => {
+    if (clicked) {
+      inputRef.current.focus();
+    }
+  }, [clicked]);
 
 
 function editPost(e,post){
     e.stopPropagation();
-    console.log(post);
-    setCliked(true);
+    //console.log(post);
+    setCliked(!clicked);
     setText(post.text);
+    console.log(inputRef);
+
 }
 
 function handleChange(e) {
@@ -59,6 +70,7 @@ function handleChange(e) {
                 
                 <Edit>
                     <input
+                    ref={inputRef}
                     placeholder=""
                     value={text}
                     required

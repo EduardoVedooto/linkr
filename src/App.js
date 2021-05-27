@@ -4,7 +4,6 @@ import { useState } from "react";
 import UserContext from "./Context/UserContext"
 import SelectedContext from "./Context/SelectedContext"
 
-
 import SignUp from "./pages/SignUp/SignUp"
 import Login from "./pages/Login/Login"
 import Timeline from "./pages/Timeline/Timeline";

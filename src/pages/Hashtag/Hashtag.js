@@ -27,12 +27,10 @@ useEffect(() => {
         }
     });
     promise.then(({ data }) => {
-        console.log(data.posts);
         setPosts(data.posts);
         setIsWaitingServer(false);
     });
     promise.catch(error => {
-        console.log(error.response.data);
         setIsWaitingServer(false);
         setInternalError(false);
     });

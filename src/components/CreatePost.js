@@ -14,9 +14,6 @@ function CreatePost({ updateList }) {
         text: "",
         link: ""
     });
-
-    console.log(post);
-
     function handleSubmit(e) {
         if (errorMessage) setErrorMessage(false);
         e.preventDefault();

@@ -1,37 +1,69 @@
-import { useEffect, useState } from "react";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router";
 import styled from "styled-components";
 import Aside from "../../components/Aside";
 import CreatePost from "../../components/CreatePost";
+import InternalError from "../../components/InternalError";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
+import UserContext from "../../Context/UserContext";
+
 
 function Timeline() {
+    const history = useHistory();
+    const { user } = useContext(UserContext);
     const [isWaitingServer, setIsWaitingServer] = useState(true);
+    const [internalError, setInternalError] = useState(false);
+    const [posts, setPosts] = useState([]);
 
     useEffect(() => {
-        setTimeout(() => {
+        updateList();
+    }, [user.token]); //eslint-disable-line
+
+    function updateList() {
+        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
+            headers: {
+                Authorization: `Bearer ${user.token}`,
+            }
+        });
+        promise.then(({ data }) => {
+            setPosts(data.posts);
             setIsWaitingServer(false);
-        }, 2000); // Apenas para simular o Servidor
-    }, []);
+        });
+        promise.catch(error => {
+            setIsWaitingServer(false);
+            setInternalError(true);
+        });
+    }
+
+    function goToProfile(id) {
+        history.push(`/user/${id}`);
+    }
+
+    function goToHashtag(hashtag) {
+        history.push(`/hashtag/${hashtag}`);
+    }
 
 
     return (
         <Main>
             <Content>
                 <h2>timeline</h2>
-                {isWaitingServer ?
-                    <Loading />
-                    :
+                {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
                     <Columns>
 
                         <Posts>
-                            <CreatePost />
-                            <Post />
-                            <Post />
-                            <Post />
+                            <CreatePost updateList={updateList} goToProfile={goToProfile} />
+
+                            {posts.length ?
+                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} />)
+                                :
+                                <h3 className="error">Nenhum post encontrado...</h3>
+                            }
                         </Posts>
 
-                        <Aside />
+                        <Aside user={user} posts={posts}/>
 
                     </Columns>
 
@@ -48,6 +80,7 @@ const Main = styled.main`
     padding: 125px 0 50px 0;
     min-height: 100vh;
     background-color: #2F2F2F;
+
 `;
 
 const Content = styled.div`
@@ -58,6 +91,13 @@ const Content = styled.div`
         font-family: "Oswald";
         font-size: 43px;
         font-weight: 700;
+    }
+
+    @media(max-width: 937px){
+        width: 100%;
+        h2 {
+            margin-left: 20px;
+        }
     }
 `;
 
@@ -73,6 +113,20 @@ const Posts = styled.section`
     display: flex;
     flex-direction: column;
     gap: 16px;
+    @media(max-width: 937px){
+        margin: 0 auto;
+    }
+    @media(max-width: 611px){
+        width: 100%;
+    }
+
+    h3.error {
+        color: #FFF;
+        font-size: 24px;
+        font-family: "Oswald";
+
+    }
+
 `;
 
 export default Timeline;

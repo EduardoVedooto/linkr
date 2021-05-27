@@ -1,21 +1,35 @@
+import axios from "axios"
+import { useEffect, useState } from "react"
+import { Link } from "react-router-dom";
 import styled from "styled-components"
 
+function Aside({user, posts}){
+    const [hastagsList, setHastagsList] = useState([]);
+   
+    useEffect(()=>{
+        updateTrending()
+    }, [posts])
 
-function Aside(){
+function updateTrending(){
+    const config ={
+        headers:{
+            "Authorization": `Bearer ${user.token}`
+        }
+    }
+    const request = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending", config)
+    request.then((response)=>{setHastagsList(response.data.hashtags)})
+}
+
     return(
         <Container>
             <h1>trending</h1>
-            <border></border>
-            <p># javascript</p>
-            <p># javascript</p>
-            <p># javascript</p>
-            <p># javascript</p>
-            <p># javascript</p>
-            <p># javascript</p>
-            <p># javascript</p>
-            <p># javascript</p>
-            <p># javascript</p>
-            <p># javascript</p>
+            <Border></Border>
+            { hastagsList.length ? 
+            hastagsList.map((h,i)=>
+                <Link key={i} to={`/hastag/${h.name}`}>
+                    <p># {h.name}</p>
+                </Link>
+            ): <h1>Error!</h1> }
         </Container>
     )
 }
@@ -37,10 +51,7 @@ const Container = styled.div`
         font-size: 27px;
         padding: 15px 0px 20px 20px;
     }
-    border{
-        border: 1px solid #484848;
-        width: 301px;
-    }
+
     p{
         padding-top: 10px;
         padding-left: 20px;
@@ -49,14 +60,16 @@ const Container = styled.div`
         font-size: 19px;
         letter-spacing: 0.5px;
     }
-    p:first-of-type{
-        padding-top: 25px;
-    }
-    @media(max-width: 600px){
+    @media(max-width: 611px){
         display: none;
     }
 `
-
+const Border = styled.div`
+    background-color: #484848;
+    width: 301px;
+    height: 1px;
+    margin-bottom: 15px;
+`
 
 
 export default Aside

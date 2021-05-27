@@ -1,24 +1,47 @@
-import { useState } from "react";
+import axios from "axios";
+import { useContext, useState } from "react";
+import { useHistory } from "react-router";
 import styled from "styled-components";
+import UserContext from "../Context/UserContext";
 
-function CreatePost() {
+function CreatePost({ updateList }) {
     const [isWaitingServer, setIsWaitingServer] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(false);
+    const { user } = useContext(UserContext);
+    const history = useHistory();
 
     const [post, setPost] = useState({
-        url: "",
-        text: ""
+        text: "",
+        link: ""
     });
 
     function handleSubmit(e) {
+        if (errorMessage) setErrorMessage(false);
         e.preventDefault();
         setIsWaitingServer(true);
-        console.log("Publicado");
         // Axios Post
+        const promisse = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", post, {
+            headers: {
+                Authorization: `Bearer ${user.token}`,
+            }
+        });
+        promisse.then(() => {
+            setIsWaitingServer(false);
+            post.text = "";
+            post.link = "";
+            setPost({ ...post });
+            updateList();
+        });
+        promisse.catch(error => {
+            setErrorMessage(true);
+            setIsWaitingServer(false);
+        })
     }
 
     function handleChange(e) {
+        if (errorMessage) setErrorMessage(false);
         if (e.target.type === "url") {
-            post.url = e.target.value;
+            post.link = e.target.value;
             setPost({ ...post });
         } else {
             post.text = e.target.value;
@@ -26,21 +49,15 @@ function CreatePost() {
         }
     }
 
-    console.log()
-
-    function goToProfile() {
-        console.log("indo para o profile");
-    }
-
     return (
         <Container>
-            <img onClick={goToProfile} src="https://ahseeit.com/meme-templates/king-include/uploads/2020/11/hide-the-pain-harold-4386494474.png" alt="Imagem do perfil" />
+            <img onClick={() => history.push(`/user/${user.id}`)} src={user.avatar} alt="Imagem do perfil" />
             <Form onSubmit={handleSubmit} isWaitingServer={isWaitingServer}>
                 <h3>O que você tem para favoritar hoje?</h3>
                 <input
                     placeholder="http://..."
                     type="url"
-                    value={post.url}
+                    value={post.link}
                     onChange={handleChange}
                     disabled={isWaitingServer}
                     required
@@ -51,7 +68,10 @@ function CreatePost() {
                     onChange={handleChange}
                     disabled={isWaitingServer}
                 />
-                <button disabled={isWaitingServer}>{isWaitingServer ? "Publicando" : "Publicar"}</button>
+                <footer>
+                    <span>{errorMessage ? "Houve um erro ao publicar o seu link" : ""}</span>
+                    <button disabled={isWaitingServer}>{isWaitingServer ? "Publicando" : "Publicar"}</button>
+                </footer>
             </Form>
         </Container>
     );
@@ -64,6 +84,10 @@ const Container = styled.div`
     padding: 16px 22px 16px 18px;
     box-shadow: 0 4px 4px rgba(0,0,0,.25);
     margin-bottom: 14px;
+    @media(max-width: 611px){
+        width: 100%;
+        border-radius: 0;
+    }
 
     img {
         width: 50px;
@@ -120,6 +144,16 @@ const Form = styled.form`
             color: #949494;
         }
     }
+
+    footer {
+        display: flex;
+        align-items: center;
+
+        span {
+            color: #c90000;
+        }
+    }
+
 
     button {
         width: 112px;

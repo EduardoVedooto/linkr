@@ -12,6 +12,7 @@ function Authenticated(){
                 <Route path="/timeline" exact component={Timeline}/>
                 <Route path="/user/:idUser" exact component={UserID} />
                 <Route path="/Hashtag/:hashtag" exact component={Hashtag} />
+                <Route path="/my-likes" exact />
             </Switch>
         </>
     )

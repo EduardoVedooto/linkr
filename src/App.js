@@ -2,18 +2,23 @@ import GlobalStyles from "./styles/GlobalStyles";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
 import SignUp from "./pages/SignUp/SignUp"
 import Login from "./pages/Login/Login"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserContext from "./Context/UserContext"
 import SelectedContext from "./Context/SelectedContext"
 import Authenticated from "./Authenticated";
 
 function App() {
   const [user, setUser] = useState();
-  const [selected, setSelected] = useState();     
+  const [selected, setSelected] = useState();
   
-
+  useEffect(()=>{
+    if(localStorage.length > 0){
+      setUser(JSON.parse(localStorage.user))
+    }   
+  },[])
+  console.log(user)
   return (
-    <UserContext.Provider value={{user, setUser}}>
+    <UserContext.Provider value={{ user, setUser}}>
       <SelectedContext.Provider value={{selected, setSelected}}>
         <BrowserRouter>
           <GlobalStyles />

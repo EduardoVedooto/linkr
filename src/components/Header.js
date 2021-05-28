@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import styled from "styled-components"
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import UserContext from "../Context/UserContext";
@@ -8,10 +8,12 @@ import SelectedContext from "../Context/SelectedContext"
 
 function Header(){
     const [press, setPress] = useState(false);
-    const { user } = useContext(UserContext);
+    // const { user } = useContext(UserContext);
+    const user  = JSON.parse(localStorage.user)
     const {setSelected} = useContext(SelectedContext);    
     const history = useHistory();
 
+    console.log(user)
     function UpdateUser(){
         setSelected(user.username);
         history.push(`/user/${user.id}`)
@@ -31,7 +33,7 @@ function Header(){
             <BlockMain press={press} onClick={()=> setPress(false)} >
                 <HeaderMenu>
                         <p onClick={()=>UpdateUser()}>My posts</p>
-                    <Link to={"/user/liked"}>
+                    <Link to={"/my-likes"}>
                         <p>My likes</p>
                     </Link>
                     <Link to={"/"}>
@@ -100,10 +102,11 @@ const HeaderMenu = styled.div`
     font-family: "Lato";
     font-weight: 700;
     align-items: center;
+    padding-top: 10px;
+    gap: 20px;
     p{
         color: #fff;
         cursor: pointer;
-        padding-top: 15px;
         width: fit-content;
     }
     a{

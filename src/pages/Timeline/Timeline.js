@@ -14,7 +14,8 @@ import SelectedContext from "../../Context/SelectedContext";
 
 function Timeline() {
     const history = useHistory();
-    const { user } = useContext(UserContext);
+    // const { user } = useContext(UserContext);
+    const user = JSON.parse(localStorage.user)
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);

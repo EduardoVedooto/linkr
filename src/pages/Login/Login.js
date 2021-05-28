@@ -20,7 +20,11 @@ function Login(){
 
         const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-in", body);
         request.then((response)=>{
-            setUser({token: response.data.token, avatar: response.data.user.avatar, id: response.data.user.id, username: response.data.user.username, email: response.data.user.email})
+            if(localStorage.length === 0){
+                localStorage.setItem("user", JSON.stringify({token: response.data.token, avatar: response.data.user.avatar, id: response.data.user.id, username: response.data.user.username, email: response.data.user.email}))
+            } else {
+                setUser({token: response.data.token, avatar: response.data.user.avatar, id: response.data.user.id, username: response.data.user.username, email: response.data.user.email})
+            }
             history.push("/timeline")
         });
         request.catch((error)=>{

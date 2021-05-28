@@ -8,7 +8,7 @@ function Aside({user, posts}){
    
     useEffect(()=>{
         updateTrending()
-    }, [posts])
+    }, [posts]) //eslint-disable-line
 
 function updateTrending(){
     const config ={

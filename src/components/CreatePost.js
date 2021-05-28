@@ -1,14 +1,12 @@
 import axios from "axios";
 import { useContext, useState } from "react";
-import { useHistory } from "react-router";
 import styled from "styled-components";
 import UserContext from "../Context/UserContext";
 
-function CreatePost({ updateList }) {
+function CreatePost({ updateList, goToProfile }) {
     const [isWaitingServer, setIsWaitingServer] = useState(false);
     const [errorMessage, setErrorMessage] = useState(false);
     const { user } = useContext(UserContext);
-    const history = useHistory();
 
     const [post, setPost] = useState({
         text: "",
@@ -50,7 +48,7 @@ function CreatePost({ updateList }) {
 
     return (
         <Container>
-            <img onClick={() => history.push(`/user/${user.id}`)} src={user.avatar} alt="Imagem do perfil" />
+            <img onClick={() => {goToProfile(user.id, user.username)}} src={user.avatar} alt="Imagem do perfil" />
             <Form onSubmit={handleSubmit} isWaitingServer={isWaitingServer}>
                 <h3>O que você tem para favoritar hoje?</h3>
                 <input

@@ -4,6 +4,7 @@ import { useState } from "react";
 import UserContext from "./Context/UserContext"
 import SelectedContext from "./Context/SelectedContext"
 
+import MyPosts from './pages/MyPosts/MyPosts';
 import SignUp from "./pages/SignUp/SignUp"
 import Login from "./pages/Login/Login"
 import Timeline from "./pages/Timeline/Timeline";
@@ -26,7 +27,7 @@ function App() {
         <Route path="/timeline" exact component={Timeline}/>
         <Route path="/user/:idUser" exact component={UserID} />
         <Route path="/Hashtag/:hashtag" exact component={Hashtag} />
-       
+        <Route path="/my-posts" exact component={MyPosts} />
       </Switch>
     </BrowserRouter>
     </SelectedContext.Provider>
@@ -35,4 +36,4 @@ function App() {
   )
 }
 
-export default App; 
+export default App;

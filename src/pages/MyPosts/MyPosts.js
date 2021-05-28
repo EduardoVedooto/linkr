@@ -14,11 +14,11 @@ function MyPosts() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const { user } = useContext(UserContext);
-    
+
     const config = {
-      headers: {
-          "Authorization": `Bearer ${user.token}`
-      }  
+        headers: {
+            "Authorization": `Bearer ${user.token}`
+        }
     };
 
     useEffect(() => {
@@ -34,8 +34,8 @@ function MyPosts() {
             setInternalError(true);
         });
 
-    }, []);
-    
+    }, []); //eslint-disable-line
+
     function goToHashtag(hashtag) {
         history.push(`/hashtag/${hashtag}`);
     }
@@ -61,7 +61,7 @@ function MyPosts() {
                         <aside>in development</aside>
 
                     </Columns>
-                    }
+                }
 
             </Content>
         </Main>

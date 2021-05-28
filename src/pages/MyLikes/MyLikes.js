@@ -15,7 +15,7 @@ function MyLikes() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const { user } = useContext(UserContext);
-    const { setSelected, selected } = useContext(SelectedContext);
+    const { setSelected } = useContext(SelectedContext);
     const [nameList, setNameList] = useState([]);
 
     const config = {
@@ -64,7 +64,7 @@ function MyLikes() {
                         <Posts>
 
                             {myLikedPosts.length ?
-                                myLikedPosts.map((post, index) => <Post key={index} nameList={nameList} post={post} isMyLikes={true} updateList={updateList} />).reverse()
+                                myLikedPosts.map((post, index) => <Post key={index} goToProfile={goToProfile} goToHashtag={goToHashtag} nameList={nameList} post={post} isMyLikes={true} updateList={updateList} />).reverse()
                                 :
                                 <h3 className="error">Nenhum post encontrado...</h3>
                             }

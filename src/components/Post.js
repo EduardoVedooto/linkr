@@ -6,7 +6,6 @@ import { useContext } from "react";
 import UserContext from "../Context/UserContext";
 
 import Like from './Like';
-import Like2 from "./Like";
 
 function Post({ post, goToProfile, goToHashtag, updateList, isMyLikes, nameList }) {
     const { id, token } = useContext(UserContext).user;

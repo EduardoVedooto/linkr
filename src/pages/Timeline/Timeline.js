@@ -41,7 +41,7 @@ function Timeline() {
 
     function goToProfile(id, nome) {
         setSelected(nome);
-        history.push(`/my-likes`);
+        history.push(`/user/${id}`);
     }
 
     function goToHashtag(hashtag) {

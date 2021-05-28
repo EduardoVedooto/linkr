@@ -7,13 +7,16 @@ import Post from '../../components/Post';
 import Loading from '../../components/Loading';
 import InternalError from '../../components/InternalError';
 import UserContext from "../../Context/UserContext";
+import SelectedContext from '../../Context/SelectedContext';
 
-function MyPosts() {
+function MyLikes() {
     const history = useHistory();
-    const [myPosts, setMyPosts] = useState([]);
+    const [myLikedPosts, setMyLikedPosts] = useState([]);
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const { user } = useContext(UserContext);
+    const { setSelected } = useContext(SelectedContext);
+    const [nameList, setNameList] = useState([]);
 
     const config = {
         headers: {
@@ -22,10 +25,15 @@ function MyPosts() {
     };
 
     useEffect(() => {
-        const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.id}/posts`, config);
+        updateList();
+    }, []); //eslint-disable-line
+
+    function updateList() {
+        const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked`, config);
 
         promise.then(reply => {
-            setMyPosts(reply.data.posts);
+            setMyLikedPosts(reply.data.posts);
+            setNameList(reply.data.posts.map(p => p.likes.map(u => u.username)));
             setIsWaitingServer(false);
         });
 
@@ -33,8 +41,13 @@ function MyPosts() {
             setIsWaitingServer(false);
             setInternalError(true);
         });
+    }
 
-    }, []); //eslint-disable-line
+
+    function goToProfile(id, nome) {
+        setSelected(nome);
+        history.push(`/user/${id}`);
+    }
 
     function goToHashtag(hashtag) {
         history.push(`/hashtag/${hashtag}`);
@@ -43,15 +56,15 @@ function MyPosts() {
     return (
         <Main>
             <Content>
-                <h2>my posts</h2>
+                <h2>my likes</h2>
                 {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
 
                     <Columns>
 
                         <Posts>
 
-                            {myPosts.length ?
-                                myPosts.map((post, index) => <Post key={index} post={post} goToHashtag={goToHashtag} />)
+                            {myLikedPosts.length ?
+                                myLikedPosts.map((post, index) => <Post key={index} goToProfile={goToProfile} goToHashtag={goToHashtag} nameList={nameList} post={post} isMyLikes={true} updateList={updateList} />).reverse()
                                 :
                                 <h3 className="error">Nenhum post encontrado...</h3>
                             }
@@ -111,4 +124,4 @@ const Posts = styled.section`
     gap: 16px;
 `;
 
-export default MyPosts;
+export default MyLikes;

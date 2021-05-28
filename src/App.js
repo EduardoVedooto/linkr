@@ -10,6 +10,7 @@ import Login from "./pages/Login/Login"
 import Timeline from "./pages/Timeline/Timeline";
 import UserID from "./pages/UserID/UserID";
 import Hashtag from "./pages/Hashtag/Hashtag";
+import MyLikes from './pages/MyLikes/MyLikes';
 
 function App() {
   const [user, setUser] = useState();
@@ -27,6 +28,7 @@ function App() {
         <Route path="/timeline" exact component={Timeline}/>
         <Route path="/user/:idUser" exact component={UserID} />
         <Route path="/Hashtag/:hashtag" exact component={Hashtag} />
+        <Route path="/my-likes" exact component={MyLikes} />
         <Route path="/my-posts" exact component={MyPosts} />
       </Switch>
     </BrowserRouter>

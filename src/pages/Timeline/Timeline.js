@@ -10,8 +10,6 @@ import Post from "../../components/Post";
 import UserContext from "../../Context/UserContext";
 import SelectedContext from "../../Context/SelectedContext";
 
-
-
 function Timeline() {
     const history = useHistory();
     const { user } = useContext(UserContext);
@@ -70,7 +68,7 @@ function Timeline() {
                             }
                         </Posts>
 
-                        <Aside user={user} posts={posts}/>
+                        <Aside user={user} posts={posts} />
 
                     </Columns>
 

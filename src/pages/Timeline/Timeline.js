@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
+import Aside from "../../components/Aside";
 import CreatePost from "../../components/CreatePost";
 import InternalError from "../../components/InternalError";
 import Loading from "../../components/Loading";
@@ -18,11 +19,12 @@ function Timeline() {
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
 
-   const {setSelected} = useContext(SelectedContext);
-    
+    const { setSelected } = useContext(SelectedContext);
+
     useEffect(() => {
         updateList();
-    }, []); 
+    }, []); //eslint-disable-line
+
     function updateList() {
         const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
             headers: {
@@ -39,17 +41,17 @@ function Timeline() {
         });
     }
 
-    function goToProfile(id,nome) {
+    function goToProfile(id, nome) {
         setSelected(nome);
         history.push(`/user/${id}`);
     }
 
     function goToHashtag(hashtag) {
-        history.push(`/hashtag/${hashtag.replace("#","")}`);
+        history.push(`/hashtag/${hashtag.replace("#", "")}`);
     }
 
- 
-    
+
+
 
     return (
         <Main>
@@ -62,13 +64,13 @@ function Timeline() {
                             <CreatePost updateList={updateList} goToProfile={goToProfile} />
 
                             {posts.length ?
-                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} />)
+                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
                                 :
                                 <h3 className="error">Nenhum post encontrado...</h3>
                             }
                         </Posts>
 
-                        <aside>in development (Trending)</aside>
+                        <Aside user={user} posts={posts}/>
 
                     </Columns>
 
@@ -108,19 +110,6 @@ const Columns = styled.div`
     justify-content: space-between;
     height: inherit;
     margin-top: 43px;
-    &>aside{  // Será substituído pela div hashtag
-        background-color: #171717;
-        color: #fff;
-        width: 301px;
-        height: 406px;
-        border-radius: 16px;
-        text-align: center;
-    }
-    @media(max-width: 937px){
-        &>aside {
-            display: none;
-        }
-    }
 `;
 
 const Posts = styled.section`

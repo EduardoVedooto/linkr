@@ -1,30 +1,40 @@
 import styled from "styled-components";
-import { IconContext } from "react-icons";
-import { FiHeart } from "react-icons/fi";
-/*
-*/
+import EditPost from "./EditPost";
 import ReactHashtag from "react-hashtag";
+import RemovePost from "./RemovePost";
+import { useContext } from "react";
+import UserContext from "../Context/UserContext";
 
-function Post({ post, goToProfile, goToHashtag })  {
+import Like from './Like';
+
+function Post({ post, goToProfile, goToHashtag, updateList }) {
+    const { id, token } = useContext(UserContext).user;
     let counter = 0;
     return (
         <PostsContainer>
             <aside>
-                <img src={post.user.avatar} onClick={() => goToProfile(post.user.id,post.user.username)} alt="Imagem do perfil" />
+                <img src={post.user.avatar} onClick={() => goToProfile(post.user.id, post.user.username)} alt="Imagem do perfil" />
                 <div id="likes">
-                    <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
-                        <FiHeart />
-                        <span>{post.likes.length} {post.likes.length === 1 ? "like" : "likes"}</span>
-                    </IconContext.Provider>
+                <Like likes={post.likes} postId={post.id} updateList={updateList} />
                 </div>
             </aside>
             <main>
-                <h3 onClick={() => goToProfile(post.user.id,post.user.username)}>{post.user.username}</h3>
-                <p>
-                    <ReactHashtag renderHashtag={hashtag => <Hashtag key={post.id + hashtag + counter++} onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>}>
-                        {post.text}
-                    </ReactHashtag>
-                </p>
+                
+
+            <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
+            {post.user.id === id ?
+                 <>
+                 <RemovePost id={post.id} token={token} updateList={updateList} /> 
+                 <EditPost post={post} token={token} updateList={updateList} goToHashtag={goToHashtag}/>
+                 </>
+                 : 
+                 <p>
+                 <ReactHashtag renderHashtag={hashtag => <Hashtag key={post.id + hashtag + counter++} onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>}>
+                     {post.text}
+                 </ReactHashtag>
+                 </p>
+                 }
+
                 <LinkContent onClick={() => window.open(post.link, "_blank")}>
                     <h4>{post.linkTitle}</h4>
                     <p>{post.linkDescription}</p>
@@ -76,7 +86,9 @@ const PostsContainer = styled.div`
     main {
         display: flex;
         flex-direction: column;
-        width: 100%;    
+        width: 100%;   
+        position: relative; 
+
         h3 {
             width: fit-content;
             font-size: 20px;

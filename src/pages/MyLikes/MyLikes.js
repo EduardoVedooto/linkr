@@ -15,7 +15,7 @@ function MyLikes() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const { user } = useContext(UserContext);
-    const { setSelected } = useContext(SelectedContext);
+    const { setSelected, selected } = useContext(SelectedContext);
     
     const config = {
       headers: {
@@ -27,6 +27,10 @@ function MyLikes() {
     
 
     useEffect(() => {
+        updateList();
+    }, [selected]); //eslint-disable-line
+
+    function updateList() {
         const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked`, config);
 
         promise.then(reply => {
@@ -35,13 +39,11 @@ function MyLikes() {
             setIsWaitingServer(false);
         });
         
-        
         promise.catch(error => {
             setIsWaitingServer(false);
             setInternalError(true);
         });
-
-    }, []);
+    }
 
     function goToProfile(id,nome) {
         setSelected(nome);
@@ -63,7 +65,7 @@ function MyLikes() {
                         <Posts>
 
                             {myLikedPosts.length ?
-                                myLikedPosts.map((post, index) => <Post key={index} post={post} goToHashtag={goToHashtag} goToProfile={goToProfile} redHeart={true} nameList={nameList.shift()} />)
+                                myLikedPosts.map((post, index) => <Post key={index} post={post} goToHashtag={goToHashtag} goToProfile={goToProfile} redHeart={true} nameList={nameList.shift()} updateList={updateList} />)
                                 :
                                 <h3 className="error">Nenhum post encontrado...</h3>
                             }

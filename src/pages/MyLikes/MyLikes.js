@@ -7,13 +7,15 @@ import Post from '../../components/Post';
 import Loading from '../../components/Loading';
 import InternalError from '../../components/InternalError';
 import UserContext from "../../Context/UserContext";
+import SelectedContext from '../../Context/SelectedContext';
 
-function MyPosts() {
+function MyLikes() {
     const history = useHistory();
-    const [myPosts, setMyPosts] = useState([]);
+    const [myLikedPosts, setMyLikedPosts] = useState([]);
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const { user } = useContext(UserContext);
+    const { setSelected } = useContext(SelectedContext);
     
     const config = {
       headers: {
@@ -27,7 +29,7 @@ function MyPosts() {
         const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked`, config);
 
         promise.then(reply => {
-            setMyPosts(reply.data.posts);
+            setMyLikedPosts(reply.data.posts);
             setIsWaitingServer(false);
         });
 
@@ -38,6 +40,11 @@ function MyPosts() {
 
     }, []);
     
+    function goToProfile(id,nome) {
+        setSelected(nome);
+        history.push(`/user/${id}`);
+    }
+
     function goToHashtag(hashtag) {
         history.push(`/hashtag/${hashtag}`);
     }
@@ -45,15 +52,15 @@ function MyPosts() {
     return (
         <Main>
             <Content>
-                <h2>my posts</h2>
+                <h2>my likes</h2>
                 {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
 
                     <Columns>
 
                         <Posts>
 
-                            {myPosts.length ?
-                                myPosts.map((post, index) => <Post key={index} post={post} goToHashtag={goToHashtag} />)
+                            {myLikedPosts.length ?
+                                myLikedPosts.map((post, index) => <Post key={index} post={post} goToHashtag={goToHashtag} goToProfile={goToProfile} />)
                                 :
                                 <h3 className="error">Nenhum post encontrado...</h3>
                             }
@@ -112,3 +119,5 @@ const Posts = styled.section`
     flex-direction: column;
     gap: 16px;
 `;
+
+export default MyLikes;

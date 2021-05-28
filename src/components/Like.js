@@ -1,97 +1,85 @@
+import { useContext, useEffect, useState } from "react";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from 'react-icons/fa';
 import ReactTooltip from 'react-tooltip';
+import UserContext from "../Context/UserContext";
+import axios from "axios";
 
-import axios from 'axios';
-import UserContext from '../Context/UserContext';
-import { useContext, useState, useEffect } from "react";
-
-function Like({ postId, likes, updateList, redHeart, nameList }) {
+function Like({ postId, post, isMyLikes, updateList }) {
     const { user } = useContext(UserContext);
-    const [text, setText] = useState("null");
-
-    const [likesList, setLikesList] = useState(redHeart ? nameList : likes.length > 0 ? likes.map(like => Object.values(like)[6]) : []);
-    const [clickedLike, setClickedLike] = useState(redHeart ? true : likesList.includes(user.username));
+    const [usernamesList, setUsernamesList] = useState([]);
+    const [isLiked, setIsLiked] = useState(false);
+    const [tooltipText, setTooltipText] = useState("");
 
     useEffect(() => {
-        tooltip();
-    }, [likes]); //eslint-disable-line
-    
-    const config = {
-        headers: {
-            "Authorization" : `Bearer ${user.token}`
-        }
-    }
 
-    function addLike() {
-        const request = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}/like`, {}, config);
+        setUsernamesList(post.map(p => isMyLikes ? p.username : p["user.username"]));
+        setIsLiked(usernamesList.includes(user.username));
+        updateTooltip();
+    }, [usernamesList]);
 
-        request.then(({ data }) => {
-            setLikesList(data.post.likes.map(l => l.username));
-            setClickedLike(true);
-            tooltip();
+    function handleLike(e) {
+        const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}/${isLiked ? "dislike" : "like"}`, {}, {
+            headers: {
+                Authorization: `Bearer ${user.token}`
+            }
+        });
+        promise.then(({ data }) => {
+
+            setUsernamesList(data.post.likes.map(l => l.username));
+            setIsLiked(!isLiked);
+            updateTooltip();
             updateList();
         });
-
-        request.catch(error => {
-            alert(error.response.data.message);
-        });
+        promise.catch(err => window.alert(err.response.data.message));
+        e.stopPropagation();
     }
 
-    function dislike() {
-        const request = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}/dislike`, {}, config);
+    function updateTooltip() {
 
-        request.then(({ data }) => {
-            setLikesList(data.post.likes.map(l => l.username));
-            setClickedLike(false);
-            tooltip();
-            updateList();
-        });
+        const userNotMe = usernamesList.find(name => name !== user.username);
 
-        request.catch(error =>{
-            alert(error.response.data.message);
-        });
-    }
-
-    function tooltip() {
-        const userNotMe = likesList.find(name => name !== user.username);
-        if (clickedLike) {
-            if (likesList.length === 1) {
-                setText("Somente você curtiu esse post");
-            } else if (likesList.length === 2) {
-                setText(`Você e ${userNotMe}`);
-            } else if (likesList.length > 2) {
-
-                const qtd = likesList.length - 2;
-                setText(`Você, ${userNotMe} e ${qtd} ${qtd === 1 ? "outra pessoa" : "outras pessoas"}`);
+        if (usernamesList.includes(user.username)) {
+            if (usernamesList.length === 1) {
+                setTooltipText("Somente você curtiu esse post");
+            } else if (usernamesList.length === 2) {
+                setTooltipText(`Você e ${userNotMe}`);
+            } else if (usernamesList.length > 2) {
+                const qtd = usernamesList.length - 2;
+                setTooltipText(`Você, ${userNotMe} e ${qtd} ${qtd === 1 ? "outra pessoa" : "outras pessoas"}`);
             }
         } else {
-            if(likesList.length === 1) {
-                setText(`${likesList[0]}`);
-            } else if (likesList.length === 2) {
-                setText(`${likesList[0]} e ${likesList[1]}`);
-            } else if (likesList.length > 2) {
-                const qtd = likesList.length - 2;
-                setText(`${likesList[0]}, ${likesList[1]} e ${qtd} ${qtd === 1 ? "outra pessoa" : "outras pessoas"}`);
+            if (usernamesList.length === 0) {
+                setTooltipText("");
+            }
+            if (usernamesList.length === 1) {
+                setTooltipText(`${usernamesList[0]}`);
+            } else if (usernamesList.length === 2) {
+                setTooltipText(`${usernamesList[0]} e ${usernamesList[1]}`);
+            } else if (usernamesList.length > 2) {
+                const qtd = usernamesList.length - 2;
+                setTooltipText(`${usernamesList[0]}, ${usernamesList[1]} e ${qtd} ${qtd === 1 ? "outra pessoa" : "outras pessoas"}`);
             }
         }
     }
 
     return (
         <>
-        {clickedLike ?
-            <IconContext.Provider value={{ size: "20px", color: "red" }}>
-                <FaHeart onClick={dislike} />
-            </IconContext.Provider>
-            :
-            <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
-                <FiHeart onClick={addLike} />
-            </IconContext.Provider>}
-            <span data-tip={text} data-for="info">{likes.length} {likes.length === 1 ? "like" : "likes"}</span>
+            {
+                isLiked ?
+                    <IconContext.Provider value={{ size: "20px", color: "red" }}>
+                        <FaHeart onClick={handleLike} />
+                    </IconContext.Provider>
+                    :
+                    <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
+                        <FiHeart onClick={handleLike} />
+                    </IconContext.Provider>
+            }
+            <span data-tip={tooltipText} data-for="info">{post.length} {post.length === 1 ? "like" : "likes"}</span>
             <ReactTooltip id="info" place="bottom" type="light" />
         </>
-    );
+    )
 }
 
 export default Like;

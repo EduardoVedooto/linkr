@@ -16,19 +16,17 @@ function MyLikes() {
     const [internalError, setInternalError] = useState(false);
     const { user } = useContext(UserContext);
     const { setSelected, selected } = useContext(SelectedContext);
-    
-    const config = {
-      headers: {
-          "Authorization": `Bearer ${user.token}`
-      }  
-    };
-
     const [nameList, setNameList] = useState([]);
-    
+
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${user.token}`
+        }
+    };
 
     useEffect(() => {
         updateList();
-    }, [selected]); //eslint-disable-line
+    }, []); //eslint-disable-line
 
     function updateList() {
         const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked`, config);
@@ -38,14 +36,15 @@ function MyLikes() {
             setNameList(reply.data.posts.map(p => p.likes.map(u => u.username)));
             setIsWaitingServer(false);
         });
-        
+
         promise.catch(error => {
             setIsWaitingServer(false);
             setInternalError(true);
         });
     }
 
-    function goToProfile(id,nome) {
+
+    function goToProfile(id, nome) {
         setSelected(nome);
         history.push(`/user/${id}`);
     }
@@ -65,7 +64,7 @@ function MyLikes() {
                         <Posts>
 
                             {myLikedPosts.length ?
-                                myLikedPosts.map((post, index) => <Post key={index} post={post} goToHashtag={goToHashtag} goToProfile={goToProfile} redHeart={true} nameList={nameList.shift()} updateList={updateList} />)
+                                myLikedPosts.map((post, index) => <Post key={index} nameList={nameList} post={post} isMyLikes={true} updateList={updateList} />).reverse()
                                 :
                                 <h3 className="error">Nenhum post encontrado...</h3>
                             }
@@ -75,7 +74,7 @@ function MyLikes() {
                         <aside>in development</aside>
 
                     </Columns>
-                    }
+                }
 
             </Content>
         </Main>

@@ -23,7 +23,7 @@ export default function Hashtag() {
 
     useEffect(() => {
         updateList();
-    }, []); //eslint-disable-line
+    }, [hashtag]); //eslint-disable-line
 
     function goToProfile(id, nome) {
         setSelected(nome);

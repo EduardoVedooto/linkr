@@ -7,7 +7,7 @@ import UserContext from "../Context/UserContext";
 
 import Like from './Like';
 
-function Post({ post, goToProfile, goToHashtag, updateList }) {
+function Post({ post, goToProfile, goToHashtag, updateList, redHeart, nameList }) {
     const { id, token } = useContext(UserContext).user;
     let counter = 0;
     return (
@@ -15,7 +15,7 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
             <aside>
                 <img src={post.user.avatar} onClick={() => goToProfile(post.user.id, post.user.username)} alt="Imagem do perfil" />
                 <div id="likes">
-                <Like likes={post.likes} postId={post.id} updateList={updateList} />
+                <Like likes={post.likes} postId={post.id} updateList={updateList} redHeart={redHeart} nameList={nameList} />
                 </div>
             </aside>
             <main>

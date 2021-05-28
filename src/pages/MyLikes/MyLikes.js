@@ -23,6 +23,7 @@ function MyLikes() {
       }  
     };
 
+    const [nameList, setNameList] = useState([]);
     
 
     useEffect(() => {
@@ -30,16 +31,18 @@ function MyLikes() {
 
         promise.then(reply => {
             setMyLikedPosts(reply.data.posts);
+            setNameList(reply.data.posts.map(p => p.likes.map(u => u.username)));
             setIsWaitingServer(false);
         });
-
+        
+        
         promise.catch(error => {
             setIsWaitingServer(false);
             setInternalError(true);
         });
 
     }, []);
-    
+
     function goToProfile(id,nome) {
         setSelected(nome);
         history.push(`/user/${id}`);
@@ -60,7 +63,7 @@ function MyLikes() {
                         <Posts>
 
                             {myLikedPosts.length ?
-                                myLikedPosts.map((post, index) => <Post key={index} post={post} goToHashtag={goToHashtag} goToProfile={goToProfile} />)
+                                myLikedPosts.map((post, index) => <Post key={index} post={post} goToHashtag={goToHashtag} goToProfile={goToProfile} redHeart={true} nameList={nameList.shift()} />)
                                 :
                                 <h3 className="error">Nenhum post encontrado...</h3>
                             }

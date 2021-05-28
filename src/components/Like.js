@@ -7,12 +7,12 @@ import axios from 'axios';
 import UserContext from '../Context/UserContext';
 import { useContext, useState, useEffect } from "react";
 
-function Like({ postId, likes, updateList }) {
+function Like({ postId, likes, updateList, redHeart, nameList }) {
     const { user } = useContext(UserContext);
     const [text, setText] = useState("null");
 
-    const [likesList, setLikesList] = useState(likes.length > 0 ? likes.map(like => Object.values(like)[6]) : []);
-    const [clickedLike, setClickedLike] = useState(likesList.includes(user.username));
+    const [likesList, setLikesList] = useState(redHeart ? nameList : likes.length > 0 ? likes.map(like => Object.values(like)[6]) : []);
+    const [clickedLike, setClickedLike] = useState(redHeart ? true : likesList.includes(user.username));
 
     useEffect(() => {
         tooltip();

@@ -1,26 +1,21 @@
 import styled from "styled-components";
-import { IconContext } from "react-icons";
-import { FiHeart } from "react-icons/fi";
 import EditPost from "./EditPost";
 import ReactHashtag from "react-hashtag";
 import RemovePost from "./RemovePost";
 import { useContext } from "react";
 import UserContext from "../Context/UserContext";
 
-function Post({ post, goToProfile,goToHashtag, updateList }) {
+import Like from './Like';
 
+function Post({ post, goToProfile, goToHashtag, updateList }) {
     const { id, token } = useContext(UserContext).user;
-
     let counter = 0;
     return (
         <PostsContainer>
             <aside>
                 <img src={post.user.avatar} onClick={() => goToProfile(post.user.id, post.user.username)} alt="Imagem do perfil" />
                 <div id="likes">
-                    <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
-                        <FiHeart />
-                        <span>{post.likes.length} {post.likes.length === 1 ? "like" : "likes"}</span>
-                    </IconContext.Provider>
+                <Like likes={post.likes} postId={post.id} updateList={updateList} />
                 </div>
             </aside>
             <main>

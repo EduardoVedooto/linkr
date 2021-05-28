@@ -8,6 +8,7 @@ import Loading from '../../components/Loading';
 import InternalError from '../../components/InternalError';
 import UserContext from "../../Context/UserContext";
 import SelectedContext from '../../Context/SelectedContext';
+import Aside from '../../components/Aside';
 
 function MyLikes() {
     const history = useHistory();
@@ -71,7 +72,7 @@ function MyLikes() {
 
                         </Posts>
 
-                        <aside>in development</aside>
+                        <Aside user={user} />
 
                     </Columns>
                 }

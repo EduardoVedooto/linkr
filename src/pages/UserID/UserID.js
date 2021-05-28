@@ -59,8 +59,6 @@ export default function UserID() {
 
                         <Posts>
 
-                    
-
                             {posts.length > 0 ?
                                 posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
                                 :
@@ -108,11 +106,6 @@ display: flex;
 justify-content: space-between;
 height: inherit;
 margin-top: 43px;
-@media(max-width: 937px){
-    &>aside {
-        display: none;
-    }
-}
 `;
 
 const Posts = styled.section`

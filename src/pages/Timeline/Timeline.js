@@ -16,7 +16,6 @@ function Timeline() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
-
     const { setSelected } = useContext(SelectedContext);
 
     useEffect(() => {

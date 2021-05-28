@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from 'react-icons/fa';
@@ -11,33 +11,32 @@ function Like({ postId, post, isMyLikes, updateList }) {
     const [usernamesList, setUsernamesList] = useState([]);
     const [isLiked, setIsLiked] = useState(false);
     const [tooltipText, setTooltipText] = useState("");
+    const contref = useRef(0)
 
     useEffect(() => {
-
         setUsernamesList(post.map(p => isMyLikes ? p.username : p["user.username"]));
         setIsLiked(usernamesList.includes(user.username));
         updateTooltip();
-    }, [usernamesList]); //eslint-disable-line 
+        contref.current++
+    });
+    
 
-    function handleLike(e) {
+    function handleLike() {
         const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}/${isLiked ? "dislike" : "like"}`, {}, {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }
         });
         promise.then(({ data }) => {
-
             setUsernamesList(data.post.likes.map(l => l.username));
             setIsLiked(!isLiked);
             updateTooltip();
             updateList();
         });
         promise.catch(err => window.alert(err.response.data.message));
-        e.stopPropagation();
     }
 
     function updateTooltip() {
-
         const userNotMe = usernamesList.find(name => name !== user.username);
 
         if (usernamesList.includes(user.username)) {
@@ -69,11 +68,11 @@ function Like({ postId, post, isMyLikes, updateList }) {
             {
                 isLiked ?
                     <IconContext.Provider value={{ size: "20px", color: "red" }}>
-                        <FaHeart onClick={handleLike} />
+                        <FaHeart onClick={()=>{handleLike()}} />
                     </IconContext.Provider>
                     :
                     <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
-                        <FiHeart onClick={handleLike} />
+                        <FiHeart onClick={()=>{handleLike()}} />
                     </IconContext.Provider>
             }
             <span data-tip={tooltipText} data-for="info">{post.length} {post.length === 1 ? "like" : "likes"}</span>

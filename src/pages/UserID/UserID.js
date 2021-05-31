@@ -23,7 +23,7 @@ export default function UserID() {
 
     useEffect(() => {
         updateList();
-    }, []); //eslint-disable-line 
+    }, [selected]); //eslint-disable-line 
 
     function goToProfile(id, nome) {
         setSelected(nome);

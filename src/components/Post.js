@@ -3,7 +3,7 @@ import EditPost from "./EditPost";
 import ReactHashtag from "react-hashtag";
 import RemovePost from "./RemovePost";
 import Link from "./Link";
-import { useContext, useState} from "react";
+import { useContext} from "react";
 import UserContext from "../Context/UserContext";
 import Repost from "./RePost";
 import Like from './Like';

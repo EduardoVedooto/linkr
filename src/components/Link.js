@@ -30,7 +30,7 @@ function Link({post}) {
                 </Buttons> 
                      
 
-                <iframe src={post.link} width="100%" height="100%"></iframe>
+                <iframe src={post.link} title={post.linkTitle} width="100%" height="100%"></iframe>
 
                 </ModalContent>
             </Modal>

@@ -6,7 +6,6 @@ import Post from "../../components/Post";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router";
 import UserContext from "../../Context/UserContext";
-import SelectedContext from "../../Context/SelectedContext";
 import InternalError from "../../components/InternalError";
 import Aside from "../../components/Aside";
 
@@ -15,7 +14,6 @@ import Aside from "../../components/Aside";
 export default function Hashtag() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const { hashtag } = useParams();
-    const { setSelected } = useContext(SelectedContext);
     const [posts, setPosts] = useState([]);
     const { user } = useContext(UserContext);
     const [internalError, setInternalError] = useState(false);
@@ -25,9 +23,8 @@ export default function Hashtag() {
         updateList();
     }, [hashtag]); //eslint-disable-line
 
-    function goToProfile(id, nome) {
-        setSelected(nome);
-        history.push(`/user/${id}`);
+    function goToProfile(id, name) {
+        history.push(`/user/${id}/${name}`);
     }
 
     function goToHashtag(hashtag) {

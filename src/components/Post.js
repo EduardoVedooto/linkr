@@ -13,26 +13,25 @@ function Post({ post, goToProfile, goToHashtag, updateList, isMyLikes, nameList 
     let counter = 0;
     return (
         <>
-        <RePostContainer reposted={post.repostCount}>
-        {post.repostCount > 0 ?
+        <RePostContainer reposted={post.repostedBy}>
+        {post.repostedBy ?
         <Reposted>
             <MdRepeat 
             color="#FFFFFF"
             fontSize="20px"/>
 
-        <span onClick={() => goToProfile(post.repostedBy.id, post.repostedBy.username)}>Re-posted by  <strong>{post.repostedBy?
-        post.repostedBy.id===id?"you":post.repostedBy.username
-        :""} </strong></span>
+        <span onClick={() => goToProfile(post.repostedBy.id, post.repostedBy.username)}>Re-posted by  <strong>
+        {post.repostedBy.id===id?"you":post.repostedBy.username} </strong></span>
         </Reposted>
         :""}
         
-        <PostsContainer  reposted={post.repostCount}>
+        <PostsContainer  reposted={post.repostedBy}>
             <aside>
                 <img src={post.user.avatar} onClick={() => goToProfile(post.user.id, post.user.username)} alt="Imagem do perfil" />
                 <div id="likes">
                     <Like nameList={nameList} postId={post.id} updateList={updateList} post={post.likes} isMyLikes={isMyLikes} />
                 </div>
-                <Repost post={post}/>
+                <Repost post={post} updateList={updateList}/>
             </aside>
             <main>
 

@@ -47,7 +47,7 @@ function MyLikes() {
     }
 
     function goToHashtag(hashtag) {
-        history.push(`/hashtag/${hashtag}`);
+        history.push(`/hashtag/${hashtag.replace("#", "")}`);
     }
 
     return (
@@ -116,7 +116,6 @@ const Columns = styled.div`
     justify-content: space-between;
     height: inherit;
     margin-top: 43px;
-
     &>aside{  // Será substituído pela div hashtag
         background-color: #171717;
         color: #fff;

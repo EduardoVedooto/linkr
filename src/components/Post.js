@@ -1,23 +1,39 @@
+
 import styled from "styled-components";
 import EditPost from "./EditPost";
 import ReactHashtag from "react-hashtag";
 import RemovePost from "./RemovePost";
-import { useContext } from "react";
+import { useContext} from "react";
 import UserContext from "../Context/UserContext";
-
+import Repost from "./RePost";
 import Like from './Like';
+import {MdRepeat} from 'react-icons/md';
 
 function Post({ post, goToProfile, goToHashtag, updateList, isMyLikes, nameList }) {
     const { id, token } = useContext(UserContext).user;
     let counter = 0;
     return (
-        <PostsContainer>
+        <>
+        <RePostContainer reposted={post.repostCount}>
+        {post.repostCount >=1?
+        <Reposted>
+            <MdRepeat 
+            color="#FFFFFF"
+            fontSize="20px"/>
+
+        <span>Re-posted by  <strong>{post.repostedBy?
+        post.repostedBy.id===id?"you":post.repostedBy.username
+        :""} </strong></span>
+        </Reposted>
+        :""}
+        
+        <PostsContainer  reposted={post.repostCount}>
             <aside>
                 <img src={post.user.avatar} onClick={() => goToProfile(post.user.id, post.user.username)} alt="Imagem do perfil" />
                 <div id="likes">
                     <Like nameList={nameList} postId={post.id} updateList={updateList} post={post.likes} isMyLikes={isMyLikes} />
-
                 </div>
+                <Repost post={post}/>
             </aside>
             <main>
 
@@ -44,10 +60,43 @@ function Post({ post, goToProfile, goToHashtag, updateList, isMyLikes, nameList 
                 </LinkContent>
             </main>
         </PostsContainer>
+        </RePostContainer>
+        </>
+       
     );
 }
 
-const PostsContainer = styled.div`
+const RePostContainer= styled.div `
+width: 611px;
+background: ${props => props.reposted? "#1E1E1E" : "none"};
+margin-top: 30px;
+border-radius: 16px;
+@media(max-width: 611px){
+    width: 100%;
+    margin-top:15px;
+}
+`;
+
+const Reposted = styled.div `
+margin:10px;
+display:flex;
+align-items:center;
+
+span{
+margin-left:5px;
+font-family: Lato;
+font-style: normal;
+font-weight: normal;
+font-size: 11px;
+line-height: 13px;
+color: #FFFFFF;
+}
+`;
+
+
+const PostsContainer = styled.div`  
+
+    margin-top:${props => props.reposted?"13px":"auto"};
     background-color: #171717;
     border-radius: 16px;
     width: 611px;
@@ -89,7 +138,6 @@ const PostsContainer = styled.div`
         flex-direction: column;
         width: 100%;   
         position: relative; 
-
         h3 {
             width: fit-content;
             font-size: 20px;

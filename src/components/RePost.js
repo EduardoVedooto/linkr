@@ -12,7 +12,6 @@ const [clicked,setClicked]=useState(false);
 const[isWaitingServer,setIsWaitingServer]=useState(false);
 const { user } = useContext(UserContext);
 
-if(post.repostedBy) console.log(post);
 
     function handleRePost(){
         const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${post.id}/share`, {}, {

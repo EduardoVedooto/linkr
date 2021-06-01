@@ -81,6 +81,7 @@ margin-top:22px;
 display:flex;
 flex-direction:column;
 align-items:center;
+cursor: pointer;
 
 .div{
 font-family: Lato;

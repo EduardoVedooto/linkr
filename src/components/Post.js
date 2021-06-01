@@ -1,4 +1,3 @@
-
 import styled from "styled-components";
 import EditPost from "./EditPost";
 import ReactHashtag from "react-hashtag";

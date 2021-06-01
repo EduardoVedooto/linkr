@@ -8,7 +8,7 @@ import InternalError from "../../components/InternalError";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 import UserContext from "../../Context/UserContext";
-import SelectedContext from "../../Context/SelectedContext";
+import useInterval from "use-interval";
 
 function Timeline() {
     const history = useHistory();
@@ -16,7 +16,6 @@ function Timeline() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
-    const { setSelected } = useContext(SelectedContext);
 
     useEffect(() => {
         updateList();
@@ -38,9 +37,13 @@ function Timeline() {
         });
     }
 
-    function goToProfile(id, nome) {
-        setSelected(nome);
-        history.push(`/user/${id}`);
+    useInterval(() => {
+        updateList();
+    }, 15000)
+
+
+    function goToProfile(id, name) {
+        history.push(`/user/${id}/${name}`);
     }
 
     function goToHashtag(hashtag) {

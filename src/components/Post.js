@@ -7,10 +7,16 @@ import UserContext from "../Context/UserContext";
 import Repost from "./RePost";
 import Like from './Like';
 import {MdRepeat} from 'react-icons/md';
+import TooltipText from "../utils/TooltipText";
 
-function Post({ post, goToProfile, goToHashtag, updateList, isMyLikes, nameList }) {
-    const { id, token } = useContext(UserContext).user;
+function Post({ post, goToProfile, goToHashtag, updateList }) {
+
+    const { id, token, username } = useContext(UserContext).user;
+    const usermamesList = post.likes.map(u => u["user.username"]);
+    const isLiked = usermamesList.includes(username);
+    const tooltip = TooltipText(username, usermamesList);
     let counter = 0;
+
     return (
         <>
         <RePostContainer reposted={post.repostedBy}>
@@ -29,7 +35,13 @@ function Post({ post, goToProfile, goToHashtag, updateList, isMyLikes, nameList 
             <aside>
                 <img src={post.user.avatar} onClick={() => goToProfile(post.user.id, post.user.username)} alt="Imagem do perfil" />
                 <div id="likes">
-                    <Like nameList={nameList} postId={post.id} updateList={updateList} post={post.likes} isMyLikes={isMyLikes} />
+                    <Like
+                        post={post.likes}
+                        postId={post.id}
+                        isLiked={isLiked}
+                        tooltip={tooltip}
+                        updateList={updateList}
+                    />
                 </div>
                 <Repost post={post} updateList={updateList}/>
             </aside>
@@ -44,7 +56,14 @@ function Post({ post, goToProfile, goToHashtag, updateList, isMyLikes, nameList 
                     </>
                     :
                     <p>
-                        <ReactHashtag renderHashtag={hashtag => <Hashtag key={post.id + hashtag + counter++} onClick={() => goToHashtag(hashtag)}>{hashtag}</Hashtag>}>
+                        <ReactHashtag renderHashtag={hashtag => (
+                            <Hashtag
+                                key={post.id + hashtag + counter++}
+                                onClick={() => goToHashtag(hashtag)}
+                            >
+                                {hashtag}
+                            </Hashtag>
+                        )}>
                             {post.text}
                         </ReactHashtag>
                     </p>

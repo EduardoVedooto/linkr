@@ -9,6 +9,8 @@ import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 import UserContext from "../../Context/UserContext";
 import SelectedContext from "../../Context/SelectedContext";
+import useInterval from "use-interval";
+import * as React from 'react';
 
 function Timeline() {
     const history = useHistory();
@@ -37,6 +39,11 @@ function Timeline() {
             setInternalError(true);
         });
     }
+    
+    useInterval(()=>{
+        updateList();
+    }, 15000)
+    
 
     function goToProfile(id, nome) {
         setSelected(nome);

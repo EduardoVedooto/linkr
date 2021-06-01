@@ -4,55 +4,64 @@ import { Link, useHistory } from "react-router-dom"
 import axios from "axios";
 import UserContext from "../../Context/UserContext";
 
-function Login(){
+function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const { setUser } = useContext(UserContext)
     const history = useHistory();
 
-    function AttemptToLogin(){
+    function AttemptToLogin() {
         setLoading(true)
-        const body ={
+        const body = {
             email,
             password,
         }
 
         const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-in", body);
-        request.then((response)=>{
-            setUser({token: response.data.token, avatar: response.data.user.avatar, id: response.data.user.id, username: response.data.user.username, email: response.data.user.email})
-            history.push("/timeline")
+        request.then(({ data }) => {
+            console.clear();
+            const userData = {
+                token: data.token,
+                avatar: data.user.avatar,
+                username: data.user.username,
+                email: data.user.email,
+                id: data.user.id,
+            };
+            setUser(userData);
+            localStorage.setItem("user", JSON.stringify(userData));
+            history.push("/timeline");
         });
-        request.catch((error)=>{
+        request.catch((error) => {
             setEmail("");
             setPassword("");
             setLoading(false)
-            if(email === "" || password === ""){
+            if (email === "" || password === "") {
                 alert("Preencha todos os campos!");
                 return
             }
-            if(error.response.status === 403){
+            if (error.response.status === 403) {
                 alert("Email/senha incorretos");
             }
         });
     }
 
-    return(
-    <MainContainer>
-        <ContainerText>
-            <h1>linkr</h1>
-            <p>Save, share and discover</p>
-            <p>the best links on the web</p>
-        </ContainerText>
+    return (
+        <MainContainer>
+            <ContainerText>
+                <h1>linkr</h1>
+                <p>Save, share and discover</p>
+                <p>the best links on the web</p>
+            </ContainerText>
             <InputsContainer>
-                <Input type="email" value={email} disabled={loading} onKeyPress={(e)=>{if(e.code==="Enter"){AttemptToLogin()}}} onChange={(e)=>setEmail(e.target.value)} placeholder="e-mail"></Input>
-                <Input type="password" value={password} disabled={loading} onKeyPress={(e)=>{if(e.code==="Enter"){AttemptToLogin()}}} onChange={(e)=>setPassword(e.target.value)} placeholder="password"></Input>
+                <Input type="email" value={email} disabled={loading} onKeyPress={(e) => { if (e.code === "Enter") { AttemptToLogin() } }} onChange={(e) => setEmail(e.target.value)} placeholder="e-mail"></Input>
+                <Input type="password" value={password} disabled={loading} onKeyPress={(e) => { if (e.code === "Enter") { AttemptToLogin() } }} onChange={(e) => setPassword(e.target.value)} placeholder="password"></Input>
                 <Button disabled={loading} onClick={AttemptToLogin}>Log In</Button>
                 <Link to={"/signup"}>
                     <p>First time? Create an account!</p>
                 </Link>
             </InputsContainer>
-    </MainContainer>
+        </MainContainer>
     )
 
 }

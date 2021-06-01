@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect } from "react";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from 'react-icons/fa';
@@ -6,62 +6,23 @@ import ReactTooltip from 'react-tooltip';
 import UserContext from "../Context/UserContext";
 import axios from "axios";
 
-function Like({ postId, post, isMyLikes, updateList }) {
-    const { user } = useContext(UserContext);
-    const [usernamesList, setUsernamesList] = useState([]);
-    const [isLiked, setIsLiked] = useState(false);
-    const [tooltipText, setTooltipText] = useState("");
-    const contref = useRef(0);
+function Like({ postId, post, updateList, tooltip, isLiked }) {
+    const { token } = useContext(UserContext).user;
 
-    
-   useEffect(() => {
-        setUsernamesList(post.map(p => isMyLikes ? p.username : p["user.username"]));
-        setIsLiked(usernamesList.includes(user.username));
-        updateTooltip();
-        contref.current++
-    });
-    
+    useEffect(() => {
+        updateList();
+    }, []); //eslint-disable-line
 
     function handleLike() {
         const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}/${isLiked ? "dislike" : "like"}`, {}, {
             headers: {
-                Authorization: `Bearer ${user.token}`
+                Authorization: `Bearer ${token}`
             }
         });
-        promise.then(({ data }) => {
-            setUsernamesList(data.post.likes.map(l => l.username));
-            setIsLiked(!isLiked);
-            updateTooltip();
+        promise.then(() => {
             updateList();
         });
         promise.catch(err => window.alert(err.response.data.message));
-    }
-
-    function updateTooltip() {
-        const userNotMe = usernamesList.find(name => name !== user.username);
-
-        if (usernamesList.includes(user.username)) {
-            if (usernamesList.length === 1) {
-                setTooltipText("Somente você curtiu esse post");
-            } else if (usernamesList.length === 2) {
-                setTooltipText(`Você e ${userNotMe}`);
-            } else if (usernamesList.length > 2) {
-                const qtd = usernamesList.length - 2;
-                setTooltipText(`Você, ${userNotMe} e ${qtd} ${qtd === 1 ? "outra pessoa" : "outras pessoas"}`);
-            }
-        } else {
-            if (usernamesList.length === 0) {
-                setTooltipText("");
-            }
-            if (usernamesList.length === 1) {
-                setTooltipText(`${usernamesList[0]}`);
-            } else if (usernamesList.length === 2) {
-                setTooltipText(`${usernamesList[0]} e ${usernamesList[1]}`);
-            } else if (usernamesList.length > 2) {
-                const qtd = usernamesList.length - 2;
-                setTooltipText(`${usernamesList[0]}, ${usernamesList[1]} e ${qtd} ${qtd === 1 ? "outra pessoa" : "outras pessoas"}`);
-            }
-        }
     }
 
     return (
@@ -69,14 +30,14 @@ function Like({ postId, post, isMyLikes, updateList }) {
             {
                 isLiked ?
                     <IconContext.Provider value={{ size: "20px", color: "red" }}>
-                        <FaHeart onClick={()=>{handleLike()}} />
+                        <FaHeart onClick={() => { handleLike() }} />
                     </IconContext.Provider>
                     :
                     <IconContext.Provider value={{ size: "20px", color: "#fff" }}>
-                        <FiHeart onClick={()=>{handleLike()}} />
+                        <FiHeart onClick={() => { handleLike() }} />
                     </IconContext.Provider>
             }
-            <span data-tip={tooltipText} data-for="info">{post.length} {post.length === 1 ? "like" : "likes"}</span>
+            <span data-tip={tooltip} data-for="info">{post.length === 0 ? "Nenhum" : post.length} {post.length <= 1 ? "like" : "likes"}</span>
             <ReactTooltip id="info" place="bottom" type="light" />
         </>
     )

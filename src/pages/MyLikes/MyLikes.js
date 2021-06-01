@@ -17,7 +17,6 @@ function MyLikes() {
     const [internalError, setInternalError] = useState(false);
     const { user } = useContext(UserContext);
     const { setSelected } = useContext(SelectedContext);
-    const [nameList, setNameList] = useState([]);
 
     const config = {
         headers: {
@@ -34,11 +33,11 @@ function MyLikes() {
 
         promise.then(reply => {
             setMyLikedPosts(reply.data.posts);
-            setNameList(reply.data.posts.map(p => p.likes.map(u => u.username)));
             setIsWaitingServer(false);
         });
 
-        promise.catch(error => {
+
+        promise.catch(() => {
             setIsWaitingServer(false);
             setInternalError(true);
         });
@@ -65,7 +64,15 @@ function MyLikes() {
                         <Posts>
 
                             {myLikedPosts.length ?
-                                myLikedPosts.map((post, index) => <Post key={index} goToProfile={goToProfile} goToHashtag={goToHashtag} nameList={nameList} post={post} isMyLikes={true} updateList={updateList} />).reverse()
+                                myLikedPosts.map((post, index) => (
+                                    <Post
+                                        key={index}
+                                        goToProfile={goToProfile}
+                                        goToHashtag={goToHashtag}
+                                        post={post}
+                                        updateList={updateList}
+                                    />
+                                ))
                                 :
                                 <h3 className="error">Nenhum post encontrado...</h3>
                             }

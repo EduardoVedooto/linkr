@@ -5,11 +5,17 @@ import RemovePost from "./RemovePost";
 import { useContext } from "react";
 import UserContext from "../Context/UserContext";
 
+import getYouTubeID from 'get-youtube-id';
+import YouTube from './Youtube';
+
 import Like from './Like';
 
 function Post({ post, goToProfile, goToHashtag, updateList, isMyLikes, nameList }) {
     const { id, token } = useContext(UserContext).user;
     let counter = 0;
+
+    const videoID = getYouTubeID(post.link);
+
     return (
         <PostsContainer>
             <aside>
@@ -36,12 +42,16 @@ function Post({ post, goToProfile, goToHashtag, updateList, isMyLikes, nameList 
                     </p>
                 }
 
+                {videoID ? <YouTube link={post.link} videoID={videoID} />
+                :
                 <LinkContent onClick={() => window.open(post.link, "_blank")}>
                     <h4>{post.linkTitle}</h4>
                     <p>{post.linkDescription}</p>
                     <span>{post.link}</span>
                     <img src={post.linkImage} alt="link" />
                 </LinkContent>
+                }
+                
             </main>
         </PostsContainer>
     );

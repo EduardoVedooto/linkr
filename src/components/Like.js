@@ -14,7 +14,7 @@ function Like({ postId, post, isMyLikes, updateList }) {
     const contref = useRef(0);
 
     
-    useEffect(() => {
+   useEffect(() => {
         setUsernamesList(post.map(p => isMyLikes ? p.username : p["user.username"]));
         setIsLiked(usernamesList.includes(user.username));
         updateTooltip();

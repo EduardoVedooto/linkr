@@ -1,10 +1,12 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components"
 
 function Aside({user, posts}){
     const [hastagsList, setHastagsList] = useState([]);
+    const [hashtag, setHashtag] = useState("");
+    const history = useHistory();
    
     useEffect(()=>{
         updateTrending()
@@ -20,8 +22,12 @@ function updateTrending(){
     request.then((response)=>{setHastagsList(response.data.hashtags)})
 }
 
+function goToHashtag(){
+    history.push(`/hashtag/${hashtag.replace("#", "")}`);
+}
+
     return(
-        <Container>
+        <Container> 
             <h1>trending</h1>
             <Border></Border>
             { hastagsList.length ? 
@@ -30,6 +36,10 @@ function updateTrending(){
                     <p># {h.name}</p>
                 </Link>
             ): <h1>Error!</h1> }
+            {hastagsList.length ? 
+            <Input value={hashtag} onKeyPress={(e)=>{if(e.code==="Enter") {goToHashtag()}}} onChange={(e)=>setHashtag(e.target.value)} placeholder="type a hastag"></Input>
+        : ""}
+        {hastagsList.length ? <h3>#</h3> : ""}        
         </Container>
     )
 }
@@ -43,22 +53,28 @@ const Container = styled.div`
     width: 301px;
     height: 406px;
     border-radius: 16px;
-    text-align: center;
-
+    position: fixed;
+    margin: 0px max(630px);
     h1{
         font-family: "Oswald";
         font-weight: 700;
         font-size: 27px;
-        padding: 15px 0px 20px 20px;
+        padding: 15px 0px 15px 20px;
     }
 
     p{
-        padding-top: 10px;
+        padding-top: 9px;
         padding-left: 20px;
         font-family: "Lato";
         font-weight: 700;
         font-size: 19px;
         letter-spacing: 0.5px;
+    }
+    h3{
+        position: absolute;
+        bottom: 26px;
+        font-size: 19px;
+        left: 30px;
     }
     @media(max-width: 915px){
         display: none;
@@ -68,7 +84,32 @@ const Border = styled.div`
     background-color: #484848;
     width: 301px;
     height: 1px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
+`
+
+const Input = styled.input`
+    width: 269px;
+    height: 35px;
+    border: none;
+    border-radius: 8px;
+    background-color: #252525;
+    margin-left: 18px;
+    margin-top: 10px;
+    color: #fff;
+    outline: none;
+    font-family: Lato;
+    font-weight: 400;
+    padding-left: 35px;
+    padding-bottom: 3px;
+    font-style: italic;
+    font-size: 16px;
+    ::placeholder{
+        color: #fff;
+        font-family: Lato;
+        font-weight: 400;
+        font-style: italic;
+        font-size: 16px;
+    }
 `
 
 

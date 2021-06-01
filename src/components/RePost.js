@@ -20,7 +20,6 @@ const { user } = useContext(UserContext);
             }
         });
     promise.then(() => {
-        console.log("foi");
         updateList();
         setIsWaitingServer(false);
         setClicked(false);

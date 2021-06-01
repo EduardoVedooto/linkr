@@ -57,6 +57,11 @@ const GlobalStyles = createGlobalStyle`
         color: inherit;
         text-decoration: none;
     }
+
+    strong{
+     font-weight:bold;
+    }
+
     body {
         font-family: "Lato";
     }

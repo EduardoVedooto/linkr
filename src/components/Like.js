@@ -13,14 +13,14 @@ function Like({ postId, post, isMyLikes, updateList }) {
     const [tooltipText, setTooltipText] = useState("");
     const contref = useRef(0);
 
-    /*
+    
     useEffect(() => {
         setUsernamesList(post.map(p => isMyLikes ? p.username : p["user.username"]));
         setIsLiked(usernamesList.includes(user.username));
         updateTooltip();
         contref.current++
     });
-    */
+    
 
     function handleLike() {
         const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}/${isLiked ? "dislike" : "like"}`, {}, {

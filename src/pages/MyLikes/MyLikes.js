@@ -84,53 +84,43 @@ function MyLikes() {
 
 
 const Main = styled.main`
-display: flex;
-justify-content: center;
-padding: 125px 0 50px 0;
-min-height: 100vh;
-background-color: #2F2F2F;
+    display: flex;
+    justify-content: center;
+    padding: 125px 0 50px 0;
+    min-height: 100vh;
+    background-color: #2F2F2F;
 `;
 
 const Content = styled.div`
-width: 937px;
-h2 {
-    color: #fff;
-    font-family: "Oswald";
-    font-size: 43px;
-    font-weight: 700;
-}
-@media(max-width: 937px){
-    width: 100%;
+    width: 937px;
     h2 {
-        margin-left: 20px;
+        color: #fff;
+        font-family: "Oswald";
+        font-size: 43px;
+        font-weight: 700;
     }
-}
 `;
 
 const Columns = styled.div`
-display: flex;
-justify-content: space-between;
-height: inherit;
-margin-top: 43px;
+    display: flex;
+    justify-content: space-between;
+    height: inherit;
+    margin-top: 43px;
+    &>aside{  // Será substituído pela div hashtag
+        background-color: #171717;
+        color: #fff;
+        width: 301px;
+        height: 406px;
+        border-radius: 16px;
+        text-align: center;
+    }
 `;
 
 const Posts = styled.section`
-width: 611px;
-display: flex;
-flex-direction: column;
-gap: 16px;
-@media(max-width: 937px){
-    margin: 0 auto;
-}
-@media(max-width: 611px){
-    width: 100%;
-}
-h3.error {
-    color: #FFF;
-    font-size: 24px;
-    font-family: "Oswald";
-
-}
-
+    width: 611px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 `;
+
 export default MyLikes;

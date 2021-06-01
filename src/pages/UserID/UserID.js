@@ -26,7 +26,8 @@ export default function UserID() {
     useEffect(() => {
         updateList();
         getFollows();
-    }, []); //eslint-disable-line 
+    }, [selected]); //eslint-disable-line 
+
 
     function goToProfile(id, nome) {
         setSelected(nome);

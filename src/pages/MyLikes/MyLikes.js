@@ -7,7 +7,6 @@ import Post from '../../components/Post';
 import Loading from '../../components/Loading';
 import InternalError from '../../components/InternalError';
 import UserContext from "../../Context/UserContext";
-import SelectedContext from '../../Context/SelectedContext';
 import Aside from '../../components/Aside';
 
 function MyLikes() {
@@ -16,7 +15,6 @@ function MyLikes() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const { user } = useContext(UserContext);
-    const { setSelected } = useContext(SelectedContext);
 
     const config = {
         headers: {
@@ -44,9 +42,8 @@ function MyLikes() {
     }
 
 
-    function goToProfile(id, nome) {
-        setSelected(nome);
-        history.push(`/user/${id}`);
+    function goToProfile(id, name) {
+        history.push(`/user/${id}/${name}`);
     }
 
     function goToHashtag(hashtag) {
@@ -106,6 +103,12 @@ const Content = styled.div`
         font-size: 43px;
         font-weight: 700;
     }
+    @media(max-width: 937px){
+        width: 100%;
+        h2 {
+            margin-left: 20px;
+        }
+    }
 `;
 
 const Columns = styled.div`
@@ -124,10 +127,30 @@ const Columns = styled.div`
 `;
 
 const Posts = styled.section`
+    
     width: 611px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+
+    h3.error {
+        color: #FFF;
+        font-size: 24px;
+        font-family: "Oswald";
+    }
+
+    @media(max-width: 937px){
+        margin: 0 auto;
+    }
+    @media(max-width: 611px){
+        width: 100%;
+        
+        h3.error{
+            margin-left: 20px;
+        }
+    }
+
 `;
+
 
 export default MyLikes;

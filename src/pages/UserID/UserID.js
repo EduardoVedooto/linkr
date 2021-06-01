@@ -6,18 +6,16 @@ import Post from "../../components/Post";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router";
 import UserContext from "../../Context/UserContext";
-import SelectedContext from "../../Context/SelectedContext";
 import InternalError from "../../components/InternalError";
 import Aside from "../../components/Aside";
 
 export default function UserID() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
-    const { idUser } = useParams();
+    const { idUser, name } = useParams();
     const [posts, setPosts] = useState([]);
     const { user } = useContext(UserContext);
     const [internalError, setInternalError] = useState(false);
     const history = useHistory();
-    const { selected, setSelected } = useContext(SelectedContext);
     const [isWaitingFollowing, setIsWaitingFollowing] = useState(true);
     const [follower, setFollower] = useState(true);
     const [mypost, setMyPost] = useState(false);
@@ -26,12 +24,10 @@ export default function UserID() {
     useEffect(() => {
         updateList();
         getFollows();
-    }, [selected]); //eslint-disable-line 
+    }, [name]); //eslint-disable-line 
 
-
-    function goToProfile(id, nome) {
-        setSelected(nome);
-        history.push(`/user/${id}`);
+    function goToProfile(id, name) {
+        history.push(`/user/${id}/${name}`);
     }
 
     function goToHashtag(hashtag) {
@@ -55,18 +51,18 @@ export default function UserID() {
         });
     }
 
-    function getFollows(){
-        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows",{
+    function getFollows() {
+        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows", {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }
         })
-        promise.then((response)=>{
+        promise.then((response) => {
             setIsWaitingFollowing(false)
-            if(parseInt(idUser) === user.id){
+            if (parseInt(idUser) === user.id) {
                 setMyPost(true);
-            } else{
-                if(response.data.users.map(i=>i.id).includes(parseInt(idUser))){
+            } else {
+                if (response.data.users.map(i => i.id).includes(parseInt(idUser))) {
                     setFollower(true)
                 } else {
                     setFollower(false)
@@ -76,36 +72,36 @@ export default function UserID() {
         });
     }
 
-    function Follow(){
+    function Follow() {
         setDisable(true);
-        const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/follow`, {},{
+        const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/follow`, {}, {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }
         });
-        promise.then(()=>{
+        promise.then(() => {
             getFollows();
             setDisable(false);
         })
-        promise.catch(()=>{
+        promise.catch(() => {
             setDisable(false);
             getFollows();
             alert("Não foi possivel executar a operação!");
         })
     }
 
-    function Unfollow(){
+    function Unfollow() {
         setDisable(true);
-        const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/unfollow`, {},{
+        const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/unfollow`, {}, {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }
         });
-        promise.then(()=>{
+        promise.then(() => {
             getFollows();
             setDisable(false);
         })
-        promise.catch(()=>{
+        promise.catch(() => {
             setDisable(false);
             getFollows();
             alert("Não foi possivel executar a operação!");
@@ -116,11 +112,11 @@ export default function UserID() {
         <Main>
             <Content>
                 {isWaitingFollowing ? "" :
-                <TittleHeader>
-                    <h2>{selected}’s posts</h2>
-                    <ButtonFollow mypost={mypost} disabled={disable} follower={follower} onClick={()=>Follow()}>Follow</ButtonFollow>
-                    <ButtonUnfollow mypost={mypost} disabled={disable} follower={follower} onClick={()=>Unfollow()} >Unfollow</ButtonUnfollow>
-                </TittleHeader>
+                    <TittleHeader>
+                        <h2>{name}’s posts</h2>
+                        <ButtonFollow mypost={mypost} disabled={disable} follower={follower} onClick={() => Follow()}>Follow</ButtonFollow>
+                        <ButtonUnfollow mypost={mypost} disabled={disable} follower={follower} onClick={() => Unfollow()} >Unfollow</ButtonUnfollow>
+                    </TittleHeader>
                 }
                 {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
                     <Columns>
@@ -135,62 +131,70 @@ export default function UserID() {
                     </Columns>
                 }
             </Content>
-        </Main>
+        </Main >
     );
 }
 
 const Main = styled.main`
-display: flex;
-justify-content: center;
-padding: 125px 0 50px 0;
-min-height: 100vh;
-background-color: #2F2F2F;
-`
+    display: flex;
+    justify-content: center;
+    padding: 125px 0 50px 0;
+    min-height: 100vh;
+    background-color: #2F2F2F;
+`;
 
 const Content = styled.div`
-width: 937px;
-h2 {
-    color: #fff;
-    font-family: "Oswald";
-    font-size: 43px;
-    font-weight: 700;
-}
-@media(max-width: 937px){
-    width: 100%;
+    width: 937px;
     h2 {
-        margin-left: 20px;
+        color: #fff;
+        font-family: "Oswald";
+        font-size: 43px;
+        font-weight: 700;
     }
-}`
+    @media(max-width: 937px){
+        width: 100%;
+        h2 {
+            margin-left: 20px;
+        }
+    }
+`;
 
 const Columns = styled.div`
-display: flex;
-justify-content: space-between;
-height: inherit;
-margin-top: 43px;
-`
+    display: flex;
+    justify-content: space-between;
+    height: inherit;
+    margin-top: 43px;
+`;
 
 const Posts = styled.section`
-width: 611px;
-display: flex;
-flex-direction: column;
-gap: 16px;
-@media(max-width: 937px){
-    margin: 0 auto;
-}
-@media(max-width: 611px){
-    width: 100%;
-}
-h3.error {
-    color: #FFF;
-    font-size: 24px;
-    font-family: "Oswald";
+    width: 611px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 
-}` 
+    h3.error {
+        color: #FFF;
+        font-size: 24px;
+        font-family: "Oswald";
+    }
+
+    @media(max-width: 937px){
+        margin: 0 auto;
+    }
+    @media(max-width: 611px){
+        width: 100%;
+        
+        h3.error{
+            margin-left: 20px;
+        }
+    }
+
+`;
 
 const TittleHeader = styled.div`
     display: flex;
     position: relative;
-`
+`;
 const ButtonFollow = styled.button`
     display: ${props => props.mypost ? "none" : props.follower ? "none" : "block"};
     min-width: 112px;
@@ -205,10 +209,10 @@ const ButtonFollow = styled.button`
     font-family: Lato;
     font-weight: 700;
     font-size: 14px;
-`
+`;
 
 const ButtonUnfollow = styled.button`
-    display: ${props=> props.mypost ? "none" : props.follower ? "block" : "none"};
+    display: ${props => props.mypost ? "none" : props.follower ? "block" : "none"};
     min-width: 112px;
     height: 31px;
     border-radius: 5px;
@@ -221,4 +225,4 @@ const ButtonUnfollow = styled.button`
     font-family: Lato;
     font-weight: 700;
     font-size: 14px;
-`
+`;

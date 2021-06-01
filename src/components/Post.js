@@ -14,13 +14,13 @@ function Post({ post, goToProfile, goToHashtag, updateList, isMyLikes, nameList 
     return (
         <>
         <RePostContainer reposted={post.repostCount}>
-        {post.repostCount >=1?
+        {post.repostCount > 0 ?
         <Reposted>
             <MdRepeat 
             color="#FFFFFF"
             fontSize="20px"/>
 
-        <span>Re-posted by  <strong>{post.repostedBy?
+        <span onClick={() => goToProfile(post.repostedBy.id, post.repostedBy.username)}>Re-posted by  <strong>{post.repostedBy?
         post.repostedBy.id===id?"you":post.repostedBy.username
         :""} </strong></span>
         </Reposted>

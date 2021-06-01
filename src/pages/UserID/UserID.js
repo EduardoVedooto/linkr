@@ -6,7 +6,6 @@ import Post from "../../components/Post";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router";
 import UserContext from "../../Context/UserContext";
-import SelectedContext from "../../Context/SelectedContext";
 import InternalError from "../../components/InternalError";
 import Aside from "../../components/Aside";
 
@@ -14,20 +13,18 @@ import Aside from "../../components/Aside";
 
 export default function UserID() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
-    const { idUser } = useParams();
+    const { idUser, name } = useParams();
     const [posts, setPosts] = useState([]);
     const { user } = useContext(UserContext);
     const [internalError, setInternalError] = useState(false);
     const history = useHistory();
-    const { selected, setSelected } = useContext(SelectedContext);
 
     useEffect(() => {
         updateList();
-    }, [selected]); //eslint-disable-line 
+    }, [name]); //eslint-disable-line 
 
-    function goToProfile(id, nome) {
-        setSelected(nome);
-        history.push(`/user/${id}`);
+    function goToProfile(id, name) {
+        history.push(`/user/${id}/${name}`);
     }
 
     function goToHashtag(hashtag) {
@@ -53,7 +50,7 @@ export default function UserID() {
     return (
         <Main>
             <Content>
-                <h2>{selected}’s posts</h2>
+                <h2>{name}’s posts</h2>
                 {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
                     <Columns>
 
@@ -78,53 +75,58 @@ export default function UserID() {
 }
 
 const Main = styled.main`
-display: flex;
-justify-content: center;
-padding: 125px 0 50px 0;
-min-height: 100vh;
-background-color: #2F2F2F;
+    display: flex;
+    justify-content: center;
+    padding: 125px 0 50px 0;
+    min-height: 100vh;
+    background-color: #2F2F2F;
 `;
 
 const Content = styled.div`
-width: 937px;
-h2 {
-    color: #fff;
-    font-family: "Oswald";
-    font-size: 43px;
-    font-weight: 700;
-}
-@media(max-width: 937px){
-    width: 100%;
+    width: 937px;
     h2 {
-        margin-left: 20px;
+        color: #fff;
+        font-family: "Oswald";
+        font-size: 43px;
+        font-weight: 700;
     }
-}
+    @media(max-width: 937px){
+        width: 100%;
+        h2 {
+            margin-left: 20px;
+        }
+    }
 `;
 
 const Columns = styled.div`
-display: flex;
-justify-content: space-between;
-height: inherit;
-margin-top: 43px;
+    display: flex;
+    justify-content: space-between;
+    height: inherit;
+    margin-top: 43px;
 `;
 
 const Posts = styled.section`
-width: 611px;
-display: flex;
-flex-direction: column;
-gap: 16px;
-@media(max-width: 937px){
-    margin: 0 auto;
-}
-@media(max-width: 611px){
-    width: 100%;
-}
-h3.error {
-    color: #FFF;
-    font-size: 24px;
-    font-family: "Oswald";
+    width: 611px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 
-}
+    h3.error {
+        color: #FFF;
+        font-size: 24px;
+        font-family: "Oswald";
+    }
+
+    @media(max-width: 937px){
+        margin: 0 auto;
+    }
+    @media(max-width: 611px){
+        width: 100%;
+        
+        h3.error{
+            margin-left: 20px;
+        }
+    }
 
 `;
 

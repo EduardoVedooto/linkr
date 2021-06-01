@@ -3,17 +3,14 @@ import styled from "styled-components"
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import UserContext from "../Context/UserContext";
 import { Link, useHistory } from "react-router-dom";
-import SelectedContext from "../Context/SelectedContext"
 
 function Header() {
     const [press, setPress] = useState(false);
     const { user } = useContext(UserContext);
-    const { setSelected } = useContext(SelectedContext);
     const history = useHistory();
 
     function UpdateUser() {
-        setSelected(user.username);
-        history.push(`/user/${user.id}`)
+        history.push(`/user/${user.id}/${user.username}`)
     }
 
     function logout() {

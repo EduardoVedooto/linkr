@@ -10,7 +10,7 @@ function App() {
   const [user, setUser] = useState();
 
   return (
-    <UserContext.Provider value={{ user: user || JSON.parse(localStorage.user), setUser }}>
+    <UserContext.Provider value={{ user: user || JSON.parse(localStorage.getItem("user")), setUser }}>
       <BrowserRouter>
         <GlobalStyles />
         <Switch>

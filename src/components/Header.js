@@ -5,38 +5,42 @@ import UserContext from "../Context/UserContext";
 import { Link, useHistory } from "react-router-dom";
 import SelectedContext from "../Context/SelectedContext"
 
-
-function Header(){
+function Header() {
     const [press, setPress] = useState(false);
     const { user } = useContext(UserContext);
-    const {setSelected} = useContext(SelectedContext);    
+    const { setSelected } = useContext(SelectedContext);
     const history = useHistory();
 
-    function UpdateUser(){
+    function UpdateUser() {
         setSelected(user.username);
         history.push(`/user/${user.id}`)
     }
 
-    return(
+    function logout() {
+        localStorage.clear();
+        console.clear();
+        history.push("/");
+    }
+
+    return (
         <>
             <Main>
                 <Link to={"/timeline"}>
                     <h1>linkr</h1>
                 </Link>
-                <Arrow onClick={()=>setPress(!press)}>
-                    <h2> {press ? <IoIosArrowUp/> : <IoIosArrowDown/>}    </h2>
+                <Arrow onClick={() => setPress(!press)}>
+                    <h2> {press ? <IoIosArrowUp /> : <IoIosArrowDown />}    </h2>
                     <img src={user.avatar} alt={user.avatar}></img>
                 </Arrow>
             </Main>
-            <BlockMain press={press} onClick={()=> setPress(false)} >
+            <BlockMain press={press} onClick={() => setPress(false)} >
                 <HeaderMenu>
-                        <p onClick={()=>UpdateUser()}>My posts</p>
+                    <p onClick={() => UpdateUser()}>My posts</p>
                     <Link to={"/my-likes"}>
                         <p>My likes</p>
                     </Link>
-                    <Link to={"/"}>
-                        <p>Logout</p>
-                    </Link>
+                    <p onClick={() => logout()}>Logout</p>
+
                 </HeaderMenu>
             </BlockMain>
         </>

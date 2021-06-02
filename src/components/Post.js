@@ -8,6 +8,7 @@ import Repost from "./RePost";
 import Like from './Like';
 import {MdRepeat} from 'react-icons/md';
 import TooltipText from "../utils/TooltipText";
+import Map from './Map';
 
 function Post({ post, goToProfile, goToHashtag, updateList }) {
 
@@ -49,6 +50,7 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
 
 
                 <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
+                {post.geolocation ? <Map geolocation={post.geolocation} /> : ""}
                 {post.user.id === id ?
                     <>
                         <RemovePost id={post.id} token={token} updateList={updateList} />

@@ -10,7 +10,6 @@ function CreatePost({ updateList, goToProfile }) {
     const [errorMessage, setErrorMessage] = useState(false);
     const { user } = useContext(UserContext);
 
-    // Add coordinates --> long,lat
     const [post, setPost] = useState({
         text: "",
         link: "",
@@ -74,7 +73,6 @@ function CreatePost({ updateList, goToProfile }) {
                 />
                 <footer>
                     {errorMessage ? <span>Houve um erro ao publicar o seu link</span> : <Geolocation post={post} setPost={setPost} />}
-                    <span>{/*errorMessage ? "Houve um erro ao publicar o seu link" : ""*/}</span>
                     <button disabled={isWaitingServer}>{isWaitingServer ? "Publicando" : "Publicar"}</button>
                 </footer>
             </Form>

@@ -19,10 +19,6 @@ function Geolocation({ post, setPost }) {
         setIsGeoLocationActive(true);
 
         navigator.geolocation.getCurrentPosition((position) => {
-            //Remove console.logs
-            console.log("Latitude is :", position.coords.latitude);
-            console.log("Longitude is :", position.coords.longitude);
-
             post.geolocation.latitude = position.coords.latitude;
             post.geolocation.longitude = position.coords.longitude;
 

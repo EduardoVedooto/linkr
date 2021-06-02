@@ -9,6 +9,9 @@ import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 import UserContext from "../../Context/UserContext";
 import useInterval from "use-interval";
+import InfiniteScroll from 'react-infinite-scroller';
+import Loader from "react-loader-spinner";
+
 
 function Timeline() {
     const history = useHistory();
@@ -22,12 +25,14 @@ function Timeline() {
     }, []); //eslint-disable-line
 
     function updateList() {
+        console.log("Chegou aqui");
         const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
             headers: {
                 Authorization: `Bearer ${user.token}`,
             }
         });
         promise.then(({ data }) => {
+            console.log(data);
             setPosts(data.posts);
             setIsWaitingServer(false);
         });
@@ -60,14 +65,32 @@ function Timeline() {
                 {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
                     <Columns>
 
+
                         <Posts>
                             <CreatePost updateList={updateList} goToProfile={goToProfile} />
 
-                            {posts.length ?
-                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
-                                :
-                                <h3 className="error">Nenhum post encontrado...</h3>
-                            }
+                            <InfiniteScroll
+                                pageStart={0}
+                                loadMore={updateList}
+                                hasMore={true}
+                                loader={
+                                    <LoadingMorePosts>
+                                        <Loader
+                                            type="ThreeDots"
+                                            color="#171717"
+                                            height={50}
+                                            width={50}
+                                        />
+                                    </LoadingMorePosts>
+                                }
+                            >
+                                {posts.length ?
+                                    posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
+                                    :
+                                    <h3 key={"EmptyTimeline"} className="error">Nenhum post encontrado...</h3>
+                                }
+                            </InfiniteScroll>
+
                         </Posts>
 
                         <Aside user={user} posts={posts} />
@@ -130,6 +153,14 @@ const Posts = styled.section`
 
     }
 
+`;
+
+const LoadingMorePosts = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    margin-top: 40px;
 `;
 
 export default Timeline;

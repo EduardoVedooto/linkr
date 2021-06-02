@@ -22,7 +22,7 @@ function SearchBar({ type }) {
         setInputValue(e.target.value);
 
         if (e.target.value === "") {
-            handleBlur();
+            setUserList([]);
             return;
         }
 

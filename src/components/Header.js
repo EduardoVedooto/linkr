@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import UserContext from "../Context/UserContext";
 import { Link, useHistory } from "react-router-dom";
+import SearchBar from "./SearchBar";
 
 function Header() {
     const [press, setPress] = useState(false);
@@ -25,6 +26,7 @@ function Header() {
                 <Link to={"/timeline"}>
                     <h1>linkr</h1>
                 </Link>
+                <SearchBar />
                 <Arrow onClick={() => setPress(!press)}>
                     <h2> {press ? <IoIosArrowUp /> : <IoIosArrowDown />}    </h2>
                     <img src={user.avatar} alt={user.avatar}></img>

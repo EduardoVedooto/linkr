@@ -2,6 +2,7 @@ import styled from "styled-components";
 import EditPost from "./EditPost";
 import ReactHashtag from "react-hashtag";
 import RemovePost from "./RemovePost";
+import Link from "./Link";
 import { useContext} from "react";
 import UserContext from "../Context/UserContext";
 import Repost from "./RePost";
@@ -51,7 +52,7 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
                 <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
                 {post.user.id === id ?
                     <>
-                        <RemovePost id={post.id} token={token} updateList={updateList} />
+                        <RemovePost post={post} id={post.id} token={token} updateList={updateList} />
                         <EditPost post={post} token={token} updateList={updateList} goToHashtag={goToHashtag} />
                     </>
                     :
@@ -68,13 +69,14 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
                         </ReactHashtag>
                     </p>
                 }
+            
 
-                <LinkContent onClick={() => window.open(post.link, "_blank")}>
-                    <h4>{post.linkTitle}</h4>
-                    <p>{post.linkDescription}</p>
-                    <span>{post.link}</span>
-                    <img src={post.linkImage} alt="link" />
-                </LinkContent>
+        
+            
+              <Link post={post}></Link>
+                
+                
+               
             </main>
         </PostsContainer>
         </RePostContainer>
@@ -171,59 +173,6 @@ const PostsContainer = styled.div`
     }
 `;
 
-const LinkContent = styled.div`
-    border-radius: 11px;
-    border: 1px solid #4d4d4d;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    height: 155px;
-    padding: 24px 175px 23px 20px;
-    cursor: pointer;
-    justify-content: space-between;
-    margin-top: 14px;
-    width: inherit;
-    max-width: 100%;
-    
-    img {
-        height: inherit;
-        width: 155px;
-        object-fit: cover;
-        margin: 0;
-        border-radius: 0;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: -2px;
-        margin: auto 0;
-        border-top-right-radius: 11px;
-        border-bottom-right-radius: 11px;
-    }
-    h4 {
-        color: #cecece;
-        font-size: 16px;
-        word-break: break-word;
-    }
-    p {
-        font-size: 11px;
-        color: #9B9595;
-        word-break: break-word;
-    }
-    span {
-        font-size: 11px;
-        color: #cecece;
-        word-break: break-word;
-    }
-    @media(max-width: 611px) {
-        padding: 7px 105px 7px 7px;
-        height: 115px;
-        overflow: hidden;
-        img {
-            width: 95px;
-            height: 115px;
-        }
-    }
-`;
 
 const Hashtag = styled.span`
     font-size: inherit;

@@ -19,9 +19,8 @@ function SearchBar({ type }) {
     function search(e) {
         if (e.type === "blur") return;
 
-        setInputValue(e.target.value);
 
-        if (e.target.value === "") {
+        if (e.target.value.length < 3) {
             setUserList([]);
             return;
         }

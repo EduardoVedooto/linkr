@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { MdLocationOn, MdLocationOff } from 'react-icons/md';
 import styled from 'styled-components';
 
-function Geolocation() {
+function Geolocation({ post, setPost }) {
     const [isGeolocationAvailable, setIsGeolocationAvailable] = useState(null);
     const [isGeolocationActive, setIsGeoLocationActive] = useState(false);
     
@@ -17,6 +17,20 @@ function Geolocation() {
 
     function activateLocation() {
         setIsGeoLocationActive(true);
+
+        navigator.geolocation.getCurrentPosition((position) => {
+            //Remove console.logs
+            console.log("Latitude is :", position.coords.latitude);
+            console.log("Longitude is :", position.coords.longitude);
+
+            post.geolocation.latitude = position.coords.latitude;
+            post.geolocation.longitude = position.coords.longitude;
+
+            setPost({ ...post })
+        }, (error) => {
+            setIsGeoLocationActive(false);
+            alert(error.message);
+        })
     }
 
     function deactivateLocation() {

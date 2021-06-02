@@ -9,6 +9,7 @@ import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 import UserContext from "../../Context/UserContext";
 import useInterval from "use-interval";
+import SearchBar from "../../components/SearchBar";
 
 function Timeline() {
     const history = useHistory();
@@ -56,6 +57,7 @@ function Timeline() {
     return (
         <Main>
             <Content>
+                <SearchBar type="innerSearch" />
                 <h2>timeline</h2>
                 {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
                     <Columns>
@@ -87,6 +89,9 @@ const Main = styled.main`
     padding: 125px 0 50px 0;
     min-height: 100vh;
     background-color: #2F2F2F;
+    @media(max-width: 855px) {
+        padding-top: 100px;
+    }
 `;
 
 const Content = styled.div`
@@ -96,6 +101,7 @@ const Content = styled.div`
         font-family: "Oswald";
         font-size: 43px;
         font-weight: 700;
+        user-select: none;
     }
     @media(max-width: 937px){
         width: 100%;

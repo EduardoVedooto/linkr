@@ -1,3 +1,4 @@
+
 import styled from "styled-components";
 import { FaTrash } from "react-icons/fa";
 import Modal from "react-modal";
@@ -76,7 +77,6 @@ const ModalContent = styled.div`
     overflow-y: hidden;
     display: flex;
     flex-direction: column;
-
     h3 {
         font-size: 34px;
         font-weight: 700;
@@ -103,7 +103,6 @@ const ModalContent = styled.div`
         color: #1877F2;
         opacity: ${props => props.isWaitingServer ? ".5" : "1"};
         cursor: ${props => props.isWaitingServer ? "not-allowed" : "pointer"};
-
         &.confirm {
             color: #fff;
             background-color: #1877F2;
@@ -113,17 +112,14 @@ const ModalContent = styled.div`
         height: 100vh;
         width: 100%;
         justify-content: space-between;
-
         h3 {
             margin-top: 200px;
         }
-
         .buttons {
             flex-direction: column-reverse;
             width: 100%;
             margin-bottom: 0;
         }
-
         button {
             width: 100%;
             height: 75px;
@@ -140,8 +136,6 @@ const ModalLoading = styled.div`
     margin: 35px auto 0 auto;
     color: #1877F2;
     font-size: 24px;
-
-
     @media(max-width: 611px) {
         margin-top: 200px;
         svg {

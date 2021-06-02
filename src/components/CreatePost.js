@@ -3,6 +3,8 @@ import { useContext, useState } from "react";
 import styled from "styled-components";
 import UserContext from "../Context/UserContext";
 
+import Geolocation from './Geolocation';
+
 function CreatePost({ updateList, goToProfile }) {
     const [isWaitingServer, setIsWaitingServer] = useState(false);
     const [errorMessage, setErrorMessage] = useState(false);
@@ -66,7 +68,8 @@ function CreatePost({ updateList, goToProfile }) {
                     disabled={isWaitingServer}
                 />
                 <footer>
-                    <span>{errorMessage ? "Houve um erro ao publicar o seu link" : ""}</span>
+                    {errorMessage ? <span>Houve um erro ao publicar o seu link</span> : <Geolocation />}
+                    <span>{/*errorMessage ? "Houve um erro ao publicar o seu link" : ""*/}</span>
                     <button disabled={isWaitingServer}>{isWaitingServer ? "Publicando" : "Publicar"}</button>
                 </footer>
             </Form>

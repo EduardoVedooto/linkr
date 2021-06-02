@@ -5,7 +5,12 @@ import RemovePost from "./RemovePost";
 import Link from "./Link";
 import { useContext} from "react";
 import UserContext from "../Context/UserContext";
+
+import getYouTubeID from 'get-youtube-id';
+import YouTube from './Youtube';
+
 import Repost from "./RePost";
+
 import Like from './Like';
 import {MdRepeat} from 'react-icons/md';
 import TooltipText from "../utils/TooltipText";
@@ -17,6 +22,8 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
     const isLiked = usermamesList.includes(username);
     const tooltip = TooltipText(username, usermamesList);
     let counter = 0;
+
+    const videoID = getYouTubeID(post.link);
 
     return (
         <>
@@ -70,13 +77,10 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
                     </p>
                 }
             
-
-        
-            
-              <Link post={post}></Link>
+                {videoID ? <YouTube link={post.link} videoID={videoID} />
+                :
+                <Link post={post}></Link>}
                 
-                
-               
             </main>
         </PostsContainer>
         </RePostContainer>

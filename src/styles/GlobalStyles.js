@@ -73,8 +73,8 @@ const GlobalStyles = createGlobalStyle`
         bottom: 0;
         background-color: rgba(255,255,255,.9);
         display: flex;
-        justify-content: center;
-        align-items: center;
+        justify-content:center;
+        align-items:center;
     }
     .Modal {
         outline: none;
@@ -94,6 +94,34 @@ const GlobalStyles = createGlobalStyle`
             height: 100vh;
             border-radius: 0;
         }
+    }
+
+
+
+    .ModalLink {
+        outline: none;
+        position: static;
+        width: 60%;
+        height: 90%;
+        border-radius: 20px;
+        background-color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+    }
+
+    .OverlayLink{
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255,255,255,.9);
+        display: flex;
+        justify-content:center;
+        align-items:center;
+        z-index:3;
     }
 `;
 

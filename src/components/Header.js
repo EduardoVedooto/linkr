@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import UserContext from "../Context/UserContext";
 import { Link, useHistory } from "react-router-dom";
+import SearchBar from "./SearchBar";
 
 function Header() {
     const [press, setPress] = useState(false);
@@ -25,6 +26,7 @@ function Header() {
                 <Link to={"/timeline"}>
                     <h1>linkr</h1>
                 </Link>
+                <SearchBar />
                 <Arrow onClick={() => setPress(!press)}>
                     <h2> {press ? <IoIosArrowUp /> : <IoIosArrowDown />}    </h2>
                     <img src={user.avatar} alt={user.avatar}></img>
@@ -52,13 +54,15 @@ const Main = styled.div`
     justify-content: space-between;
     align-items: center;
     position: fixed;
-    z-index: 3;
+    z-index: 100;
+
     h1{
         padding-left: 30px;
         color: #fff;
         font-family: "Passion One";
         font-weight: 700;
         font-size: 49px;
+        user-select: none;
     }
     svg{
         color: #fff;
@@ -87,7 +91,7 @@ const BlockMain = styled.div`
     opacity: 1;
     position: fixed;
     background-color: transparent;
-    z-index: 5;
+    z-index: 20;
 `
 
 const HeaderMenu = styled.div`

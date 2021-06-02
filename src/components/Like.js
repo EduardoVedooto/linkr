@@ -9,7 +9,6 @@ import axios from "axios";
 function Like({ postId, post, updateList, tooltip, isLiked }) {
     const { token } = useContext(UserContext).user;
 
-    
     useEffect(() => {
         updateList();
     }, []); //eslint-disable-line

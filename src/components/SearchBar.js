@@ -19,11 +19,8 @@ function SearchBar({ type }) {
         if (e.target.value.length >= 3) setShowResult(true);
     }
 
-
     function search(e) {
-        console.log(e);
         if (e.type === "blur") return;
-
 
         if (e.target.value.length < 3) {
             setUserList([]);

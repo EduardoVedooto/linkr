@@ -56,9 +56,11 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
             </aside>
             <main>
 
-
-                <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
-                {post.geolocation ? <Map geolocation={post.geolocation} /> : ""}
+                <div className="title">
+                    <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
+                    {post.geolocation ? <Map geolocation={post.geolocation} username={post.user.username} /> : ""}
+                </div>
+                
                 {post.user.id === id ?
                     <>
                         <RemovePost post={post} id={post.id} token={token} updateList={updateList} />
@@ -162,7 +164,10 @@ const PostsContainer = styled.div`
         display: flex;
         flex-direction: column;
         width: 100%;   
-        position: relative; 
+        position: relative;
+        .title {
+            display: flex;
+        } 
         h3 {
             width: fit-content;
             font-size: 20px;

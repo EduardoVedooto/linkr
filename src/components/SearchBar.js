@@ -15,10 +15,12 @@ function SearchBar({ type }) {
     const [inputValue, setInputValue] = useState("");
 
 
+    function handleFocus(e) {
+        if (e.target.value.length >= 3) setShowResult(true);
+    }
 
     function search(e) {
         if (e.type === "blur") return;
-
 
         if (e.target.value.length < 3) {
             setUserList([]);
@@ -49,7 +51,6 @@ function SearchBar({ type }) {
     function handleBlur() {
         setShowResult(false);
         setInputValue("");
-        setUserList([]);
     }
 
     return (
@@ -60,6 +61,7 @@ function SearchBar({ type }) {
                 placeholder={"Search for people and friends"}
                 onChange={search}
                 onBlur={handleBlur}
+                onFocus={handleFocus}
                 value={inputValue}
             />
             <AiOutlineSearch />

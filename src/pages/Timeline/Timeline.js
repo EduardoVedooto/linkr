@@ -17,13 +17,15 @@ function Timeline() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
+    const [followingList, setFollowingList] = useState([]);
 
     useEffect(() => {
         updateList();
+        getFollowings();
     }, []); //eslint-disable-line
 
     function updateList() {
-        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
+        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts", {
             headers: {
                 Authorization: `Bearer ${user.token}`,
             }
@@ -36,6 +38,18 @@ function Timeline() {
             setIsWaitingServer(false);
             setInternalError(true);
         });
+    }
+
+    function getFollowings() {
+        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows", {
+            headers: {
+                Authorization: `Bearer ${user.token}`,
+            }
+        });
+        promise.then(({ data }) => {
+            setFollowingList(data.users);
+        });
+        promise.catch(error => window.alert(error.response.data.message));
     }
 
     useInterval(() => {
@@ -51,9 +65,6 @@ function Timeline() {
         history.push(`/hashtag/${hashtag.replace("#", "")}`);
     }
 
-
-
-
     return (
         <Main>
             <Content>
@@ -68,7 +79,13 @@ function Timeline() {
                             {posts.length ?
                                 posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
                                 :
-                                <h3 className="error">Nenhum post encontrado...</h3>
+                                <h3 className="info">
+                                    {followingList.length ?
+                                        "Nenhum post encontrado..."
+                                        :
+                                        "Você não segue ninguém ainda, procure por perfis na busca"
+                                    }
+                                </h3>
                             }
                         </Posts>
 
@@ -129,7 +146,7 @@ const Posts = styled.section`
     @media(max-width: 611px){
         width: 100%;
     }
-    h3.error {
+    h3.info {
         color: #FFF;
         font-size: 24px;
         font-family: "Oswald";

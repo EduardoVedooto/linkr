@@ -64,13 +64,13 @@ function Timeline() {
                             <CreatePost updateList={updateList} goToProfile={goToProfile} />
 
                             {posts.length ?
-                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
+                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList}/>)
                                 :
                                 <h3 className="error">Nenhum post encontrado...</h3>
                             }
                         </Posts>
 
-                        <Aside user={user} posts={posts} />
+                        <Aside user={user} posts={posts}/>
 
                     </Columns>
 

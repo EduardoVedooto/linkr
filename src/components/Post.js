@@ -3,113 +3,132 @@ import EditPost from "./EditPost";
 import ReactHashtag from "react-hashtag";
 import RemovePost from "./RemovePost";
 import Link from "./Link";
-import { useContext} from "react";
+import { useContext, useEffect, useState} from "react";
 import UserContext from "../Context/UserContext";
 import Repost from "./RePost";
 import Like from './Like';
 import {MdRepeat} from 'react-icons/md';
 import TooltipText from "../utils/TooltipText";
+import Comments from "../components/Comments";
+import CommentSection from "../components/CommentSection";
+import axios from "axios";
 
 function Post({ post, goToProfile, goToHashtag, updateList }) {
-
     const { id, token, username } = useContext(UserContext).user;
     const usermamesList = post.likes.map(u => u["user.username"]);
     const isLiked = usermamesList.includes(username);
     const tooltip = TooltipText(username, usermamesList);
+    const [showComments, setShowComments] = useState(false);
+    const [eachComments, setComments] = useState([]);
+
+    function getComments(){
+        const request = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${post.id}/comments`, {
+            headers:{
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        request.then((response)=>{setComments(response.data.comments)});
+    }
+
+    useEffect(()=>{
+        getComments();  
+        setShowComments(false);
+    }, [post]) //eslint-disable-line
+    
     let counter = 0;
 
     return (
         <>
-        <RePostContainer reposted={post.repostedBy}>
-        {post.repostedBy ?
-        <Reposted>
-            <MdRepeat 
-            color="#FFFFFF"
-            fontSize="20px"/>
-
-        <span onClick={() => goToProfile(post.repostedBy.id, post.repostedBy.username)}>Re-posted by  <strong>
-        {post.repostedBy.id===id?"you":post.repostedBy.username} </strong></span>
-        </Reposted>
-        :""}
-        
-        <PostsContainer  reposted={post.repostedBy}>
-            <aside>
-                <img src={post.user.avatar} onClick={() => goToProfile(post.user.id, post.user.username)} alt="Imagem do perfil" />
-                <div id="likes">
-                    <Like
-                        post={post.likes}
-                        postId={post.id}
-                        isLiked={isLiked}
-                        tooltip={tooltip}
-                        updateList={updateList}
-                    />
-                </div>
-                <Repost post={post} updateList={updateList}/>
-            </aside>
-            <main>
-
-
-                <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
-                {post.user.id === id ?
-                    <>
-                        <RemovePost post={post} id={post.id} token={token} updateList={updateList} />
-                        <EditPost post={post} token={token} updateList={updateList} goToHashtag={goToHashtag} />
-                    </>
-                    :
-                    <p>
-                        <ReactHashtag renderHashtag={hashtag => (
-                            <Hashtag
-                                key={post.id + hashtag + counter++}
-                                onClick={() => goToHashtag(hashtag)}
-                            >
-                                {hashtag}
-                            </Hashtag>
-                        )}>
-                            {post.text}
-                        </ReactHashtag>
-                    </p>
-                }
-            
-
-        
-            
-              <Link post={post}></Link>
-                
-                
-               
-            </main>
-        </PostsContainer>
+        <RePostContainer  reposted={post.repostedBy}>
+            {post.repostedBy ?
+            <Reposted>
+                <MdRepeat 
+                color="#FFFFFF"
+                fontSize="20px"/>
+            <span onClick={() => goToProfile(post.repostedBy.id, post.repostedBy.username)}>Re-posted by  <strong>
+            {post.repostedBy.id===id?"you":post.repostedBy.username} </strong></span>
+            </Reposted>
+            :""}
+            <BackgroundPost>
+                <PostsContainer reposted={post.repostedBy}>
+                    <aside>
+                        <img src={post.user.avatar} onClick={() => goToProfile(post.user.id, post.user.username)} alt="Imagem do perfil" />
+                        <div id="likes">
+                            <Like
+                                post={post.likes}
+                                postId={post.id}
+                                isLiked={isLiked}
+                                tooltip={tooltip}
+                                updateList={updateList}
+                                />
+                        </div>
+                        <CommentButton>
+                            <Comments eachComments={eachComments} showComments={showComments} setShowComments={setShowComments} />
+                        </CommentButton>
+                        <Repost post={post} updateList={updateList}/>
+                    </aside>
+                    <main>
+                        <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
+                        {post.user.id === id ?
+                            <>
+                                <RemovePost post={post} id={post.id} token={token} updateList={updateList} />
+                                <EditPost post={post} token={token} updateList={updateList} goToHashtag={goToHashtag} />
+                            </>
+                            :
+                            <p>
+                                <ReactHashtag renderHashtag={hashtag => (
+                                    <Hashtag
+                                    key={post.id + hashtag + counter++}
+                                    onClick={() => goToHashtag(hashtag)}
+                                    >
+                                        {hashtag}
+                                    </Hashtag>
+                                )}>
+                                    {post.text}
+                                </ReactHashtag>
+                            </p>
+                        }
+                    <Link post={post}></Link>
+                    </main>
+                </PostsContainer>
+                <CommentSection updateList={updateList} post={post} setShowComments={setShowComments} showComments={showComments} eachComments={eachComments} />
+            </BackgroundPost>
         </RePostContainer>
-        </>
-       
+        </>   
     );
 }
 
+const BackgroundPost = styled.div `
+    background-color: #1E1E1E;
+    border-radius: 16px;
+    width: 611px;
+    height: auto;
+`
+
 const RePostContainer= styled.div `
-width: 611px;
-background: ${props => props.reposted? "#1E1E1E" : "none"};
-margin-top: 30px;
-border-radius: 16px;
-@media(max-width: 611px){
-    width: 100%;
-    margin-top:15px;
-}
+    width: 611px;
+    background: ${props => props.reposted? "#1E1E1E" : "none"};
+    margin-top: 30px;
+    border-radius: 16px;
+    @media(max-width: 611px){
+        width: 100%;
+        margin-top:15px;
+    }
 `;
 
 const Reposted = styled.div `
-margin:10px;
-display:flex;
-align-items:center;
-
-span{
-margin-left:5px;
-font-family: Lato;
-font-style: normal;
-font-weight: normal;
-font-size: 11px;
-line-height: 13px;
-color: #FFFFFF;
-}
+    margin:10px;
+    display:flex;
+    align-items:center;
+    span{
+    margin-left:5px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 11px;
+    line-height: 13px;
+    color: #FFFFFF;
+    }
 `;
 
 
@@ -123,6 +142,7 @@ const PostsContainer = styled.div`
     padding: 17px 22px 20px 18px;
     color: #fff;
     gap: 18px;
+    z-index: 3;
     @media(max-width: 611px){
         width: 100%;
         border-radius: 0;
@@ -151,6 +171,7 @@ const PostsContainer = styled.div`
             margin-top: 5px;
             text-align: center;
         }
+
     }
     main {
         display: flex;
@@ -173,6 +194,9 @@ const PostsContainer = styled.div`
     }
 `;
 
+const CommentButton = styled.div`
+    width: 100px;
+`
 
 const Hashtag = styled.span`
     font-size: inherit;
@@ -180,5 +204,6 @@ const Hashtag = styled.span`
     color: #fff;
     cursor: pointer;
 `;
+
 
 export default Post;

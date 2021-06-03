@@ -76,7 +76,7 @@ const Container = styled.div`
         font-size: 19px;
         left: 30px;
     }
-    @media(max-width: 915px){
+    @media(max-width: 955px){
         display: none;
     }
 `

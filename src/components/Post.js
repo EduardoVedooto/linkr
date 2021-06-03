@@ -58,7 +58,7 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
 
                 <div className="title">
                     <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
-                    {post.geolocation ? <Map geolocation={post.geolocation} username={post.user.username} /> : ""}
+                    {post.geolocation ? <MapBox geolocation={post.geolocation} username={post.user.username} /> : ""}
                 </div>
                 
                 {post.user.id === id ?

@@ -5,6 +5,8 @@ import RemovePost from "./RemovePost";
 import Link from "./Link";
 import { useContext, useEffect, useState} from "react";
 import UserContext from "../Context/UserContext";
+import getYouTubeID from 'get-youtube-id';
+import YouTube from './Youtube';
 import Repost from "./RePost";
 import Like from './Like';
 import {MdRepeat} from 'react-icons/md';
@@ -31,6 +33,10 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
         request.then((response)=>{setComments(response.data.comments)});
     }
 
+
+    const videoID = getYouTubeID(post.link);
+
+
     function getFollows() {
         const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows", {
             headers: {
@@ -50,7 +56,6 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
     let counter = 0;
 
     return (
-        <>
         <RePostContainer  reposted={post.repostedBy}>
             {post.repostedBy ?
             <Reposted>
@@ -100,13 +105,15 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
                                 </ReactHashtag>
                             </p>
                         }
-                    <Link post={post}></Link>
+                        {videoID ? <YouTube link={post.link} videoID={videoID} />
+                        :
+                        <Link post={post}></Link>}
                     </main>
                 </PostsContainer>
                 <CommentSection goToProfile={goToProfile} allFollowers={allFollowers} updateList={updateList} post={post} setShowComments={setShowComments} showComments={showComments} eachComments={eachComments} />
             </BackgroundPost>
-        </RePostContainer>
-        </>   
+
+        </RePostContainer>  
     );
 }
 

@@ -6,6 +6,7 @@ import Post from '../../components/Post';
 import Loading from '../../components/Loading';
 import InternalError from '../../components/InternalError';
 import UserContext from "../../Context/UserContext";
+import SearchBar from '../../components/SearchBar';
 
 function MyPosts() {
     const history = useHistory();
@@ -42,6 +43,7 @@ function MyPosts() {
     return (
         <Main>
             <Content>
+                <SearchBar type="innerSearch" />
                 <h2>my posts</h2>
                 {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
 
@@ -73,6 +75,9 @@ const Main = styled.main`
     padding: 125px 0 50px 0;
     min-height: 100vh;
     background-color: #2F2F2F;
+    @media(max-width: 855px) {
+        padding-top: 100px;
+    }
 `;
 
 const Content = styled.div`
@@ -83,6 +88,7 @@ const Content = styled.div`
         font-family: "Oswald";
         font-size: 43px;
         font-weight: 700;
+        user-select: none;
     }
 `;
 

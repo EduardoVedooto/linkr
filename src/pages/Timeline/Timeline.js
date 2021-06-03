@@ -8,7 +8,7 @@ import InternalError from "../../components/InternalError";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 import UserContext from "../../Context/UserContext";
-import useInterval from "use-interval";
+import SearchBar from "../../components/SearchBar";
 
 function Timeline() {
     const history = useHistory();
@@ -16,13 +16,15 @@ function Timeline() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
+    const [followingList, setFollowingList] = useState([]);
 
     useEffect(() => {
         updateList();
+        getFollowings();
     }, []); //eslint-disable-line
 
     function updateList() {
-        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
+        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts", {
             headers: {
                 Authorization: `Bearer ${user.token}`,
             }
@@ -37,9 +39,17 @@ function Timeline() {
         });
     }
 
-    // useInterval(() => {
-    //     updateList();
-    // }, 15000)
+    function getFollowings() {
+        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows", {
+            headers: {
+                Authorization: `Bearer ${user.token}`,
+            }
+        });
+        promise.then(({ data }) => {
+            setFollowingList(data.users);
+        });
+        promise.catch(error => window.alert(error.response.data.message));
+    }
 
 
     function goToProfile(id, name) {
@@ -50,12 +60,10 @@ function Timeline() {
         history.push(`/hashtag/${hashtag.replace("#", "")}`);
     }
 
-
-
-
     return (
         <Main>
             <Content>
+                <SearchBar type="innerSearch" />
                 <h2>timeline</h2>
                 {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
                     <Columns>
@@ -66,7 +74,13 @@ function Timeline() {
                             {posts.length ?
                                 posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList}/>)
                                 :
-                                <h3 className="error">Nenhum post encontrado...</h3>
+                                <h3 className="info">
+                                    {followingList.length ?
+                                        "Nenhum post encontrado..."
+                                        :
+                                        "Você não segue ninguém ainda, procure por perfis na busca"
+                                    }
+                                </h3>
                             }
                         </Posts>
 
@@ -87,6 +101,9 @@ const Main = styled.main`
     padding: 125px 0 50px 0;
     min-height: 100vh;
     background-color: #2F2F2F;
+    @media(max-width: 855px) {
+        padding-top: 100px;
+    }
 `;
 
 const Content = styled.div`
@@ -96,6 +113,7 @@ const Content = styled.div`
         font-family: "Oswald";
         font-size: 43px;
         font-weight: 700;
+        user-select: none;
     }
     @media(max-width: 937px){
         width: 100%;
@@ -123,7 +141,7 @@ const Posts = styled.section`
     @media(max-width: 611px){
         width: 100%;
     }
-    h3.error {
+    h3.info {
         color: #FFF;
         font-size: 24px;
         font-family: "Oswald";

@@ -9,7 +9,6 @@ import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 import UserContext from "../../Context/UserContext";
 import useInterval from "use-interval";
-// import InfiniteScroll from "react-infinite-scroller";
 import Loader from "react-loader-spinner";
 import SearchBar from "../../components/SearchBar";
 import Round from "../../utils/Round";

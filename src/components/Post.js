@@ -14,7 +14,7 @@ import Repost from "./RePost";
 import Like from './Like';
 import {MdRepeat} from 'react-icons/md';
 import TooltipText from "../utils/TooltipText";
-import Map from './Map';
+import MapBox from './MapBox';
 
 function Post({ post, goToProfile, goToHashtag, updateList }) {
 

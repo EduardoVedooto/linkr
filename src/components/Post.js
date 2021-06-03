@@ -14,6 +14,7 @@ import Repost from "./RePost";
 import Like from './Like';
 import {MdRepeat} from 'react-icons/md';
 import TooltipText from "../utils/TooltipText";
+import MapBox from './MapBox';
 
 function Post({ post, goToProfile, goToHashtag, updateList }) {
 
@@ -55,8 +56,11 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
             </aside>
             <main>
 
-
-                <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
+                <div className="title">
+                    <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
+                    {post.geolocation ? <MapBox geolocation={post.geolocation} username={post.user.username} /> : ""}
+                </div>
+                
                 {post.user.id === id ?
                     <>
                         <RemovePost post={post} id={post.id} token={token} updateList={updateList} />
@@ -160,7 +164,10 @@ const PostsContainer = styled.div`
         display: flex;
         flex-direction: column;
         width: 100%;   
-        position: relative; 
+        position: relative;
+        .title {
+            display: flex;
+        } 
         h3 {
             width: fit-content;
             font-size: 20px;

@@ -11,6 +11,7 @@ import UserContext from "../../Context/UserContext";
 import useInterval from "use-interval";
 import InfiniteScroll from "react-infinite-scroller";
 import Loader from "react-loader-spinner";
+import SearchBar from "../../components/SearchBar";
 
 
 function Timeline() {
@@ -19,12 +20,14 @@ function Timeline() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
+    const [followingList, setFollowingList] = useState([]);
     const [lastID, setLastID] = useState(null);
     const [loadMore, setLoadMore] = useState(true);
     const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts";
 
     useEffect(() => {
         firstLoad();
+        getFollowings();
     }, []); //eslint-disable-line
 
     function updateList() {
@@ -91,7 +94,17 @@ function Timeline() {
         setLastID(posts[posts.length - 1].id);
     }
 
-
+    function getFollowings() {
+        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows", {
+            headers: {
+                Authorization: `Bearer ${user.token}`,
+            }
+        });
+        promise.then(({ data }) => {
+            setFollowingList(data.users);
+        });
+        promise.catch(error => window.alert(error.response.data.message));
+    }
 
     function goToProfile(id, name) {
         history.push(`/user/${id}/${name}`);
@@ -101,12 +114,10 @@ function Timeline() {
         history.push(`/hashtag/${hashtag.replace("#", "")}`);
     }
 
-
-
-
     return (
         <Main>
             <Content>
+                <SearchBar type="innerSearch" />
                 <h2>timeline</h2>
                 {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
                     <Columns>
@@ -114,6 +125,7 @@ function Timeline() {
 
                         <Posts>
                             <CreatePost updateList={updateList} goToProfile={goToProfile} />
+
 
                             <InfiniteScroll
                                 pageStart={0}
@@ -137,9 +149,16 @@ function Timeline() {
                                 {posts.length ?
                                     posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
                                     :
-                                    <h3 key={"EmptyTimeline"} className="error">Nenhum post encontrado...</h3>
+                                    <h3 className="info">
+                                        {followingList.length ?
+                                            "Nenhum post encontrado..."
+                                            :
+                                            "Você não segue ninguém ainda, procure por perfis na busca"
+                                        }
+                                    </h3>
                                 }
                             </InfiniteScroll>
+
 
                         </Posts>
 
@@ -160,6 +179,9 @@ const Main = styled.main`
     padding: 125px 0 50px 0;
     min-height: 100vh;
     background-color: #2F2F2F;
+    @media(max-width: 855px) {
+        padding-top: 100px;
+    }
 `;
 
 const Content = styled.div`
@@ -169,6 +191,7 @@ const Content = styled.div`
         font-family: "Oswald";
         font-size: 43px;
         font-weight: 700;
+        user-select: none;
     }
     @media(max-width: 937px){
         width: 100%;
@@ -196,7 +219,7 @@ const Posts = styled.section`
     @media(max-width: 611px){
         width: 100%;
     }
-    h3.error {
+    h3.info {
         color: #FFF;
         font-size: 24px;
         font-family: "Oswald";

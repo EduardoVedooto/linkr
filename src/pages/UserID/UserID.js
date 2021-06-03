@@ -8,6 +8,7 @@ import { useHistory } from "react-router";
 import UserContext from "../../Context/UserContext";
 import InternalError from "../../components/InternalError";
 import Aside from "../../components/Aside";
+import SearchBar from "../../components/SearchBar";
 
 export default function UserID() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
@@ -111,6 +112,7 @@ export default function UserID() {
     return (
         <Main>
             <Content>
+                <SearchBar type="innerSearch" />
                 {isWaitingFollowing ? "" :
                     <TittleHeader>
                         <h2>{name}’s posts</h2>
@@ -141,6 +143,9 @@ const Main = styled.main`
     padding: 125px 0 50px 0;
     min-height: 100vh;
     background-color: #2F2F2F;
+    @media(max-width: 855px) {
+        padding-top: 100px;
+    }
 `;
 
 const Content = styled.div`
@@ -150,6 +155,7 @@ const Content = styled.div`
         font-family: "Oswald";
         font-size: 43px;
         font-weight: 700;
+        user-select: none;
     }
     @media(max-width: 937px){
         width: 100%;

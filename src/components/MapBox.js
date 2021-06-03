@@ -4,8 +4,6 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import Modal from 'react-modal';
 
-//import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
-
 import { withScriptjs, withGoogleMap, GoogleMap } from "react-google-maps";
 
 function MapBox({ geolocation, username }) {

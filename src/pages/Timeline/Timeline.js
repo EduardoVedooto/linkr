@@ -37,9 +37,9 @@ function Timeline() {
         });
     }
 
-    useInterval(() => {
-        updateList();
-    }, 15000)
+    // useInterval(() => {
+    //     updateList();
+    // }, 15000)
 
 
     function goToProfile(id, name) {

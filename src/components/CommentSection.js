@@ -5,13 +5,14 @@ import { FiSend } from 'react-icons/fi';
 import axios from "axios";
 
 
-function CommentSection({updateList ,post, setShowComments, showComments, eachComments}){
+function CommentSection({allFollowers ,updateList ,post, setShowComments, showComments, eachComments, goToProfile}){
     const {user} = useContext(UserContext);
     const [text, setText] = useState("");
     const [loading, setLoading] = useState(false);
 
+
     useEffect(()=>{
-        setShowComments(false)
+        setShowComments(false);
     },[]) //eslint-disable-line
 
     function SendComment(){
@@ -34,7 +35,9 @@ function CommentSection({updateList ,post, setShowComments, showComments, eachCo
             <CommentPost key={i}>
                 <img src={c.user.avatar} alt={c.user.username}></img>
                 <EachMessage>
-                    <h1>{c.user.username}</h1>
+                    <div onClick={()=>goToProfile(post.user.id, post.user.username)}>
+                        <h1>{c.user.username}</h1><span>{post.user.id === c.user.id ? "• post’s author" : allFollowers.map((each)=>each.id).includes(c.user.id) ? "• following" : ""}</span>
+                    </div>
                     <p>{c.text}</p>
                 </EachMessage>
             </CommentPost>
@@ -83,6 +86,15 @@ const EachMessage = styled.div`
         color: #ACACAC;
         font-weight: 400;
         padding-right: 10px;
+    }
+    div{
+        display: flex;
+        flex-direction: row;
+        cursor: pointer;
+    }
+    span{
+        color: #565656;
+        padding-left: 10px;
     }
 `
 const InputTab = styled.div`

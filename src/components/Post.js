@@ -20,6 +20,7 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
     const tooltip = TooltipText(username, usermamesList);
     const [showComments, setShowComments] = useState(false);
     const [eachComments, setComments] = useState([]);
+    const [allFollowers, setAllFollowers] = useState([]);
 
     function getComments(){
         const request = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${post.id}/comments`, {
@@ -30,10 +31,21 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
         request.then((response)=>{setComments(response.data.comments)});
     }
 
+    function getFollows() {
+        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        promise.then((response)=>{setAllFollowers(response.data.users)})
+    }
+
     useEffect(()=>{
         getComments();  
         setShowComments(false);
+        getFollows();
     }, [post]) //eslint-disable-line
+
     
     let counter = 0;
 
@@ -45,8 +57,8 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
                 <MdRepeat 
                 color="#FFFFFF"
                 fontSize="20px"/>
-            <span onClick={() => goToProfile(post.repostedBy.id, post.repostedBy.username)}>Re-posted by  <strong>
-            {post.repostedBy.id===id?"you":post.repostedBy.username} </strong></span>
+                <span onClick={() => goToProfile(post.repostedBy.id, post.repostedBy.username)}>Re-posted by  <strong>
+                {post.repostedBy.id===id?"you":post.repostedBy.username} </strong></span>
             </Reposted>
             :""}
             <BackgroundPost>
@@ -91,7 +103,7 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
                     <Link post={post}></Link>
                     </main>
                 </PostsContainer>
-                <CommentSection updateList={updateList} post={post} setShowComments={setShowComments} showComments={showComments} eachComments={eachComments} />
+                <CommentSection goToProfile={goToProfile} allFollowers={allFollowers} updateList={updateList} post={post} setShowComments={setShowComments} showComments={showComments} eachComments={eachComments} />
             </BackgroundPost>
         </RePostContainer>
         </>   
@@ -103,6 +115,10 @@ const BackgroundPost = styled.div `
     border-radius: 16px;
     width: 611px;
     height: auto;
+    @media(max-width: 611px){
+        width: 100%;
+        border-radius: 0;
+    }
 `
 
 const RePostContainer= styled.div `

@@ -162,8 +162,6 @@ function Timeline() {
                         <Posts>
                             <CreatePost updateList={updateList} goToProfile={goToProfile} />
 
-
-
                             <InfiniteScroll
                                 dataLength={posts.length}
                                 next={morePosts}
@@ -197,7 +195,6 @@ function Timeline() {
                                     </h3>
                                 }
                             </InfiniteScroll>
-
 
                         </Posts>
 

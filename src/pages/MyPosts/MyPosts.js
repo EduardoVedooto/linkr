@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router';
 import axios from 'axios';
 import styled from 'styled-components';
-
 import Post from '../../components/Post';
 import Loading from '../../components/Loading';
 import InternalError from '../../components/InternalError';
@@ -60,7 +59,6 @@ function MyPosts() {
 
                         </Posts>
 
-                        <aside>in development</aside>
 
                     </Columns>
                 }
@@ -99,15 +97,6 @@ const Columns = styled.div`
     justify-content: space-between;
     height: inherit;
     margin-top: 43px;
-
-    &>aside{  // Será substituído pela div hashtag
-        background-color: #171717;
-        color: #fff;
-        width: 301px;
-        height: 406px;
-        border-radius: 16px;
-        text-align: center;
-    }
 `;
 
 const Posts = styled.section`

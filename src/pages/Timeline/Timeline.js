@@ -9,7 +9,7 @@ import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 import UserContext from "../../Context/UserContext";
 import useInterval from "use-interval";
-import InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from "react-infinite-scroller";
 import Loader from "react-loader-spinner";
 
 
@@ -19,32 +19,78 @@ function Timeline() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
+    const [lastID, setLastID] = useState(null);
+    const [loadMore, setLoadMore] = useState(true);
+    const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts";
 
     useEffect(() => {
-        updateList();
+        firstLoad();
     }, []); //eslint-disable-line
 
     function updateList() {
-        console.log("Chegou aqui");
-        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", {
-            headers: {
-                Authorization: `Bearer ${user.token}`,
-            }
-        });
+        const promise = axios.get(url, { headers: { Authorization: `Bearer ${user.token}` } });
         promise.then(({ data }) => {
-            console.log(data);
+            const newPosts = data.posts.filter(post => console.log(post.id));
+            console.log(newPosts);
+            if (lastID === null) setLastID(data.posts[data.posts.length - 1].id);
             setPosts(data.posts);
             setIsWaitingServer(false);
         });
-        promise.catch(error => {
+        promise.catch(() => {
             setIsWaitingServer(false);
             setInternalError(true);
         });
     }
 
-    useInterval(() => {
-        updateList();
-    }, 15000)
+    function firstLoad() {
+        console.log("Chegou aqui");
+        const promise = axios.get(url, { headers: { Authorization: `Bearer ${user.token}` } });
+        promise.then(({ data }) => {
+            setLastID(data.posts[data.posts.length - 1].id);
+
+            setPosts(data.posts);
+            setIsWaitingServer(false);
+        });
+        promise.catch(() => {
+            setIsWaitingServer(false);
+            setInternalError(true);
+        });
+    }
+
+    function morePosts(e) {
+
+        const promise = axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${user.token}`,
+            },
+            params: {
+                olderThan: `${lastID}`
+            }
+        });
+        promise.then(({ data }) => {
+            setLoadMore(false);
+            console.log(posts.concat(data.posts));
+            setPosts(posts.concat(data.posts));
+            getLastID(data.posts);
+        });
+        promise.catch(() => {
+            setInternalError(true);
+        });
+
+        console.log(posts);
+    }
+
+    // useInterval(() => {
+    //     updateList();
+    // }, 15000);
+
+
+
+
+    function getLastID(posts) {
+        setLastID(posts[posts.length - 1].id);
+    }
+
 
 
     function goToProfile(id, name) {
@@ -71,11 +117,15 @@ function Timeline() {
 
                             <InfiniteScroll
                                 pageStart={0}
-                                loadMore={updateList}
-                                hasMore={true}
+                                loadMore={morePosts}
+                                hasMore={loadMore}
+                                threshold={500}
+                                initialLoad={true}
+
                                 loader={
-                                    <LoadingMorePosts>
+                                    <LoadingMorePosts key="LoaderKey">
                                         <Loader
+                                            key="TESTEFSD"
                                             type="ThreeDots"
                                             color="#171717"
                                             height={50}

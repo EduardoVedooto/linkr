@@ -9,9 +9,11 @@ import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 import UserContext from "../../Context/UserContext";
 import useInterval from "use-interval";
-import InfiniteScroll from "react-infinite-scroller";
+// import InfiniteScroll from "react-infinite-scroller";
 import Loader from "react-loader-spinner";
 import SearchBar from "../../components/SearchBar";
+import Round from "../../utils/Round";
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 
 function Timeline() {
@@ -21,8 +23,12 @@ function Timeline() {
     const [internalError, setInternalError] = useState(false);
     const [posts, setPosts] = useState([]);
     const [followingList, setFollowingList] = useState([]);
-    const [lastID, setLastID] = useState(null);
     const [loadMore, setLoadMore] = useState(true);
+    const [renderNumber, setRenderNumber] = useState(0);
+    const [updatedList, setUpdatedList] = useState([]);
+    const [isLastID, setIsLastID] = useState(null);
+    const [lastID, setLastID] = useState(null);
+    const [firstID, setFirstID] = useState(null);
     const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts";
 
     useEffect(() => {
@@ -30,64 +36,93 @@ function Timeline() {
         getFollowings();
     }, []); //eslint-disable-line
 
-    function updateList() {
-        const promise = axios.get(url, { headers: { Authorization: `Bearer ${user.token}` } });
-        promise.then(({ data }) => {
-            const newPosts = data.posts.filter(post => console.log(post.id));
-            console.log(newPosts);
-            if (lastID === null) setLastID(data.posts[data.posts.length - 1].id);
-            setPosts(data.posts);
-            setIsWaitingServer(false);
-        });
-        promise.catch(() => {
-            setIsWaitingServer(false);
-            setInternalError(true);
-        });
-    }
+    // useInterval(() => {
+    //     updateList();
+    // }, 15000);
 
     function firstLoad() {
-        console.log("Chegou aqui");
-        const promise = axios.get(url, { headers: { Authorization: `Bearer ${user.token}` } });
-        promise.then(({ data }) => {
-            setLastID(data.posts[data.posts.length - 1].id);
 
+        const promise = axios.get(url, { headers: { Authorization: `Bearer ${user.token}` } });
+
+        promise.then(({ data }) => {
+            setFirstID(data.posts[0].id);
+            setLastID(data.posts[data.posts.length - 1].id);
             setPosts(data.posts);
             setIsWaitingServer(false);
         });
+
         promise.catch(() => {
             setIsWaitingServer(false);
             setInternalError(true);
         });
     }
 
-    function morePosts(e) {
+    console.log(firstID);
+    console.log(lastID);
 
+    function updateList() {
+        const promise = axios.get(url, {
+            headers: { Authorization: `Bearer ${user.token}` },
+            params: { olderThan: `${firstID}` }
+        });
+
+        promise.then(({ data }) => {
+            if (!data.posts[data.posts.length - 1].id === lastID) {
+                console.log("chegou aqui");
+                setUpdatedList(updatedList.concat(data.posts));
+                setIsLastID(data.posts[data.posts.length - 1].id);
+                console.log(data.posts[data.posts.length - 1].id);
+                updateList();
+            } else {
+                setUpdatedList(updatedList.concat(data.posts));
+                console.log(updatedList);
+            }
+
+
+            // const newPosts = data.posts;
+            // const changes = newPosts.filter(post => {
+
+            // });
+        });
+
+        promise.catch(() => {
+
+            setInternalError(true);
+        });
+    }
+
+    console.log(updatedList);
+    function TESTE() {
+        const postsNumber = Number(String(Round(posts.length)).replace("0", ""));
+        console.log(postsNumber);
+    }
+
+    function morePosts() {
+        console.log(renderNumber + 10);
         const promise = axios.get(url, {
             headers: {
                 Authorization: `Bearer ${user.token}`,
             },
             params: {
-                olderThan: `${lastID}`
+                olderThan: `${lastID}`,
+
             }
         });
         promise.then(({ data }) => {
-            setLoadMore(false);
-            console.log(posts.concat(data.posts));
+            setRenderNumber(renderNumber + 10);
+            if (data.posts.length < 10) setLoadMore(false);
+
+            // console.log(posts.concat(data.posts));
             setPosts(posts.concat(data.posts));
+            console.log(posts.concat(data.posts));
             getLastID(data.posts);
         });
         promise.catch(() => {
             setInternalError(true);
         });
 
-        console.log(posts);
+
     }
-
-    // useInterval(() => {
-    //     updateList();
-    // }, 15000);
-
-
 
 
     function getLastID(posts) {
@@ -117,6 +152,7 @@ function Timeline() {
     return (
         <Main>
             <Content>
+                <button style={{ position: "fixed", left: 0, top: "70px" }} onClick={updateList}>TESTE</button>
                 <SearchBar type="innerSearch" />
                 <h2>timeline</h2>
                 {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
@@ -127,12 +163,15 @@ function Timeline() {
                             <CreatePost updateList={updateList} goToProfile={goToProfile} />
 
 
+
                             <InfiniteScroll
-                                pageStart={0}
-                                loadMore={morePosts}
+                                dataLength={posts.length}
+                                next={morePosts}
                                 hasMore={loadMore}
-                                threshold={500}
-                                initialLoad={true}
+                                endMessage="FIM"
+                                style={{
+                                    overflow: "hidden"
+                                }}
 
                                 loader={
                                     <LoadingMorePosts key="LoaderKey">
@@ -147,7 +186,7 @@ function Timeline() {
                                 }
                             >
                                 {posts.length ?
-                                    posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
+                                    posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={() => updateList} />)
                                     :
                                     <h3 className="info">
                                         {followingList.length ?

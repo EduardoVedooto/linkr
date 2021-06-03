@@ -25,8 +25,7 @@ function CommentSection({allFollowers ,updateList ,post, setShowComments, showCo
                 Authorization: `Bearer ${user.token}`,
             }
         });
-        request.then((response)=>{setLoading(false);updateList();setText("")});
-        request.catch(()=> alert("Comentário não enviado, por favor tente novamente!"));
+        request.then(()=>{setLoading(false);updateList();setText("")});
     }
 
     return(
@@ -71,7 +70,6 @@ const CommentPost = styled.div`
     width: 611px;
     padding: 10px 0px 10px 25px;
     border-bottom: 1px solid #353535;
-
 `
 
 const EachMessage = styled.div`

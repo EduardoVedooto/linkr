@@ -149,7 +149,6 @@ const Reposted = styled.div `
 
 
 const PostsContainer = styled.div`  
-
     margin-top:${props => props.reposted?"13px":"auto"};
     background-color: #171717;
     border-radius: 16px;
@@ -187,7 +186,6 @@ const PostsContainer = styled.div`
             margin-top: 5px;
             text-align: center;
         }
-
     }
     main {
         display: flex;

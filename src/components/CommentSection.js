@@ -11,10 +11,9 @@ function CommentSection({allFollowers ,updateList ,post, setShowComments, showCo
     const [loading, setLoading] = useState(false);
 
 
-    useEffect(()=>{
-        setShowComments(false);
-        console.log(eachComments)
-    },[]) //eslint-disable-line
+    // useEffect(()=>{
+    //     setShowComments(false);
+    // },[]) //eslint-disable-line
 
     function SendComment(){
         setLoading(true)

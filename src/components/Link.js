@@ -72,6 +72,11 @@ justify-content:space-between;
 padding-left:15px;
 padding-right:15px;
 padding-bottom:15px;
+cursor: pointer;
+ button{
+    cursor: pointer;
+ }
+
 
 .close{
         border: none;

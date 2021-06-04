@@ -155,6 +155,7 @@ const Reposted = styled.div `
     font-size: 11px;
     line-height: 13px;
     color: #FFFFFF;
+    cursor: pointer;
     }
 `;
 

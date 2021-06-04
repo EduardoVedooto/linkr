@@ -48,15 +48,12 @@ const Container = styled.div`
     background-color: #171717;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     color: #fff;
     width: 301px;
     height: 406px;
     border-radius: 16px;
-    position: fixed;
-    left: 0;
-    right: 0;
-    margin: 0px 45% 0px 65%;
+    position: sticky;
+    margin-left: 30px;
     h1{
         font-family: "Oswald";
         font-weight: 700;

@@ -20,7 +20,6 @@ export default function UserID() {
     const { user } = useContext(UserContext);
     const [internalError, setInternalError] = useState(false);
     const history = useHistory();
-    const [isWaitingFollowing, setIsWaitingFollowing] = useState(true);
     const [follower, setFollower] = useState(true);
     const [mypost, setMyPost] = useState(false);
     const [disable, setDisable] = useState(false);
@@ -83,7 +82,7 @@ export default function UserID() {
             }
         })
         promise.then((response) => {
-            setIsWaitingFollowing(false)
+            setIsWaitingServer(false)
             if (parseInt(idUser) === user.id) {
                 setMyPost(true);
             } else {
@@ -139,46 +138,46 @@ export default function UserID() {
 
     return (
         <Main>
-            <Content>
-                <SearchBar type="innerSearch" />
-                {isWaitingFollowing ? "" :
-                    <TittleHeader>
-                        <h2>{name}’s posts</h2>
-                        <ButtonFollow mypost={mypost} disabled={disable} follower={follower} onClick={() => Follow()}>Follow</ButtonFollow>
-                        <ButtonUnfollow mypost={mypost} disabled={disable} follower={follower} onClick={() => Unfollow()} >Unfollow</ButtonUnfollow>
-                    </TittleHeader>
-                }
-                {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
-                    <Columns>
-                        <Posts>
+            {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
+                <Content>
+                    <SearchBar type="innerSearch" />
+                    {isWaitingServer ? "" :
+                        <TittleHeader>
+                            <h2>{name}’s posts</h2>
+                            <ButtonFollow mypost={mypost} disabled={disable} follower={follower} onClick={() => Follow()}>Follow</ButtonFollow>
+                            <ButtonUnfollow mypost={mypost} disabled={disable} follower={follower} onClick={() => Unfollow()} >Unfollow</ButtonUnfollow>
+                        </TittleHeader>
+                    }
+                        <Columns>
+                            <Posts>
 
-                            <InfiniteScroll
-                                dataLength={posts.length}
-                                next={morePosts}
-                                hasMore={loadMore}
-                                style={{ overflow: "hidden" }}
-                                loader={
-                                    <LoadingMorePosts key={`LoaderKeyUser${idUser}`}>
-                                        <Loader
-                                            type="ThreeDots"
-                                            color="#171717"
-                                            height={50}
-                                            width={50}
-                                        />
-                                    </LoadingMorePosts>
-                                }
-                            >
-                                {posts.length ?
-                                    posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
-                                    :
-                                    <h3 className="info">"Nenhum post encontrado com esta hashtag..."</h3>
-                                }
-                            </InfiniteScroll>
-                        </Posts>
-                        <Aside user={user} posts={posts} />
-                    </Columns>
-                }
-            </Content>
+                                <InfiniteScroll
+                                    dataLength={posts.length}
+                                    next={morePosts}
+                                    hasMore={loadMore}
+                                    style={{ overflow: "hidden" }}
+                                    loader={
+                                        <LoadingMorePosts key={`LoaderKeyUser${idUser}`}>
+                                            <Loader
+                                                type="ThreeDots"
+                                                color="#171717"
+                                                height={50}
+                                                width={50}
+                                            />
+                                        </LoadingMorePosts>
+                                    }
+                                >
+                                    {posts.length ?
+                                        posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
+                                        :
+                                        <h3 className="info">"Nenhum post encontrado com esta hashtag..."</h3>
+                                    }
+                                </InfiniteScroll>
+                            </Posts>
+                            <Aside user={user} posts={posts} />
+                        </Columns>
+                </Content>
+            }
         </Main >
     );
 }

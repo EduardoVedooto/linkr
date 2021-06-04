@@ -10,6 +10,7 @@ import InternalError from "../../components/InternalError";
 import Aside from "../../components/Aside";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Loader from "react-loader-spinner";
+import useInterval from "use-interval";
 
 
 
@@ -71,6 +72,10 @@ export default function Hashtag() {
         promise.catch(() => setInternalError(true));
     }
 
+    useInterval(() => {
+        updateList()
+    }, 15000)
+
     return (
         <Main>
             <Content>
@@ -101,12 +106,12 @@ export default function Hashtag() {
                                 }
                             </InfiniteScroll>
                         </Posts>
+                        <Aside user={user} posts={posts} />
                     </Columns>
 
                 }
 
             </Content>
-            <Aside user={user} posts={posts} />
         </Main>
     );
 }
@@ -136,10 +141,13 @@ h2 {
 `;
 
 const Columns = styled.div`
-display: flex;
-justify-content: space-between;
-height: inherit;
-margin-top: 43px;
+    display: flex;
+    justify-content: space-between;
+    height: inherit;
+    margin-top: 43px;
+    &>div{
+        margin-top: 30px;
+    }
 `;
 
 const Posts = styled.section`

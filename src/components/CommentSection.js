@@ -10,11 +10,6 @@ function CommentSection({allFollowers ,updateList ,post, setShowComments, showCo
     const [text, setText] = useState("");
     const [loading, setLoading] = useState(false);
 
-
-    useEffect(()=>{
-        setShowComments(false);
-    },[]) //eslint-disable-line
-
     function SendComment(){
         setLoading(true)
         const body = {
@@ -32,9 +27,9 @@ function CommentSection({allFollowers ,updateList ,post, setShowComments, showCo
     <Comment showComments={showComments}>
         {eachComments.map((c,i)=>
             <CommentPost key={i}>
-                <img src={c.user.avatar} alt={c.user.username}></img>
+                <img src={c.user.avatar} alt={c.user.username} onClick={()=>goToProfile(c.user.id, c.user.username)} ></img>
                 <EachMessage>
-                    <div onClick={()=>goToProfile(post.user.id, post.user.username)}>
+                    <div onClick={()=>goToProfile(c.user.id, c.user.username)}>
                         <h1>{c.user.username}</h1><span>{post.user.id === c.user.id ? "• post’s author" : allFollowers.map((each)=>each.id).includes(c.user.id) ? "• following" : ""}</span>
                     </div>
                     <p>{c.text}</p>
@@ -62,6 +57,7 @@ const Comment = styled.div`
         width: 39px;
         height: 39px;
         border-radius: 50px;
+        cursor: pointer;
     }
 `
 

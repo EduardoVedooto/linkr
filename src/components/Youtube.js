@@ -10,7 +10,7 @@ function YouTube({ link, videoID }) {
             <YouTubePlayer
                 url={`https://www.youtube.com/watch?v=${videoID}`}
                 controls={true}
-                width="480px"
+                width="100%"
             />
         </Video>
         <Span>{link}</Span> 

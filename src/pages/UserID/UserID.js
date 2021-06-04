@@ -11,6 +11,7 @@ import Aside from "../../components/Aside";
 import SearchBar from "../../components/SearchBar";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Loader from "react-loader-spinner";
+import useInterval from "use-interval";
 
 export default function UserID() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
@@ -95,6 +96,10 @@ export default function UserID() {
 
         });
     }
+
+    useInterval(() => {
+        updateList()
+    }, 15000)
 
     function Follow() {
         setDisable(true);
@@ -211,6 +216,9 @@ const Columns = styled.div`
     justify-content: space-between;
     height: inherit;
     margin-top: 43px;
+    &>div{
+        margin-top: 30px;
+    }
 `;
 
 const Posts = styled.section`

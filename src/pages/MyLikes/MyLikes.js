@@ -145,12 +145,12 @@ function MyLikes() {
 
                         </Posts>
 
+                        <Aside user={user} />
 
                     </Columns>
                 }
 
             </Content>
-            <Aside user={user} />
         </Main>
     );
 }
@@ -189,13 +189,8 @@ const Columns = styled.div`
     justify-content: space-between;
     height: inherit;
     margin-top: 43px;
-    &>aside{  // Será substituído pela div hashtag
-        background-color: #171717;
-        color: #fff;
-        width: 301px;
-        height: 406px;
-        border-radius: 16px;
-        text-align: center;
+    &>div{
+        margin-top: 30px;
     }
 `;
 

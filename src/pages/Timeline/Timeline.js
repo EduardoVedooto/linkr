@@ -114,6 +114,10 @@ function Timeline() {
         history.push(`/hashtag/${hashtag.replace("#", "")}`);
     }
 
+    useInterval(() => {
+        updateList()
+    }, 15000)
+
     return (
         <Main>
             <Content>
@@ -158,12 +162,12 @@ function Timeline() {
                         </Posts>
 
 
+                        <Aside user={user} posts={posts} />
                     </Columns>
 
                 }
 
             </Content>
-            <Aside user={user} posts={posts} />
         </Main>
     );
 }

@@ -37,7 +37,7 @@ function goToHashtag(){
                 </Link>
             ): <h1>Error!</h1> }
             {hastagsList.length ? 
-            <Input value={hashtag} onKeyPress={(e)=>{if(e.code==="Enter") {goToHashtag()}}} onChange={(e)=>setHashtag(e.target.value)} placeholder="type a hastag"></Input>
+            <Input value={hashtag} onKeyPress={(e)=>{if(e.code==="Enter") {goToHashtag()}}} onChange={(e)=>setHashtag(e.target.value)} placeholder="type a hashtag"></Input>
         : ""}
         {hastagsList.length ? <h3>#</h3> : ""}        
         </Container>
@@ -48,13 +48,12 @@ const Container = styled.div`
     background-color: #171717;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     color: #fff;
     width: 301px;
     height: 406px;
     border-radius: 16px;
-    position: fixed;
-    margin: 0px max(630px);
+    position: sticky;
+    margin-left: 30px;
     h1{
         font-family: "Oswald";
         font-weight: 700;
@@ -76,7 +75,7 @@ const Container = styled.div`
         font-size: 19px;
         left: 30px;
     }
-    @media(max-width: 915px){
+    @media(max-width: 955px){
         display: none;
     }
 `

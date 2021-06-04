@@ -8,8 +8,8 @@ import InternalError from "../../components/InternalError";
 import Loading from "../../components/Loading";
 import Post from "../../components/Post";
 import UserContext from "../../Context/UserContext";
-import useInterval from "use-interval";
 import SearchBar from "../../components/SearchBar";
+import useInterval from "use-interval";
 
 function Timeline() {
     const history = useHistory();
@@ -52,10 +52,6 @@ function Timeline() {
         promise.catch(error => window.alert(error.response.data.message));
     }
 
-    useInterval(() => {
-        updateList();
-    }, 15000)
-
 
     function goToProfile(id, name) {
         history.push(`/user/${id}/${name}`);
@@ -64,6 +60,10 @@ function Timeline() {
     function goToHashtag(hashtag) {
         history.push(`/hashtag/${hashtag.replace("#", "")}`);
     }
+
+    useInterval(()=>{
+        updateList()
+    },15000)
 
     return (
         <Main>
@@ -77,7 +77,7 @@ function Timeline() {
                             <CreatePost updateList={updateList} goToProfile={goToProfile} />
 
                             {posts.length ?
-                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
+                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList}/>)
                                 :
                                 <h3 className="info">
                                     {followingList.length ?
@@ -89,7 +89,7 @@ function Timeline() {
                             }
                         </Posts>
 
-                        <Aside user={user} posts={posts} />
+                        <Aside user={user} posts={posts}/>
 
                     </Columns>
 

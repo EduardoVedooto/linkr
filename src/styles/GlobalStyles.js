@@ -109,6 +109,10 @@ const GlobalStyles = createGlobalStyle`
         justify-content: center;
         align-items: center;
         padding: 0;
+        @media(max-width: 611px){
+            width: 100vw;
+            height: 100vh;
+        }
     }
 
     .OverlayLink{
@@ -121,7 +125,7 @@ const GlobalStyles = createGlobalStyle`
         display: flex;
         justify-content:center;
         align-items:center;
-        z-index:3;
+        z-index:150;
     }
 
 

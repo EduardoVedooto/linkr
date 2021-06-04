@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { DebounceInput } from 'react-debounce-input';
-import { AiOutlineSearch } from "react-icons/ai";
 import { useContext, useState } from "react";
 import UserContext from "../Context/UserContext";
 import axios from "axios";
@@ -64,7 +63,6 @@ function SearchBar({ type }) {
                 onFocus={handleFocus}
                 value={inputValue}
             />
-            <AiOutlineSearch />
             <Result isDisplay={showResult}>
                 {userList.length ?
                     userList.map(user => (

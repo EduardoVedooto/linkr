@@ -15,6 +15,7 @@ import Comments from "../components/Comments";
 import CommentSection from "../components/CommentSection";
 import axios from "axios";
 import MapBox from './MapBox';
+import useInterval from "use-interval";
 
 function Post({ post, goToProfile, goToHashtag, updateList }) {
     const { id, token, username } = useContext(UserContext).user;
@@ -51,7 +52,11 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
         getComments();  
         setShowComments(false);
         getFollows();
-    }, [post]) //eslint-disable-line
+    }, []) //eslint-disable-line
+
+    useInterval(()=>{
+        getComments();
+    }, 1500)
 
     
     let counter = 0;
@@ -114,7 +119,7 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
                         <Link post={post}></Link>}
                     </main>
                 </PostsContainer>
-                <CommentSection goToProfile={goToProfile} allFollowers={allFollowers} updateList={updateList} post={post} setShowComments={setShowComments} showComments={showComments} eachComments={eachComments} />
+                <CommentSection goToProfile={goToProfile} allFollowers={allFollowers} updateList={updateList} post={post} showComments={showComments} eachComments={eachComments} />
             </BackgroundPost>
 
         </RePostContainer>  

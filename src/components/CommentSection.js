@@ -5,7 +5,7 @@ import { FiSend } from 'react-icons/fi';
 import axios from "axios";
 
 
-function CommentSection({allFollowers ,updateList ,post, setShowComments, showComments, eachComments, goToProfile}){
+function CommentSection({allFollowers ,updateList ,post, showComments, eachComments, goToProfile}){
     const {user} = useContext(UserContext);
     const [text, setText] = useState("");
     const [loading, setLoading] = useState(false);

@@ -21,6 +21,8 @@ function Like({ postId, post, updateList, tooltip, isLiked }) {
         promise.catch(err => window.alert(err.response.data.message));
     }
 
+
+
     return (
         <>
             {

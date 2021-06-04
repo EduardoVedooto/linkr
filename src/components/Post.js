@@ -119,7 +119,7 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
                         <Link post={post}></Link>}
                     </main>
                 </PostsContainer>
-                <CommentSection goToProfile={goToProfile} allFollowers={allFollowers} updateList={updateList} post={post} setShowComments={setShowComments} showComments={showComments} eachComments={eachComments} />
+                <CommentSection goToProfile={goToProfile} allFollowers={allFollowers} updateList={updateList} post={post} showComments={showComments} eachComments={eachComments} />
             </BackgroundPost>
 
         </RePostContainer>  

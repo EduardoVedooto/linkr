@@ -105,8 +105,6 @@ const LinkContent = styled.div`
     cursor: pointer;
     justify-content: space-between;
     margin-top: 14px;
-    width: inherit;
-    max-width: 100%;
     
     img {
         height: inherit;
@@ -129,8 +127,13 @@ const LinkContent = styled.div`
     }
     p {
         font-size: 11px;
+        padding-top: 7px;
         color: #9B9595;
         word-break: break-word;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-line-orient: vertical;
+        overflow: hidden;
     }
     span {
         font-size: 11px;

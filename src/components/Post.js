@@ -14,6 +14,7 @@ import TooltipText from "../utils/TooltipText";
 import Comments from "../components/Comments";
 import CommentSection from "../components/CommentSection";
 import axios from "axios";
+import MapBox from './MapBox';
 
 function Post({ post, goToProfile, goToHashtag, updateList }) {
     const { id, token, username } = useContext(UserContext).user;
@@ -85,7 +86,10 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
                         <Repost post={post} updateList={updateList}/>
                     </aside>
                     <main>
-                        <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
+                        <div className="title">
+                            <h3 onClick={() => goToProfile(post.user.id, post.user.username)}>{post.user.username}</h3>
+                            {post.geolocation ? <MapBox geolocation={post.geolocation} username={post.user.username} /> : ""}
+                        </div>
                         {post.user.id === id ?
                             <>
                                 <RemovePost post={post} id={post.id} token={token} updateList={updateList} />
@@ -169,6 +173,9 @@ const PostsContainer = styled.div`
         width: 100%;
         border-radius: 0;
     }
+    @media(max-width: 450px){
+        overflow-x: scroll;
+    }
     aside {
         display: flex;
         flex-direction: column;
@@ -198,7 +205,10 @@ const PostsContainer = styled.div`
         display: flex;
         flex-direction: column;
         width: 100%;   
-        position: relative; 
+        position: relative;
+        .title {
+            display: flex;
+        } 
         h3 {
             width: fit-content;
             font-size: 20px;

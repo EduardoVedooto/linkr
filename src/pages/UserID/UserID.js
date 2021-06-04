@@ -9,6 +9,8 @@ import UserContext from "../../Context/UserContext";
 import InternalError from "../../components/InternalError";
 import Aside from "../../components/Aside";
 import SearchBar from "../../components/SearchBar";
+import InfiniteScroll from 'react-infinite-scroll-component';
+import Loader from "react-loader-spinner";
 import useInterval from "use-interval";
 
 export default function UserID() {
@@ -22,6 +24,8 @@ export default function UserID() {
     const [follower, setFollower] = useState(true);
     const [mypost, setMyPost] = useState(false);
     const [disable, setDisable] = useState(false);
+    const [loadMore, setLoadMore] = useState(true);
+    const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/posts`;
 
     useEffect(() => {
         updateList();
@@ -36,21 +40,40 @@ export default function UserID() {
         history.push(`/hashtag/${hashtag.replace("#", "")}`);
     }
 
-    function updateList() {
-        const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/posts`, {
-            headers: {
-                Authorization: `Bearer ${user.token}`,
-            }
-        });
+    function updateList(flag, previousList) {
+        if (!flag) {
+            const promise = axios.get(url, {
+                headers: { Authorization: `Bearer ${user.token}` },
+                params: { offset: (previousList ? previousList.length : 0) }
+            });
+            promise.then(({ data }) => {
+                const newList = [].concat(previousList ? previousList : [], data.posts);
 
+                if (newList.length >= posts.length) {
+                    setPosts(newList);
+                    updateList("STOP");
+                } else {
+                    updateList(false, newList);
+                }
+                setIsWaitingServer(false);
+            });
+            promise.catch(() => {
+                setIsWaitingServer(false);
+                setInternalError(false);
+            });
+        }
+    }
+
+    function morePosts() {
+        const promise = axios.get(url, {
+            headers: { Authorization: `Bearer ${user.token}` },
+            params: { offset: `${posts.length}` }
+        });
         promise.then(({ data }) => {
-            setPosts(data.posts);
-            setIsWaitingServer(false);
+            if (data.posts.length < 10 || !data.posts.length) setLoadMore(false);
+            if (data.posts.length) setPosts(posts.concat(data.posts));
         });
-        promise.catch(error => {
-            setIsWaitingServer(false);
-            setInternalError(true);
-        });
+        promise.catch(() => setInternalError(true));
     }
 
     function getFollows() {
@@ -74,9 +97,9 @@ export default function UserID() {
         });
     }
 
-    useInterval(()=>{
+    useInterval(() => {
         updateList()
-    },15000)
+    }, 15000)
 
     function Follow() {
         setDisable(true);
@@ -128,11 +151,29 @@ export default function UserID() {
                 {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
                     <Columns>
                         <Posts>
-                            {posts.length > 0 ?
-                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
-                                :
-                                <h3 className="error">Nenhum post encontrado...</h3>
-                            }
+
+                            <InfiniteScroll
+                                dataLength={posts.length}
+                                next={morePosts}
+                                hasMore={loadMore}
+                                style={{ overflow: "hidden" }}
+                                loader={
+                                    <LoadingMorePosts key={`LoaderKeyUser${idUser}`}>
+                                        <Loader
+                                            type="ThreeDots"
+                                            color="#171717"
+                                            height={50}
+                                            width={50}
+                                        />
+                                    </LoadingMorePosts>
+                                }
+                            >
+                                {posts.length ?
+                                    posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
+                                    :
+                                    <h3 className="info">"Nenhum post encontrado com esta hashtag..."</h3>
+                                }
+                            </InfiniteScroll>
                         </Posts>
                         <Aside user={user} posts={posts} />
                     </Columns>
@@ -175,6 +216,9 @@ const Columns = styled.div`
     justify-content: space-between;
     height: inherit;
     margin-top: 43px;
+    &>div{
+        margin-top: 30px;
+    }
 `;
 
 const Posts = styled.section`
@@ -236,4 +280,12 @@ const ButtonUnfollow = styled.button`
     font-family: Lato;
     font-weight: 700;
     font-size: 14px;
+`;
+
+const LoadingMorePosts = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    margin-top: 40px;
 `;

@@ -139,6 +139,7 @@ const GlobalStyles = createGlobalStyle`
         display: flex;
         justify-content:center;
         align-items:center;
+        z-index: 150;
     }
     .MapModal {
         outline: none;

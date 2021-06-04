@@ -64,13 +64,13 @@ export default function Hashtag() {
                             }
                         </Posts>
 
-                        <Aside user={user} posts={posts} />
 
                     </Columns>
 
                 }
 
             </Content>
+            <Aside user={user} posts={posts} />
         </Main>
     );
 }

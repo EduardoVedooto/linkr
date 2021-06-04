@@ -78,12 +78,12 @@ function MyLikes() {
 
                         </Posts>
 
-                        <Aside user={user} />
 
                     </Columns>
                 }
 
             </Content>
+            <Aside user={user} />
         </Main>
     );
 }

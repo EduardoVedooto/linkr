@@ -35,9 +35,9 @@ function Timeline() {
         getFollowings();
     }, []); //eslint-disable-line
 
-    // useInterval(() => {
-    //     updateList();
-    // }, 15000);
+    useInterval(() => {
+        updateList();
+    }, 15000);
 
     function firstLoad() {
 
@@ -58,42 +58,36 @@ function Timeline() {
 
     console.log(firstID);
     console.log(lastID);
+    console.log(posts);
+    console.log(updatedList);
 
     function updateList() {
         const promise = axios.get(url, {
             headers: { Authorization: `Bearer ${user.token}` },
-            params: { olderThan: `${firstID}` }
+            params: { olderThan: `${updatedList.length ? lastID : firstID}`, }
         });
 
         promise.then(({ data }) => {
-            if (!data.posts[data.posts.length - 1].id === lastID) {
-                console.log("chegou aqui");
-                setUpdatedList(updatedList.concat(data.posts));
-                setIsLastID(data.posts[data.posts.length - 1].id);
-                console.log(data.posts[data.posts.length - 1].id);
+            setUpdatedList(updatedList.concat(data.posts));
+            let newList = [].concat(updatedList, data.posts);
+
+            console.log(newList);
+
+            if (newList.length >= posts.length) {
+                setPosts(newList);
+                setUpdatedList([]);
+                console.log("cheguei aqui");
+            }
+            else {
+                setLastID(newList[newList.length - 1].id);
                 updateList();
-            } else {
-                setUpdatedList(updatedList.concat(data.posts));
-                console.log(updatedList);
             }
 
-
-            // const newPosts = data.posts;
-            // const changes = newPosts.filter(post => {
-
-            // });
         });
 
         promise.catch(() => {
-
             setInternalError(true);
         });
-    }
-
-    console.log(updatedList);
-    function TESTE() {
-        const postsNumber = Number(String(Round(posts.length)).replace("0", ""));
-        console.log(postsNumber);
     }
 
     function morePosts() {
@@ -113,19 +107,13 @@ function Timeline() {
 
             // console.log(posts.concat(data.posts));
             setPosts(posts.concat(data.posts));
-            console.log(posts.concat(data.posts));
-            getLastID(data.posts);
+            setLastID(data.posts[data.posts.length - 1].id);
         });
         promise.catch(() => {
             setInternalError(true);
         });
 
 
-    }
-
-
-    function getLastID(posts) {
-        setLastID(posts[posts.length - 1].id);
     }
 
     function getFollowings() {
@@ -169,7 +157,6 @@ function Timeline() {
                                 style={{
                                     overflow: "hidden"
                                 }}
-
                                 loader={
                                     <LoadingMorePosts key="LoaderKey">
                                         <Loader
@@ -197,13 +184,13 @@ function Timeline() {
 
                         </Posts>
 
-                        <Aside user={user} posts={posts} />
 
                     </Columns>
 
                 }
 
             </Content>
+            <Aside user={user} posts={posts} />
         </Main>
     );
 }

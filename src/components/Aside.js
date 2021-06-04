@@ -3,43 +3,43 @@ import { useEffect, useState } from "react"
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components"
 
-function Aside({user, posts}){
+function Aside({ user, posts }) {
     const [hastagsList, setHastagsList] = useState([]);
     const [hashtag, setHashtag] = useState("");
     const history = useHistory();
-   
-    useEffect(()=>{
+
+    useEffect(() => {
         updateTrending()
     }, [posts]) //eslint-disable-line
 
-function updateTrending(){
-    const config ={
-        headers:{
-            "Authorization": `Bearer ${user.token}`
+    function updateTrending() {
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${user.token}`
+            }
         }
+        const request = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending", config)
+        request.then((response) => { setHastagsList(response.data.hashtags) })
     }
-    const request = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending", config)
-    request.then((response)=>{setHastagsList(response.data.hashtags)})
-}
 
-function goToHashtag(){
-    history.push(`/hashtag/${hashtag.replace("#", "")}`);
-}
+    function goToHashtag() {
+        history.push(`/hashtag/${hashtag.replace("#", "")}`);
+    }
 
-    return(
-        <Container> 
+    return (
+        <Container>
             <h1>trending</h1>
             <Border></Border>
-            { hastagsList.length ? 
-            hastagsList.map((h,i)=>
-                <Link key={i} to={`/hashtag/${h.name}`}>
-                    <p># {h.name}</p>
-                </Link>
-            ): <h1>Error!</h1> }
-            {hastagsList.length ? 
-            <Input value={hashtag} onKeyPress={(e)=>{if(e.code==="Enter") {goToHashtag()}}} onChange={(e)=>setHashtag(e.target.value)} placeholder="type a hastag"></Input>
-        : ""}
-        {hastagsList.length ? <h3>#</h3> : ""}        
+            { hastagsList.length ?
+                hastagsList.map((h, i) =>
+                    <Link key={i} to={`/hashtag/${h.name}`}>
+                        <p># {h.name}</p>
+                    </Link>
+                ) : <h1>Error!</h1>}
+            {hastagsList.length ?
+                <Input value={hashtag} onKeyPress={(e) => { if (e.code === "Enter") { goToHashtag() } }} onChange={(e) => setHashtag(e.target.value)} placeholder="type a hastag"></Input>
+                : ""}
+            {hastagsList.length ? <h3>#</h3> : ""}
         </Container>
     )
 }
@@ -54,7 +54,9 @@ const Container = styled.div`
     height: 406px;
     border-radius: 16px;
     position: fixed;
-    margin: 0px max(630px);
+    right: 0;
+    left: 0;
+    margin: 0 45% 0 65%;
     h1{
         font-family: "Oswald";
         font-weight: 700;
@@ -76,7 +78,7 @@ const Container = styled.div`
         font-size: 19px;
         left: 30px;
     }
-    @media(max-width: 955px){
+    @media(max-width: 937px){
         display: none;
     }
 `

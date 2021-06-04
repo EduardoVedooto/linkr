@@ -7,6 +7,7 @@ import Loading from '../../components/Loading';
 import InternalError from '../../components/InternalError';
 import UserContext from "../../Context/UserContext";
 import SearchBar from '../../components/SearchBar';
+import useInterval from 'use-interval';
 
 function MyPosts() {
     const history = useHistory();

@@ -8,6 +8,7 @@ import { useHistory } from "react-router";
 import UserContext from "../../Context/UserContext";
 import InternalError from "../../components/InternalError";
 import Aside from "../../components/Aside";
+import useInterval from "use-interval";
 
 
 
@@ -46,6 +47,10 @@ export default function Hashtag() {
             setInternalError(false);
         });
     }
+
+    useInterval(()=>{
+        updateList()
+    },15000)
 
     return (
         <Main>

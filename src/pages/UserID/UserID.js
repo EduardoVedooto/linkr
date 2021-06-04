@@ -9,6 +9,7 @@ import UserContext from "../../Context/UserContext";
 import InternalError from "../../components/InternalError";
 import Aside from "../../components/Aside";
 import SearchBar from "../../components/SearchBar";
+import useInterval from "use-interval";
 
 export default function UserID() {
     const [isWaitingServer, setIsWaitingServer] = useState(true);
@@ -72,6 +73,10 @@ export default function UserID() {
 
         });
     }
+
+    useInterval(()=>{
+        updateList()
+    },15000)
 
     function Follow() {
         setDisable(true);

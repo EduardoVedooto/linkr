@@ -26,21 +26,6 @@ function MyLikes() {
         firstLoad();
     }, []); //eslint-disable-line
 
-    // function updateList() {
-    //     const promise = axios.get(url, config);
-
-    //     promise.then(reply => {
-    //         setPosts(reply.data.posts);
-    //         setIsWaitingServer(false);
-    //     });
-
-
-    //     promise.catch(() => {
-    //         setIsWaitingServer(false);
-    //         setInternalError(true);
-    //     });
-    // }
-
     function firstLoad() {
         const promise = axios.get(url, {
             headers: { Authorization: `Bearer ${user.token}` },

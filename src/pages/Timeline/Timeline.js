@@ -23,9 +23,6 @@ function Timeline() {
     const [posts, setPosts] = useState([]);
     const [followingList, setFollowingList] = useState([]);
     const [loadMore, setLoadMore] = useState(true);
-    const [renderNumber, setRenderNumber] = useState(0);
-    const [updatedList, setUpdatedList] = useState([]);
-    const [isLastID, setIsLastID] = useState(null);
     const [lastID, setLastID] = useState(null);
     const [firstID, setFirstID] = useState(null);
     const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts";
@@ -56,62 +53,46 @@ function Timeline() {
         });
     }
 
-    console.log(firstID);
-    console.log(lastID);
-    console.log(posts);
-    console.log(updatedList);
+    function updateList(flag, previouList, newID) {
+        if (!flag) {
+            const promise = axios.get(url, newID ? {
+                headers: { Authorization: `Bearer ${user.token}` },
+                params: { olderThan: `${newID}` }
+            } : {
+                headers: { Authorization: `Bearer ${user.token}` },
+            });
 
-    function updateList() {
-        const promise = axios.get(url, {
-            headers: { Authorization: `Bearer ${user.token}` },
-            params: { olderThan: `${updatedList.length ? lastID : firstID}`, }
-        });
+            promise.then(({ data }) => {
+                let newList = [].concat(previouList ? previouList : [], data.posts);
 
-        promise.then(({ data }) => {
-            setUpdatedList(updatedList.concat(data.posts));
-            let newList = [].concat(updatedList, data.posts);
+                if (newList.length >= posts.length) {
+                    setPosts(newList);
+                    updateList("STOP");
+                }
+                else {
+                    updateList(false, newList, newList[newList.length - 1].id);
+                }
 
-            console.log(newList);
-
-            if (newList.length >= posts.length) {
-                setPosts(newList);
-                setUpdatedList([]);
-                console.log("cheguei aqui");
-            }
-            else {
-                setLastID(newList[newList.length - 1].id);
-                updateList();
-            }
-
-        });
-
-        promise.catch(() => {
-            setInternalError(true);
-        });
+            });
+        }
     }
 
     function morePosts() {
-        console.log(renderNumber + 10);
         const promise = axios.get(url, {
-            headers: {
-                Authorization: `Bearer ${user.token}`,
-            },
-            params: {
-                olderThan: `${lastID}`,
-
-            }
+            headers: { Authorization: `Bearer ${user.token}` },
+            params: { olderThan: `${lastID}` }
         });
         promise.then(({ data }) => {
-            setRenderNumber(renderNumber + 10);
             if (data.posts.length < 10) setLoadMore(false);
 
-            // console.log(posts.concat(data.posts));
+            if (!data.posts.length) {
+                setLoadMore(false);
+            } else {
+                setLastID(data.posts[data.posts.length - 1].id);
+            }
             setPosts(posts.concat(data.posts));
-            setLastID(data.posts[data.posts.length - 1].id);
         });
-        promise.catch(() => {
-            setInternalError(true);
-        });
+        promise.catch(() => setInternalError(true));
 
 
     }
@@ -139,7 +120,6 @@ function Timeline() {
     return (
         <Main>
             <Content>
-                <button style={{ position: "fixed", left: 0, top: "70px" }} onClick={updateList}>TESTE</button>
                 <SearchBar type="innerSearch" />
                 <h2>timeline</h2>
                 {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
@@ -153,14 +133,11 @@ function Timeline() {
                                 dataLength={posts.length}
                                 next={morePosts}
                                 hasMore={loadMore}
-                                endMessage="FIM"
-                                style={{
-                                    overflow: "hidden"
-                                }}
+                                endMessage={<h4>Você chegou no final dos posts</h4>}
+                                style={{ overflow: "hidden" }}
                                 loader={
                                     <LoadingMorePosts key="LoaderKey">
                                         <Loader
-                                            key="TESTEFSD"
                                             type="ThreeDots"
                                             color="#171717"
                                             height={50}
@@ -170,7 +147,7 @@ function Timeline() {
                                 }
                             >
                                 {posts.length ?
-                                    posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={() => updateList} />)
+                                    posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
                                     :
                                     <h3 className="info">
                                         {followingList.length ?

@@ -9,9 +9,9 @@ import axios from "axios";
 function Like({ postId, post, updateList, tooltip, isLiked }) {
     const { token } = useContext(UserContext).user;
 
-    useEffect(() => {
-        updateList();
-    }, []); //eslint-disable-line
+    // useEffect(() => {
+    //     updateList();
+    // }, []); //eslint-disable-line
 
     function handleLike() {
         const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}/${isLiked ? "dislike" : "like"}`, {}, {

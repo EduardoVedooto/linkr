@@ -9,39 +9,87 @@ import InternalError from '../../components/InternalError';
 import UserContext from "../../Context/UserContext";
 import Aside from '../../components/Aside';
 import SearchBar from '../../components/SearchBar';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import Loader from "react-loader-spinner";
 
 function MyLikes() {
     const history = useHistory();
-    const [myLikedPosts, setMyLikedPosts] = useState([]);
+    const [posts, setPosts] = useState([]);
     const [isWaitingServer, setIsWaitingServer] = useState(true);
     const [internalError, setInternalError] = useState(false);
+    const [loadMore, setLoadMore] = useState(true);
     const { user } = useContext(UserContext);
+    const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked`;
 
-    const config = {
-        headers: {
-            "Authorization": `Bearer ${user.token}`
-        }
-    };
 
     useEffect(() => {
-        updateList();
+        firstLoad();
     }, []); //eslint-disable-line
 
-    function updateList() {
-        const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked`, config);
+    // function updateList() {
+    //     const promise = axios.get(url, config);
 
-        promise.then(reply => {
-            setMyLikedPosts(reply.data.posts);
+    //     promise.then(reply => {
+    //         setPosts(reply.data.posts);
+    //         setIsWaitingServer(false);
+    //     });
+
+
+    //     promise.catch(() => {
+    //         setIsWaitingServer(false);
+    //         setInternalError(true);
+    //     });
+    // }
+
+    function firstLoad() {
+        const promise = axios.get(url, {
+            headers: { Authorization: `Bearer ${user.token}` },
+            params: { offset: 0 }
+        });
+        promise.then(({ data }) => {
+            setPosts(data.posts);
             setIsWaitingServer(false);
         });
-
-
         promise.catch(() => {
             setIsWaitingServer(false);
-            setInternalError(true);
+            setInternalError(false);
         });
     }
 
+
+    function updateList(flag, previousList) {
+        if (!flag) {
+            const promise = axios.get(url, {
+                headers: { Authorization: `Bearer ${user.token}` },
+                params: { offset: (previousList ? previousList.length : 0) }
+            });
+            promise.then(({ data }) => {
+                const newList = [].concat(previousList ? previousList : [], data.posts);
+                if (newList.length + 1 === posts.length) {
+                    setPosts(newList);
+                    updateList("STOP");
+                } else {
+                    updateList(false, newList);
+                }
+            });
+            promise.catch(() => {
+                setInternalError(false);
+            });
+        }
+    }
+
+
+    function morePosts() {
+        const promise = axios.get(url, {
+            headers: { Authorization: `Bearer ${user.token}` },
+            params: { offset: `${posts.length}` }
+        });
+        promise.then(({ data }) => {
+            if (data.posts.length < 10 || !data.posts.length) setLoadMore(false);
+            if (data.posts.length) setPosts(posts.concat(data.posts));
+        });
+        promise.catch(() => setInternalError(true));
+    }
 
     function goToProfile(id, name) {
         history.push(`/user/${id}/${name}`);
@@ -60,21 +108,40 @@ function MyLikes() {
 
                     <Columns>
 
-                        <Posts>
 
-                            {myLikedPosts.length ?
-                                myLikedPosts.map((post, index) => (
-                                    <Post
-                                        key={index}
-                                        goToProfile={goToProfile}
-                                        goToHashtag={goToHashtag}
-                                        post={post}
-                                        updateList={updateList}
-                                    />
-                                ))
-                                :
-                                <h3 className="error">Nenhum post encontrado...</h3>
-                            }
+
+                        <Posts>
+                            <InfiniteScroll
+                                dataLength={posts.length}
+                                next={morePosts}
+                                hasMore={loadMore}
+                                style={{ overflow: "hidden" }}
+                                loader={
+                                    <LoadingMorePosts key={`LoaderKeyLikes`}>
+                                        <Loader
+                                            type="ThreeDots"
+                                            color="#171717"
+                                            height={50}
+                                            width={50}
+                                        />
+                                    </LoadingMorePosts>
+                                }
+                            >
+                                {posts.length ?
+                                    posts.map((post, index) => (
+                                        <Post
+                                            key={index}
+                                            goToProfile={goToProfile}
+                                            goToHashtag={goToHashtag}
+                                            post={post}
+                                            updateList={updateList}
+                                        />
+                                    ))
+                                    :
+                                    <h3 className="error">Você ainda não curtiu nenhum post...</h3>
+                                }
+                            </InfiniteScroll>
+
 
                         </Posts>
 
@@ -158,5 +225,12 @@ const Posts = styled.section`
 
 `;
 
+const LoadingMorePosts = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    margin-top: 40px;
+`;
 
 export default MyLikes;

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { IconContext } from "react-icons";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from 'react-icons/fa';
@@ -8,10 +8,6 @@ import axios from "axios";
 
 function Like({ postId, post, updateList, tooltip, isLiked }) {
     const { token } = useContext(UserContext).user;
-
-    // useEffect(() => {
-    //     updateList();
-    // }, []); //eslint-disable-line
 
     function handleLike() {
         const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}/${isLiked ? "dislike" : "like"}`, {}, {

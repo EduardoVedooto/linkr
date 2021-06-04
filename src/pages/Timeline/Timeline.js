@@ -11,7 +11,6 @@ import UserContext from "../../Context/UserContext";
 import useInterval from "use-interval";
 import Loader from "react-loader-spinner";
 import SearchBar from "../../components/SearchBar";
-import Round from "../../utils/Round";
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 
@@ -24,7 +23,6 @@ function Timeline() {
     const [followingList, setFollowingList] = useState([]);
     const [loadMore, setLoadMore] = useState(true);
     const [lastID, setLastID] = useState(null);
-    const [firstID, setFirstID] = useState(null);
     const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts";
 
     useEffect(() => {
@@ -41,7 +39,6 @@ function Timeline() {
         const promise = axios.get(url, { headers: { Authorization: `Bearer ${user.token}` } });
 
         promise.then(({ data }) => {
-            setFirstID(data.posts[0].id);
             setLastID(data.posts[data.posts.length - 1].id);
             setPosts(data.posts);
             setIsWaitingServer(false);

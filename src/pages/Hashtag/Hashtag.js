@@ -18,7 +18,6 @@ export default function Hashtag() {
     const [posts, setPosts] = useState([]);
     const [internalError, setInternalError] = useState(false);
     const [loadMore, setLoadMore] = useState(true);
-    const [lastID, setLastID] = useState(null);
     const { hashtag } = useParams();
     const { user } = useContext(UserContext);
     const history = useHistory();
@@ -70,8 +69,6 @@ export default function Hashtag() {
             if (data.posts.length) setPosts(posts.concat(data.posts));
         });
         promise.catch(() => setInternalError(true));
-
-
     }
 
     return (
@@ -80,31 +77,30 @@ export default function Hashtag() {
                 <h2>#{hashtag}</h2>
                 {isWaitingServer ? <Loading /> : internalError ? <InternalError /> :
                     <Columns>
-
-                        <InfiniteScroll
-                            dataLength={posts.length}
-                            next={morePosts}
-                            hasMore={loadMore}
-                            style={{ overflow: "hidden" }}
-                            loader={
-                                <LoadingMorePosts key="LoaderKeyHashtag">
-                                    <Loader
-                                        type="ThreeDots"
-                                        color="#171717"
-                                        height={50}
-                                        width={50}
-                                    />
-                                </LoadingMorePosts>
-                            }
-                        >
-                            {posts.length ?
-                                posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
-                                :
-                                <h3 className="info">"Nenhum post encontrado com esta hashtag..."</h3>
-                            }
-                        </InfiniteScroll>
-
-
+                        <Posts>
+                            <InfiniteScroll
+                                dataLength={posts.length}
+                                next={morePosts}
+                                hasMore={loadMore}
+                                style={{ overflow: "hidden" }}
+                                loader={
+                                    <LoadingMorePosts key={`LoaderKeyHashtag${hashtag}`}>
+                                        <Loader
+                                            type="ThreeDots"
+                                            color="#171717"
+                                            height={50}
+                                            width={50}
+                                        />
+                                    </LoadingMorePosts>
+                                }
+                            >
+                                {posts.length ?
+                                    posts.map((post, index) => <Post key={index} post={post} goToProfile={goToProfile} goToHashtag={goToHashtag} updateList={updateList} />)
+                                    :
+                                    <h3 className="info">"Nenhum post encontrado com esta hashtag..."</h3>
+                                }
+                            </InfiniteScroll>
+                        </Posts>
                     </Columns>
 
                 }

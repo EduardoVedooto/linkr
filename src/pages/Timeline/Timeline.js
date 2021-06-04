@@ -133,7 +133,6 @@ function Timeline() {
                                 dataLength={posts.length}
                                 next={morePosts}
                                 hasMore={loadMore}
-                                endMessage={<h4>Você chegou no final dos posts</h4>}
                                 style={{ overflow: "hidden" }}
                                 loader={
                                     <LoadingMorePosts key="LoaderKey">

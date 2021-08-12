@@ -14,7 +14,7 @@ const { user } = useContext(UserContext);
 
 
     function handleRePost(){
-        const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${post.id}/share`, {}, {
+        const promise = axios.post(`${process.env.REACT_APP_API_BASE_URL}/posts/${post.id}/share`, {}, {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }

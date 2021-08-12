@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import UserContext from "../Context/UserContext";
 import { FiSend } from 'react-icons/fi';
@@ -15,7 +15,7 @@ function CommentSection({allFollowers ,updateList ,post, showComments, eachComme
         const body = {
             text,
         }
-        const request = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${post.id}/comment`, body, {
+        const request = axios.post(`${process.env.REACT_APP_API_BASE_URL}/posts/${post.id}/comment`, body, {
             headers: {
                 Authorization: `Bearer ${user.token}`,
             }

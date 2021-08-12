@@ -49,7 +49,7 @@ export default function EditPost({ post, token, updateList,goToHashtag }){
             headers: { "Authorization": `Bearer ${token}` }
         }
         const body = { "text": text };
-        const promise = axios.put(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${post.id}`, body, config);
+        const promise = axios.put(`${process.env.REACT_APP_API_BASE_URL}/posts/${post.id}`, body, config);
         promise.then((response) => {
         setIsWaitingServer(false);    
         setCliked(false);

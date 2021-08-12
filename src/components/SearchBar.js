@@ -26,7 +26,7 @@ function SearchBar({ type }) {
             return;
         }
 
-        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/search", {
+        const promise = axios.get(`${process.env.REACT_APP_API_BASE_URL}/users/search`, {
             headers: {
                 Authorization: `Bearer ${user.token}`
             },

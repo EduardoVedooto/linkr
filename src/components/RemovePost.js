@@ -13,7 +13,7 @@ function RemovePost({ id, token, updateList }) {
 
     function handleRemove() {
         setIsWaitingServer(true);
-        const promise = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${id}`, {
+        const promise = axios.delete(`${process.env.REACT_APP_API_BASE_URL}/posts/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

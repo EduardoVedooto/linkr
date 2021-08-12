@@ -39,7 +39,6 @@ function Timeline() {
         const promise = axios.get(url, { headers: { Authorization: `Bearer ${user.token}` } });
 
         promise.then(({ data }) => {
-            console.table(data.posts);
             setLastID(data.posts[data.posts.length - 1]?.id || 0);
             setPosts(data.posts);
             setIsWaitingServer(false);

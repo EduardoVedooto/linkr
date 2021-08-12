@@ -18,7 +18,7 @@ function Aside({ user, posts }) {
                 "Authorization": `Bearer ${user.token}`
             }
         }
-        const request = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending", config)
+        const request = axios.get(`${process.env.REACT_APP_API_BASE_URL}/hashtags/trending`, config)
         request.then((response) => { setHastagsList(response.data.hashtags) })
     }
 

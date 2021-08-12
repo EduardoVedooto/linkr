@@ -23,7 +23,7 @@ function Timeline() {
     const [followingList, setFollowingList] = useState([]);
     const [loadMore, setLoadMore] = useState(true);
     const [lastID, setLastID] = useState(null);
-    const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts";
+    const url = `${process.env.REACT_APP_API_BASE_URL}/following/posts`;
 
     useEffect(() => {
         firstLoad();
@@ -39,7 +39,7 @@ function Timeline() {
         const promise = axios.get(url, { headers: { Authorization: `Bearer ${user.token}` } });
 
         promise.then(({ data }) => {
-            setLastID(data.posts[data.posts.length - 1].id);
+            setLastID(data.posts[data.posts.length - 1]?.id || 0);
             setPosts(data.posts);
             setIsWaitingServer(false);
         });
@@ -95,7 +95,7 @@ function Timeline() {
     }
 
     function getFollowings() {
-        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows", {
+        const promise = axios.get(`${process.env.REACT_APP_API_BASE_URL}/users/follows`, {
             headers: {
                 Authorization: `Bearer ${user.token}`,
             }

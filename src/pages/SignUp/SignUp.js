@@ -20,7 +20,7 @@ function SignUp(){
             username,
             pictureUrl,   
         }
-        const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-up", body);
+        const request = axios.post(`${process.env.REACT_APP_API_BASE_URL}/sign-up`, body);
 
         request.then(()=> {history.push("/")});
         request.catch((error)=>{setLoading(false)

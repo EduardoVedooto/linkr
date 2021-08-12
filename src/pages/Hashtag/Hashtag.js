@@ -22,7 +22,7 @@ export default function Hashtag() {
     const { hashtag } = useParams();
     const { user } = useContext(UserContext);
     const history = useHistory();
-    const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts`;
+    const url = `${process.env.REACT_APP_API_BASE_URL}/hashtags/${hashtag}/posts`;
 
     useEffect(() => {
         updateList();

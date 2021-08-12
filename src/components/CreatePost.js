@@ -23,7 +23,7 @@ function CreatePost({ updateList, goToProfile }) {
         e.preventDefault();
         setIsWaitingServer(true);
         // Axios Post
-        const promisse = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts", post, {
+        const promisse = axios.post(`${process.env.REACT_APP_API_BASE_URL}/posts`, post, {
             headers: {
                 Authorization: `Bearer ${user.token}`,
             }

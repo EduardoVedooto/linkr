@@ -10,7 +10,7 @@ function Like({ postId, post, updateList, tooltip, isLiked }) {
     const { token } = useContext(UserContext).user;
 
     function handleLike() {
-        const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}/${isLiked ? "dislike" : "like"}`, {}, {
+        const promise = axios.post(`${process.env.REACT_APP_API_BASE_URL}/posts/${postId}/${isLiked ? "dislike" : "like"}`, {}, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

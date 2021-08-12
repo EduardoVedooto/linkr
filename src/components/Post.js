@@ -27,7 +27,7 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
     const [allFollowers, setAllFollowers] = useState([]);
 
     function getComments(){
-        const request = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${post.id}/comments`, {
+        const request = axios.get(`${process.env.REACT_APP_API_BASE_URL}/posts/${post.id}/comments`, {
             headers:{
                 "Authorization": `Bearer ${token}`
             }
@@ -40,7 +40,7 @@ function Post({ post, goToProfile, goToHashtag, updateList }) {
 
 
     function getFollows() {
-        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows", {
+        const promise = axios.get(`${process.env.REACT_APP_API_BASE_URL}/users/follows`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

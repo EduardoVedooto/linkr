@@ -18,7 +18,7 @@ function Login() {
             password,
         }
 
-        const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-in", body);
+        const request = axios.post(`${process.env.REACT_APP_API_BASE_URL}/sign-in`, body);
         request.then(({ data }) => {
             console.clear();
             const userData = {

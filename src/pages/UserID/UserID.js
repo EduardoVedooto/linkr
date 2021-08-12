@@ -24,7 +24,7 @@ export default function UserID() {
     const [mypost, setMyPost] = useState(false);
     const [disable, setDisable] = useState(false);
     const [loadMore, setLoadMore] = useState(true);
-    const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/posts`;
+    const url = `${process.env.REACT_APP_API_BASE_URL}/users/${idUser}/posts`;
 
     useEffect(() => {
         updateList();
@@ -76,7 +76,7 @@ export default function UserID() {
     }
 
     function getFollows() {
-        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows", {
+        const promise = axios.get(`${process.env.REACT_APP_API_BASE_URL}/users/follows`, {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }
@@ -102,7 +102,7 @@ export default function UserID() {
 
     function Follow() {
         setDisable(true);
-        const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/follow`, {}, {
+        const promise = axios.post(`${process.env.REACT_APP_API_BASE_URL}/users/${idUser}/follow`, {}, {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }
@@ -120,7 +120,7 @@ export default function UserID() {
 
     function Unfollow() {
         setDisable(true);
-        const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${idUser}/unfollow`, {}, {
+        const promise = axios.post(`${process.env.REACT_APP_API_BASE_URL}/users/${idUser}/unfollow`, {}, {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }

@@ -19,7 +19,7 @@ function MyLikes() {
     const [internalError, setInternalError] = useState(false);
     const [loadMore, setLoadMore] = useState(true);
     const { user } = useContext(UserContext);
-    const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked`;
+    const url = `${process.env.REACT_APP_API_BASE_URL}/posts/liked`;
 
 
     useEffect(() => {
